@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Paws and Pals</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav id="navbar"></nav>
+
+    <main class="login-page-main">
+        <section class="login-section">
+            <div class="login-card">
+                <h1 style="text-align:center; margin-bottom:40px;">Sign In</h1>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="Enter your email" style="opacity:0.5;" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" style="opacity:0.5;" required>
+                    </div>
+                    <a href="#" id="forgot-password-link" style="color:var(--primary-color); text-decoration:none; opacity:0.8; margin-bottom:20px; display:block; margin-top:-20px; font-size:14px; text-align:end;">forgot password?</a>
+                    <p id="form-message" style="display:none; font-size:13px; margin:8px 0; text-align:center;"></p>
+                    <button type="submit" id="submit-btn" class="btn btn-primary" style="width:100%; margin-bottom:20px; background-color:var(--primary-color); border-radius:15px; padding:20px; color:white; font-weight:bold;">Sign In</button>
+                </form>
+                <p class="text-center">
+                    Don't have an account? <a href="signup.html" style="color:var(--primary-color); text-decoration:none; font-weight:bold;">Sign Up</a>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="../scripts/navbar.js"></script>
+<script type="module">
+    await window.navbarReady;
+
+    const form = document.getElementById('login-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const formMessage = document.getElementById('form-message');
+
+    function showMessage(text, isError = true) {
+        formMessage.textContent = text;
+        formMessage.style.display = 'block';
+        formMessage.style.color = isError ? '#e53e3e' : '#38a169';
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Signing in...';
+
+        const success = await window.login(email, password);
+        if (!success) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Sign In';
+        }
+    });
+
+    document.getElementById('forgot-password-link').addEventListener('click', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        if (!email) { showMessage('Please enter your email address first.'); return; }
+
+        const { error } = await window._supabase.auth.resetPasswordForEmail(email);
+        if (error) {
+            showMessage(error.message);
+        } else {
+            showMessage('Password reset email sent! Check your inbox.', false);
+        }
+    });
+</script>
+
+    <style>
+        html, body { margin: 0; padding: 0; height: 100%; }
+        #navbar { position: fixed; top: 0; width: 100%; z-index: 1001; }
+        .login-page-main { margin: 0; padding: 0; height: 100vh; width: 100%; }
+        .login-section {
+            display: flex; justify-content: center; align-items: center; height: 100%;
+            background-image: url('../images/login-bg.jpg');
+            background-size: cover; background-position: center;
+            background-attachment: fixed; position: relative;
+        }
+        .login-section::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.5); z-index: 1;
+        }
+        .login-card {
+            background-color: var(--white-color); padding: 40px; border-radius: 10px;
+            box-shadow: var(--shadow); margin-top: 50px; max-width: 400px;
+            height: 510px; width: 100%; position: relative; z-index: 2;
+        }
+        .login-card h1 { margin-bottom: 10px; color: var(--dark-color); }
+        .login-card a { text-decoration: none; color: var(--primary-color); }
+        .login-card a:hover { text-decoration: underline; }
+        .login-footer { position: fixed; bottom: 0; width: 100%; color: white; text-align: center; padding: 10px; font-size: 12px; z-index: 1000; }
+        button:disabled { opacity: 0.7; cursor: not-allowed; }
+    </style>
+</body>
+</html>

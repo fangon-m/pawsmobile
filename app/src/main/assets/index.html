@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paws & Pals - Pet Adoption</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<nav id="navbar"></nav>
+
+<main class="container">
+    <section class="hero" style="background-size:cover;">
+        <h1>Welcome to Paws & Pals</h1>
+        <p>Find your perfect furry companion today or help your furry friend find a loving home.</p>
+        <div class="hero-buttons">
+            <a href="pages/maps.html" class="hero-btn-link"><button class="btn btn-primary">Browse Pets</button></a>
+            <button class="btn btn-primary" id="open-pet-modal-btn">Create Pet Profile</button>
+        </div>
+    </section>
+
+    <section class="featured-pets">
+        <h2>Featured Pets</h2>
+        <div class="pet-grid" id="featured-pets-grid">
+            <div class="pet-card skeleton"></div>
+            <div class="pet-card skeleton"></div>
+            <div class="pet-card skeleton"></div>
+            <div class="pet-card skeleton"></div>
+        </div>
+    </section>
+
+    <section class="featured-pets" id="my-pets-section" style="display:none;">
+        <div class="section-header">
+            <h2>My Pet Profiles</h2>
+            <a href="pages/pet-profiles.html" id="my-pets-view-all" style="display:none; color:var(--primary-color); font-weight:600; text-decoration:none; font-size:15px;">View All</a>
+        </div>
+        <div class="pet-grid" id="my-pets-grid">
+            <div class="pet-card skeleton"></div>
+            <div class="pet-card skeleton"></div>
+            <div class="pet-card skeleton"></div>
+        </div>
+    </section>
+</main>
+
+<div id="alert-modal-overlay" class="modal-overlay" style="display:none;">
+    <div class="modal-card" style="max-width:400px; text-align:center;">
+        <div style="padding:32px 28px 28px;">
+            <div id="alert-modal-icon" style="font-size:44px; margin-bottom:16px;">ℹ️</div>
+            <h3 id="alert-modal-title" style="margin:0 0 10px; font-size:20px; color:var(--dark-color);"></h3>
+            <p id="alert-modal-message" style="color:#666; margin:0 0 24px; font-size:14px; line-height:1.5;"></p>
+            <div id="alert-modal-actions" style="display:flex; gap:10px; justify-content:center;"></div>
+        </div>
+    </div>
+</div>
+
+<div id="pet-modal-overlay" class="modal-overlay" style="display:none;">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h2>Create Pet Profile</h2>
+            <button class="modal-close" id="close-pet-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p id="pet-modal-message" style="display:none; font-size:13px; margin-bottom:10px; text-align:center;"></p>
+            <div class="modal-form-grid">
+                <div class="form-group">
+                    <label>Pet Name <span style="color:red;">*</span></label>
+                    <input type="text" id="pet-name" placeholder="e.g. Max">
+                </div>
+                <div class="form-group">
+                    <label>Species <span style="color:red;">*</span></label>
+                    <select id="pet-species">
+                        <option value="">Select species</option>
+                        <option value="dog">Dog</option>
+                        <option value="cat">Cat</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Breed <span style="color:red;">*</span></label>
+                    <input type="text" id="pet-breed" placeholder="e.g. Golden Retriever">
+                </div>
+                <div class="form-group">
+                    <label>Gender <span style="color:red;">*</span></label>
+                    <select id="pet-gender">
+                        <option value="">Select gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Age (months) <span style="color:red;">*</span></label>
+                    <input type="number" id="pet-age" placeholder="e.g. 24" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Health Status <span style="color:red;">*</span></label>
+                    <select id="pet-health">
+                        <option value="">Select status</option>
+                        <option value="healthy">Healthy</option>
+                        <option value="vaccinated">Vaccinated</option>
+                        <option value="needs_care">Needs Care</option>
+                        <option value="special_needs">Special Needs</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Pet Photos <span style="color:red;">*</span> <span style="color:#aaa; font-weight:normal;">(1–5 photos, max 25MB each)</span></label>
+                    <label for="pet-photo-file" class="photo-upload-area" id="photo-upload-area" style="cursor:pointer;">
+                        <i class="fas fa-camera" style="font-size:28px; color:#aaa;"></i>
+                        <p style="margin:8px 0 4px; color:#666; font-size:14px;">Click to upload photos</p>
+                        <p style="margin:0; color:#aaa; font-size:12px;">JPG, PNG, WEBP • Up to 5 photos • 25MB each</p>
+                        <input type="file" id="pet-photo-file" accept="image/*" multiple style="display:none;">
+                    </label>
+                    <div id="photo-previews" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;"></div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Description <span style="color:red;">*</span></label>
+                    <textarea id="pet-description" placeholder="Tell us about your pet..." rows="3"></textarea>
+                </div>
+
+                <div class="form-group full-width" id="use-profile-address-row" style="display:none;">
+                    <label style="flex-direction:row; align-items:center; gap:10px; cursor:pointer; font-weight:500;">
+                        <input type="checkbox" id="use-profile-address-checkbox" style="width:16px; height:16px; accent-color:var(--primary-color); cursor:pointer;">
+                        Use your current address as pet's address
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label>Province <span style="color:red;">*</span></label>
+                    <select id="pet-province">
+                        <option value="">Select Province</option>
+                        <option value="Bulacan">Bulacan</option>
+                        <option value="Metro Manila">Metro Manila (NCR)</option>
+                        <option value="Cavite">Cavite</option>
+                        <option value="Laguna">Laguna</option>
+                        <option value="Rizal">Rizal</option>
+                        <option value="Pampanga">Pampanga</option>
+                        <option value="Batangas">Batangas</option>
+                        <option value="Quezon">Quezon</option>
+                        <option value="Nueva Ecija">Nueva Ecija</option>
+                        <option value="Tarlac">Tarlac</option>
+                        <option value="Zambales">Zambales</option>
+                        <option value="Bataan">Bataan</option>
+                        <option value="Pangasinan">Pangasinan</option>
+                        <option value="Cebu">Cebu</option>
+                        <option value="Davao del Sur">Davao del Sur</option>
+                        <option value="Iloilo">Iloilo</option>
+                        <option value="Negros Occidental">Negros Occidental</option>
+                        <option value="Benguet">Benguet</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>City / Municipality <span style="color:red;">*</span></label>
+                    <select id="pet-city" disabled>
+                        <option value="">Select Province first</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Barangay <span style="color:red;">*</span></label>
+                    <select id="pet-barangay" disabled>
+                        <option value="">Select Municipality first</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Street / Building <span style="color:red;">*</span></label>
+                    <input type="text" id="pet-street" placeholder="e.g. 123 Rizal St.">
+                </div>
+                <div class="form-group">
+                    <label>ZIP Code <span style="color:#aaa; font-weight:normal;">(auto-filled)</span></label>
+                    <input type="text" id="pet-zip" placeholder="e.g. 3016" readonly style="background:#f5f5f5;">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Complete Address <span style="color:#aaa; font-weight:normal; font-size:11px;">(auto-filled)</span></label>
+                    <input type="text" id="pet-address" placeholder="Fill in the fields above" readonly style="background:#f5f5f5; color:#555;">
+                    <p id="location-status" style="font-size:12px; margin:4px 0 0; display:none;"></p>
+                </div>
+
+                <input type="hidden" id="pet-lat">
+                <input type="hidden" id="pet-lng">
+
+                <button class="btn btn-primary full-width" id="submit-pet-btn" style="width:100%; margin-top:20px; padding:14px; border-radius:10px; font-weight:bold; background-color:var(--primary-color); color:white;">
+                    Create Profile
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="success-modal-overlay" class="modal-overlay" style="display:none;">
+    <div class="modal-card" style="max-width:400px; text-align:center;">
+        <div style="padding:40px 24px;">
+            <div style="font-size:60px; margin-bottom:20px;">✓</div>
+            <h2 style="margin:0 0 10px; color:#38a169; font-size:24px;">Success!</h2>
+            <p style="color:#666; margin:0;">Your pet profile has been created successfully!</p>
+        </div>
+    </div>
+</div>
+
+<div id="save-address-modal-overlay" class="modal-overlay" style="display:none;">
+    <div class="modal-card" style="max-width:440px;">
+        <div class="modal-header">
+            <h2 style="font-size:18px;">Save Address to Your Profile?</h2>
+        </div>
+        <div class="modal-body">
+            <p style="color:#555; font-size:14px; margin-bottom:16px;">
+                Your profile doesn't have an address yet. Would you like to use this pet's address as your profile address?
+            </p>
+            <div style="background:#f9f9f9; border:1px solid #eee; border-radius:8px; padding:12px 16px; margin-bottom:20px;">
+                <p style="margin:0; font-size:13px; color:#444;" id="save-address-preview"></p>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn btn-primary" id="save-address-yes" style="flex:1; background-color:var(--primary-color); color:white; padding:11px;">
+                    Yes, save it
+                </button>
+                <button class="btn" id="save-address-no" style="flex:1; background:#f0f0f0; color:#555; padding:11px;">
+                    No, skip
+                </button>
+            </div>
+            <p id="save-address-status" style="display:none; font-size:12px; margin-top:10px; text-align:center;"></p>
+        </div>
+    </div>
+</div>
+
+<script src="scripts/navbar.js"></script>
+
+<script type="module">
+    import { locationDataSimplified } from './scripts/locationData.js';
+
+    await window.navbarReady;
+    const supabase = window._supabase;
+
+    let userPreferences = { species: null, gender: null };
+
+    function showAlertModal({ icon = 'ℹ️', title = '', message = '', buttons = [] }) {
+        const overlay  = document.getElementById('alert-modal-overlay');
+        const iconEl   = document.getElementById('alert-modal-icon');
+        const titleEl  = document.getElementById('alert-modal-title');
+        const msgEl    = document.getElementById('alert-modal-message');
+        const actionsEl = document.getElementById('alert-modal-actions');
+
+        iconEl.textContent   = icon;
+        titleEl.textContent  = title;
+        msgEl.textContent    = message;
+        actionsEl.innerHTML  = '';
+
+        const btns = buttons.length ? buttons : [{ label: 'OK', primary: true }];
+
+        btns.forEach(btn => {
+            const el = document.createElement('button');
+            el.textContent = btn.label;
+            el.className = 'btn' + (btn.primary ? ' btn-primary' : '');
+            el.style.cssText = btn.primary
+                ? 'background-color:var(--primary-color); color:white; padding:10px 28px; min-width:100px;'
+                : 'background:#f0f0f0; color:#555; padding:10px 28px; min-width:100px;';
+            el.addEventListener('click', () => {
+                overlay.style.display = 'none';
+                document.body.style.overflow = '';
+                if (btn.onClick) btn.onClick();
+            });
+            actionsEl.appendChild(el);
+        });
+
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        overlay.onclick = (e) => {
+            if (e.target === overlay) {
+                overlay.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        };
+    }
+
+    function formatAge(months) {
+        if (months >= 12) {
+            const yrs = Math.floor(months / 12);
+            return yrs + (yrs === 1 ? ' year' : ' years');
+        }
+        return (months || 0) + ' months';
+    }
+
+    function petCardHTML(pet, showFavorite = false) {
+        return `
+            <div class="pet-card">
+                <img src="${pet.photo_url || 'https://via.placeholder.com/250x250?text=Pet'}" alt="${pet.name}"
+                     onerror="this.src='https://via.placeholder.com/250x250?text=Pet'">
+                <h3>${pet.name}</h3>
+                <p style="margin-top:-10px;">${pet.health_status ? pet.health_status.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : ''}</p>
+                <p>${pet.breed || pet.species} • ${formatAge(pet.age_months)} old</p>
+                <div class="pet-card-actions">
+                    <button class="btn btn-small" onclick="window.location.href='pages/pet.html?id=${pet.id}'">View Details</button>
+                    ${showFavorite ? `<button class="btn-favorite" data-pet-id="${pet.id}" title="Add to favorites"><i class="fas fa-heart"></i></button>` : ''}
+                </div>
+            </div>
+        `;
+    }
+
+    async function loadUserPreferences(userId) {
+        try {
+            if (!userId) return;
+            const { data: profile, error } = await supabase
+                .from('profiles')
+                .select('preferred_species, preferred_gender')
+                .eq('id', userId)
+                .maybeSingle();
+
+            if (error) throw error;
+
+            if (profile) {
+                userPreferences.species = profile.preferred_species?.trim() || null;
+                userPreferences.gender  = profile.preferred_gender?.trim() || null;
+            }
+        } catch (err) {
+            console.error("Error setting preference configurations:", err.message);
+        }
+    }
+
+    async function loadFeaturedPets() {
+        const grid = document.getElementById('featured-pets-grid');
+        const { data: { session } } = await supabase.auth.getSession();
+        const currentUserId = session?.user?.id || null;
+
+        const { data: pets, error } = await supabase
+            .from('pets')
+            .select('id, name, health_status, breed, species, gender, age_months, photo_url, owner_id')
+            .eq('adoption_status', 'available')
+            .order('created_at', { ascending: false });
+
+        if (error || !pets?.length) {
+            grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#999;">No pets available yet.</p>';
+            return;
+        }
+
+        let filteredPets = pets || [];
+        if (userPreferences.species) {
+            filteredPets = filteredPets.filter(pet =>
+                pet.species && pet.species.toLowerCase() === userPreferences.species.toLowerCase()
+            );
+        }
+        if (userPreferences.gender) {
+            filteredPets = filteredPets.filter(pet =>
+                pet.gender && pet.gender.toLowerCase() === userPreferences.gender.toLowerCase()
+            );
+        }
+
+        const displayPets = filteredPets.slice(0, 4);
+
+        if (displayPets.length === 0) {
+            grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#999;">No pets match your profile preferences.</p>';
+            return;
+        }
+
+        grid.innerHTML = displayPets.map(pet => petCardHTML(pet, pet.owner_id !== currentUserId)).join('');
+        attachFavoriteHandlers();
+    }
+
+    async function loadMyPets(userId) {
+        const section = document.getElementById('my-pets-section');
+        const grid    = document.getElementById('my-pets-grid');
+        const viewAll = document.getElementById('my-pets-view-all');
+
+        const { data: pets, error } = await supabase
+            .from('pets')
+            .select('id, name, health_status, breed, age_months, photo_url')
+            .eq('owner_id', userId)
+            .order('created_at', { ascending: false })
+            .limit(5);
+
+        section.style.display = 'block';
+
+        if (error || !pets?.length) {
+            grid.innerHTML = `
+                <div style="grid-column:1/-1; text-align:center; padding:40px 0;">
+                    <p style="color:#999; margin-bottom:16px;">You haven't added any pets yet.</p>
+                    <button class="btn btn-primary" id="open-pet-modal-btn-2" style="background-color:var(--primary-color); color:white;">Create Pet Profile</button>
+                </div>
+            `;
+            document.getElementById('open-pet-modal-btn-2').addEventListener('click', () => {
+                openBtn.click();
+            });
+            viewAll.style.display = 'none';
+            return;
+        }
+
+        const hasMore = pets.length > 4;
+        const display = hasMore ? pets.slice(0, 4) : pets;
+        viewAll.style.display = hasMore ? 'inline' : 'none';
+        grid.innerHTML = display.map(pet => petCardHTML(pet, false)).join('');
+    }
+
+    async function attachFavoriteHandlers() {
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session) {
+            const petIds = [...document.querySelectorAll('.btn-favorite')].map(b => b.dataset.petId);
+            if (petIds.length) {
+                const { data: existing } = await supabase.from('favorites')
+                    .select('pet_id').eq('user_id', session.user.id).in('pet_id', petIds);
+                const favSet = new Set((existing || []).map(f => f.pet_id));
+                document.querySelectorAll('.btn-favorite').forEach(btn => {
+                    if (favSet.has(btn.dataset.petId)) btn.classList.add('favorited');
+                });
+            }
+        }
+
+        document.querySelectorAll('.btn-favorite').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                if (btn.classList.contains('favorited')) {
+                    btn.style.borderColor = '#e8e6e6';
+                    btn.style.color = '#e0dada';
+                    btn.style.background = '#ffffff';
+                }
+            });
+            btn.addEventListener('mouseleave', () => {
+                if (btn.classList.contains('favorited')) {
+                    btn.style.borderColor = '';
+                    btn.style.color = '';
+                    btn.style.background = '';
+                }
+            });
+            btn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const petId = btn.dataset.petId;
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session) {
+                    showAlertModal({
+                        icon: '🔒',
+                        title: 'Sign In Required',
+                        message: 'Please sign in to save pets to your favorites.',
+                        buttons: [
+                            { label: 'Sign In', primary: true, onClick: () => window.location.href = 'pages/login.html' },
+                            { label: 'Cancel', primary: false }
+                        ]
+                    });
+                    return;
+                }
+                try {
+                    const { data: existing } = await supabase.from('favorites')
+                        .select('id').eq('user_id', session.user.id).eq('pet_id', petId).maybeSingle();
+                    if (existing) {
+                        await supabase.from('favorites').delete()
+                            .eq('user_id', session.user.id).eq('pet_id', petId);
+                        btn.classList.remove('favorited');
+                    } else {
+                        await supabase.from('favorites').insert({ user_id: session.user.id, pet_id: petId });
+                        btn.classList.add('favorited');
+                    }
+                    btn.style.borderColor = '';
+                    btn.style.color = '';
+                    btn.style.background = '';
+                } catch (err) { console.error('Favorites error:', err); }
+            });
+        });
+    }
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+        await loadUserPreferences(session.user.id);
+        loadMyPets(session.user.id);
+    }
+
+    loadFeaturedPets();
+
+    const overlay        = document.getElementById('pet-modal-overlay');
+    const openBtn        = document.getElementById('open-pet-modal-btn');
+    const closeBtn       = document.getElementById('close-pet-modal');
+    const submitBtn      = document.getElementById('submit-pet-btn');
+    const message        = document.getElementById('pet-modal-message');
+    const locationStatus = document.getElementById('location-status');
+    const provinceSelect = document.getElementById('pet-province');
+    const zipInput       = document.getElementById('pet-zip');
+    const addressInput   = document.getElementById('pet-address');
+
+    const saveAddressOverlay  = document.getElementById('save-address-modal-overlay');
+    const saveAddressPreview  = document.getElementById('save-address-preview');
+    const saveAddressStatus   = document.getElementById('save-address-status');
+    const saveAddressYesBtn   = document.getElementById('save-address-yes');
+    const saveAddressNoBtn    = document.getElementById('save-address-no');
+
+    function showMessage(text, isError = true) {
+        message.textContent = text;
+        message.style.display = 'block';
+        message.style.color = isError ? '#e53e3e' : '#38a169';
+    }
+
+    async function maybePromptSaveAddress(userId, petAddressData) {
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('address, city, province')
+            .eq('id', userId)
+            .maybeSingle();
+
+        if (profile && !profile.address && !profile.city && !profile.province && !profile.barangay) {
+            saveAddressPreview.textContent = petAddressData.address || '(address from pet profile)';
+            saveAddressStatus.style.display = 'none';
+            saveAddressYesBtn.disabled = false;
+            saveAddressYesBtn.textContent = 'Yes, save it';
+            saveAddressOverlay.style.display = 'flex';
+
+            saveAddressOverlay.dataset.userId    = userId;
+            saveAddressOverlay.dataset.address   = petAddressData.address   || '';
+            saveAddressOverlay.dataset.city      = petAddressData.city      || '';
+            saveAddressOverlay.dataset.province  = petAddressData.province  || '';
+            saveAddressOverlay.dataset.barangay  = petAddressData.barangay  || '';
+            saveAddressOverlay.dataset.latitude  = petAddressData.latitude  || '';
+            saveAddressOverlay.dataset.longitude = petAddressData.longitude || '';
+        }
+    }
+
+    saveAddressYesBtn.addEventListener('click', async () => {
+        saveAddressYesBtn.disabled = true;
+        saveAddressYesBtn.textContent = 'Saving...';
+
+        const userId    = saveAddressOverlay.dataset.userId;
+        const address   = saveAddressOverlay.dataset.address;
+        const city      = saveAddressOverlay.dataset.city;
+        const province  = saveAddressOverlay.dataset.province;
+        const barangay  = saveAddressOverlay.dataset.barangay;
+        const latitude  = parseFloat(saveAddressOverlay.dataset.latitude)  || null;
+        const longitude = parseFloat(saveAddressOverlay.dataset.longitude) || null;
+
+        const { error } = await supabase
+            .from('profiles')
+            .update({ address, city, province, barangay, latitude, longitude })
+            .eq('id', userId);
+
+        saveAddressStatus.style.display = 'block';
+        if (error) {
+            saveAddressStatus.textContent = '⚠ Could not save address. Please update your profile manually.';
+            saveAddressStatus.style.color = '#e53e3e';
+            saveAddressYesBtn.disabled = false;
+            saveAddressYesBtn.textContent = 'Yes, save it';
+        } else {
+            saveAddressStatus.textContent = '✓ Address saved to your profile!';
+            saveAddressStatus.style.color = '#38a169';
+            setTimeout(() => { saveAddressOverlay.style.display = 'none'; }, 1500);
+        }
+    });
+
+    saveAddressNoBtn.addEventListener('click', () => {
+        saveAddressOverlay.style.display = 'none';
+    });
+
+    provinceSelect.addEventListener('change', () => {
+        const province = provinceSelect.value;
+        let cityEl = document.getElementById('pet-city');
+        let brgyEl = document.getElementById('pet-barangay');
+
+        if (cityEl.tagName === 'INPUT') {
+            const sel = document.createElement('select');
+            sel.id = 'pet-city'; sel.disabled = true;
+            sel.innerHTML = '<option value="">Select City/Municipality</option>';
+            cityEl.replaceWith(sel); cityEl = document.getElementById('pet-city');
+        } else { cityEl.innerHTML = '<option value="">Select City/Municipality</option>'; cityEl.disabled = true; }
+
+        if (brgyEl.tagName === 'INPUT') {
+            const sel = document.createElement('select');
+            sel.id = 'pet-barangay'; sel.disabled = true;
+            sel.innerHTML = '<option value="">Select Municipality first</option>';
+            brgyEl.replaceWith(sel); brgyEl = document.getElementById('pet-barangay');
+        } else { brgyEl.innerHTML = '<option value="">Select Municipality first</option>'; brgyEl.disabled = true; }
+
+        zipInput.value = '';
+
+        if (province === 'Bulacan' && locationDataSimplified['Bulacan']) {
+            locationDataSimplified['Bulacan'].municipalities.forEach(mun => {
+                const opt = document.createElement('option');
+                opt.value = mun.name; opt.textContent = mun.name; opt.dataset.zip = mun.zipCode;
+                cityEl.appendChild(opt);
+            });
+            cityEl.disabled = false;
+            cityEl.addEventListener('change', onCityChange);
+        } else if (province) {
+            const cityInput = document.createElement('input');
+            cityInput.type = 'text'; cityInput.id = 'pet-city';
+            cityInput.placeholder = 'e.g. Quezon City';
+            cityInput.addEventListener('input', updateAddress);
+            cityEl.replaceWith(cityInput);
+
+            const brgyInput = document.createElement('input');
+            brgyInput.type = 'text'; brgyInput.id = 'pet-barangay';
+            brgyInput.placeholder = 'e.g. Brgy. San Antonio';
+            brgyInput.addEventListener('input', updateAddress);
+            brgyEl.replaceWith(brgyInput);
+        }
+        updateAddress();
+    });
+
+    function onCityChange() {
+        const cityEl = document.getElementById('pet-city');
+        const brgyEl = document.getElementById('pet-barangay');
+        const cityName = cityEl.value;
+        brgyEl.innerHTML = '<option value="">Select Barangay</option>';
+        brgyEl.disabled = true;
+        zipInput.value = '';
+        const selectedOpt = cityEl.options[cityEl.selectedIndex];
+        if (selectedOpt?.dataset.zip) zipInput.value = selectedOpt.dataset.zip;
+        if (cityName && locationDataSimplified[cityName]) {
+            locationDataSimplified[cityName].barangays.forEach(brgy => {
+                const opt = document.createElement('option');
+                opt.value = brgy; opt.textContent = brgy;
+                brgyEl.appendChild(opt);
+            });
+            brgyEl.disabled = false;
+            brgyEl.addEventListener('change', onBarangayChange);
+        }
+        updateAddress();
+    }
+
+    async function onBarangayChange() {
+        updateAddress();
+        const barangay = document.getElementById('pet-barangay').value;
+        const city     = document.getElementById('pet-city').value;
+        const province = provinceSelect.value;
+        if (!barangay || !city) return;
+        locationStatus.style.display = 'block';
+        locationStatus.textContent = '⏳ Finding coordinates...';
+        locationStatus.style.color = '#888';
+        try {
+            const res = await fetch(
+                `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(`${barangay}, ${city}, ${province}, Philippines`)}`,
+                { headers: { 'Accept-Language': 'en' } }
+            );
+            const results = await res.json();
+            if (results.length) {
+                document.getElementById('pet-lat').value = parseFloat(results[0].lat).toFixed(6);
+                document.getElementById('pet-lng').value = parseFloat(results[0].lon).toFixed(6);
+                locationStatus.textContent = '✓ Location found';
+                locationStatus.style.color = '#38a169';
+            } else {
+                locationStatus.textContent = '⚠ Coordinates not found — address will still be saved';
+                locationStatus.style.color = '#dd6b20';
+            }
+        } catch { locationStatus.textContent = '⚠ Geocoding failed'; locationStatus.style.color = '#e53e3e'; }
+    }
+
+    document.getElementById('pet-street').addEventListener('input', updateAddress);
+
+    function updateAddress() {
+        const street   = document.getElementById('pet-street').value.trim();
+        const barangay = document.getElementById('pet-barangay').value.trim();
+        const city     = document.getElementById('pet-city').value.trim();
+        const province = provinceSelect.value;
+        const zip      = zipInput.value.trim();
+        const parts = [street, barangay ? `Brgy. ${barangay}` : '', city, province, zip, 'Philippines'].filter(Boolean);
+        addressInput.value = parts.length > 2 ? parts.join(', ') : '';
+    }
+
+    const photoUploadArea = document.getElementById('photo-upload-area');
+    const photoFileInput  = document.getElementById('pet-photo-file');
+    const photoPreviews   = document.getElementById('photo-previews');
+    let selectedPhotos = [];
+
+    photoFileInput.addEventListener('click', (e) => {
+        if (selectedPhotos.length >= 5) { e.preventDefault(); showMessage('Maximum 5 photos allowed.'); }
+    });
+
+    photoFileInput.addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        const remaining = 5 - selectedPhotos.length;
+        const toAdd = files.slice(0, remaining).filter(f => f.size <= 25 * 1024 * 1024);
+        toAdd.forEach(file => {
+            selectedPhotos.push(file);
+            const reader = new FileReader();
+            reader.onload = (ev) => addPreview(ev.target.result, selectedPhotos.length - 1);
+            reader.readAsDataURL(file);
+        });
+        photoFileInput.value = '';
+    });
+
+    function addPreview(src, index) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'photo-thumb';
+        wrapper.innerHTML = `
+            <img src="${src}" alt="Pet photo">
+            <button type="button" class="photo-remove-btn" data-index="${index}"><i class="fas fa-times"></i></button>
+            ${index === 0 ? '<span class="photo-main-badge">Main</span>' : ''}
+        `;
+        wrapper.querySelector('.photo-remove-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            selectedPhotos.splice(parseInt(e.currentTarget.dataset.index), 1);
+            renderPreviews();
+        });
+        photoPreviews.appendChild(wrapper);
+    }
+
+    function renderPreviews() {
+        photoPreviews.innerHTML = '';
+        selectedPhotos.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = (ev) => addPreview(ev.target.result, index);
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function resetModal() {
+        ['pet-name','pet-breed','pet-age','pet-description','pet-street','pet-lat','pet-lng','pet-address','pet-zip']
+            .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+        ['pet-species','pet-gender','pet-health','pet-province']
+            .forEach(id => { const el = document.getElementById(id); if (el) el.selectedIndex = 0; });
+
+        const cityEl = document.getElementById('pet-city');
+        if (cityEl.tagName === 'INPUT') {
+            const sel = document.createElement('select'); sel.id = 'pet-city'; sel.disabled = true;
+            sel.innerHTML = '<option value="">Select Province first</option>'; cityEl.replaceWith(sel);
+        } else { cityEl.innerHTML = '<option value="">Select Province first</option>'; cityEl.disabled = true; }
+
+        const brgyEl = document.getElementById('pet-barangay');
+        if (brgyEl.tagName === 'INPUT') {
+            const sel = document.createElement('select'); sel.id = 'pet-barangay'; sel.disabled = true;
+            sel.innerHTML = '<option value="">Select Municipality first</option>'; brgyEl.replaceWith(sel);
+        } else { brgyEl.innerHTML = '<option value="">Select Municipality first</option>'; brgyEl.disabled = true; }
+
+        selectedPhotos = []; photoPreviews.innerHTML = ''; photoFileInput.value = '';
+        message.style.display = 'none'; locationStatus.style.display = 'none';
+        submitBtn.disabled = false; submitBtn.textContent = 'Create Profile';
+    }
+
+    openBtn.addEventListener('click', async () => {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+            showAlertModal({
+                icon: '🔒',
+                title: 'Sign In Required',
+                message: 'Please sign in to create a pet profile.',
+                buttons: [
+                    { label: 'Sign In', primary: true, onClick: () => window.location.href = 'pages/login.html' },
+                    { label: 'Cancel', primary: false }
+                ]
+            });
+            return;
+        }
+
+        resetModal();
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        const { data: profile } = await supabase
+            .from('profiles')
+            .select('address, city, province, barangay, latitude, longitude')
+            .eq('id', session.user.id)
+            .maybeSingle();
+
+        const addressRow = document.getElementById('use-profile-address-row');
+        const checkbox = document.getElementById('use-profile-address-checkbox');
+        if (checkbox) checkbox.checked = false;
+        setAddressFieldsDisabled(false);
+        document.getElementById('use-profile-address-row').style.display = 'none';
+
+        const hasAddress = profile && (profile.address || profile.city || profile.province || profile.barangay);
+
+        if (hasAddress) {
+            addressRow.dataset.address   = profile.address   || '';
+            addressRow.dataset.city      = profile.city      || '';
+            addressRow.dataset.province  = profile.province  || '';
+            addressRow.dataset.barangay  = profile.barangay  || '';
+            addressRow.dataset.latitude  = profile.latitude  || '';
+            addressRow.dataset.longitude = profile.longitude || '';
+            addressRow.style.display = 'block';
+        } else {
+            addressRow.style.display = 'none';
+            checkbox.checked = false;
+        }
+    });
+
+    document.getElementById('use-profile-address-checkbox').addEventListener('change', async function () {
+const addressRow = document.getElementById('use-profile-address-row');
+
+if (this.checked) {
+    const savedAddress  = addressRow.dataset.address;
+    const savedCity     = addressRow.dataset.city;
+    const savedProvince = addressRow.dataset.province;
+    const savedLat      = addressRow.dataset.latitude;
+    const savedLng      = addressRow.dataset.longitude;
+    const savedBarangay = addressRow.dataset.barangay;
+
+    const provinceEl = document.getElementById('pet-province');
+    provinceEl.value = savedProvince || '';
+    provinceEl.dispatchEvent(new Event('change'));
+
+    await new Promise(r => setTimeout(r, 0));
+
+    const cityEl = document.getElementById('pet-city');
+    let brgyEl = document.getElementById('pet-barangay');
+
+    if (cityEl.tagName === 'INPUT') {
+        cityEl.value = savedCity || '';
+        brgyEl.value = savedBarangay || '';
+    } else {
+        const matchOpt = [...cityEl.options].find(o => o.value === savedCity);
+        if (matchOpt) {
+            cityEl.value = savedCity;
+            cityEl.dispatchEvent(new Event('change')); // populates barangay options
+        }
+        // re-query brgyEl after onCityChange rebuilt it, then set the saved value
+        await new Promise(r => setTimeout(r, 0));
+        brgyEl = document.getElementById('pet-barangay');
+        if (savedBarangay) brgyEl.value = savedBarangay;
+    }
+
+            const street = savedAddress
+                ? savedAddress.replace(`, ${savedCity}`, '').replace(`, ${savedProvince}`, '').replace(', Philippines', '').replace(/,?\s*\d{4}/, '').trim()
+                : '';
+            document.getElementById('pet-street').value = street;
+            document.getElementById('pet-lat').value  = savedLat;
+            document.getElementById('pet-lng').value  = savedLng;
+
+            addressInput.value = savedAddress || '';
+            if (savedLat && savedLng) {
+                locationStatus.style.display = 'block';
+                locationStatus.textContent   = '✓ Location from your profile';
+                locationStatus.style.color   = '#38a169';
+            }
+
+            setAddressFieldsDisabled(true);
+
+        } else {
+            ['pet-province', 'pet-city', 'pet-barangay', 'pet-street'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            document.getElementById('pet-lat').value = '';
+            document.getElementById('pet-lng').value = '';
+            addressInput.value = '';
+            zipInput.value = '';
+            locationStatus.style.display = 'none';
+
+            const provinceEl = document.getElementById('pet-province');
+            provinceEl.dispatchEvent(new Event('change'));
+
+            setAddressFieldsDisabled(false);
+        }
+    });
+
+    function setAddressFieldsDisabled(disabled) {
+        const ids = ['pet-province', 'pet-city', 'pet-barangay', 'pet-street'];
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.disabled = disabled;
+                el.style.opacity = disabled ? '0.6' : '1';
+                el.style.cursor  = disabled ? 'not-allowed' : '';
+            }
+        });
+    }
+
+    closeBtn.addEventListener('click', () => { overlay.style.display = 'none'; document.body.style.overflow = ''; });
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; } });
+
+    submitBtn.addEventListener('click', async () => {
+        const name     = document.getElementById('pet-name').value.trim();
+        const species  = document.getElementById('pet-species').value;
+        const breed    = document.getElementById('pet-breed').value.trim();
+        const gender   = document.getElementById('pet-gender').value;
+        const age      = document.getElementById('pet-age').value;
+        const health   = document.getElementById('pet-health').value;
+        const desc     = document.getElementById('pet-description').value.trim();
+        const province = provinceSelect.value;
+        const city     = document.getElementById('pet-city').value.trim();
+        const barangay = document.getElementById('pet-barangay').value.trim();
+        const street   = document.getElementById('pet-street').value.trim();
+
+        if (!name || !species || !breed || !gender || !age || !health || !desc) { showMessage('Please fill in all required pet details.'); return; }
+        if (!province || !city || !barangay || !street) { showMessage('Please fill in all address fields.'); return; }
+        if (selectedPhotos.length === 0) { showMessage('Please upload at least one photo.'); return; }
+
+        submitBtn.disabled = true; submitBtn.textContent = 'Creating...';
+
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) { showMessage('Session expired. Please sign in again.'); submitBtn.disabled = false; submitBtn.textContent = 'Create Profile'; return; }
+
+        const photoUrls = [];
+        for (let i = 0; i < selectedPhotos.length; i++) {
+            const file = selectedPhotos[i];
+            const ext = file.name.split('.').pop();
+            const fileName = `${session.user.id}_${Date.now()}_${i}.${ext}`;
+            const { error: uploadError } = await supabase.storage.from('pet-photos').upload(fileName, file);
+            if (uploadError) { showMessage(`Photo ${i + 1} upload failed: ${uploadError.message}`); submitBtn.disabled = false; submitBtn.textContent = 'Create Profile'; return; }
+            const { data: urlData } = supabase.storage.from('pet-photos').getPublicUrl(fileName);
+            photoUrls.push(urlData.publicUrl);
+        }
+
+        const petAddress  = addressInput.value.trim() || null;
+        const petLat      = parseFloat(document.getElementById('pet-lat').value) || null;
+        const petLng      = parseFloat(document.getElementById('pet-lng').value) || null;
+
+        const { error: petError } = await supabase.from('pets').insert({
+            owner_id: session.user.id, name, species, breed, gender,
+            age_months: parseInt(age) || null, health_status: health,
+            adoption_status: 'available', photo_url: photoUrls[0], description: desc,
+            address: petAddress, latitude: petLat, longitude: petLng,
+        });
+
+        if (petError) { showMessage('Error creating profile: ' + petError.message); submitBtn.disabled = false; submitBtn.textContent = 'Create Profile'; return; }
+
+        const successModal = document.getElementById('success-modal-overlay');
+        successModal.style.display = 'flex';
+        loadFeaturedPets();
+        loadMyPets(session.user.id);
+
+        setTimeout(async () => {
+            successModal.style.display = 'none';
+            overlay.style.display = 'none';
+            document.body.style.overflow = '';
+            resetModal();
+
+            if (petAddress) {
+                await maybePromptSaveAddress(session.user.id, {
+                    address:   petAddress,
+                    city:      city,
+                    province:  province,
+                    barangay:  barangay,
+                    latitude:  petLat,
+                    longitude: petLng,
+                });
+            }
+        }, 2500);
+    });
+
+    window.addEventListener('pageshow', (e) => { if (e.persisted) window.location.reload(); });
+</script>
+
+<style>
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0;
+    }
+    .section-header h2 { margin-bottom: 0; }
+    .pet-card.skeleton {
+        height: 320px;
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.4s infinite;
+        border-radius: 10px;
+    }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:2000; display:flex; align-items:center; justify-content:center; padding:20px; }
+    .modal-card { background:var(--white-color); border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,0.3); width:100%; max-width:620px; max-height:90vh; overflow-y:auto; }
+    .modal-header { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; border-bottom:1px solid #eee; position:sticky; top:0; background:var(--white-color); z-index:1; }
+    .modal-header h2 { margin:0; font-size:20px; color:var(--dark-color); }
+    .modal-close { background:none; border:none; font-size:24px; cursor:pointer; color:var(--gray-color); line-height:1; }
+    .modal-close:hover { color:var(--dark-color); }
+    .modal-body { padding:24px; }
+    .modal-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .modal-form-grid .full-width { grid-column:1/-1; }
+    .modal-form-grid .form-group { display:flex; flex-direction:column; gap:5px; }
+    .modal-form-grid label { font-size:13px; font-weight:600; color:var(--dark-color); }
+    .modal-form-grid input, .modal-form-grid select, .modal-form-grid textarea { padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; outline:none; transition:border-color 0.2s; }
+    .modal-form-grid input:focus, .modal-form-grid select:focus, .modal-form-grid textarea:focus { border-color:var(--primary-color); }
+    .modal-form-grid textarea { resize:vertical; }
+    @media (max-width:500px) { .modal-form-grid { grid-template-columns:1fr; } }
+    button:disabled { opacity:0.7; cursor:not-allowed; }
+</style>
+</body>
+</html>

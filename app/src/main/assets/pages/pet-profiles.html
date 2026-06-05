@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Pet Profiles - Paws & Pals</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav id="navbar"></nav>
+
+    <main class="container">
+        <div class="page-header">
+            <div>
+                <h1>My Pet Profiles</h1>
+                <p style="color:var(--gray-color); margin-top:6px;">Manage all your listed pets for adoption.</p>
+            </div>
+            <button class="btn adopt-btn" id="add-pet-btn" style="width:auto; padding:12px 24px; font-size:15px;">
+                <i class="fas fa-plus"></i> Add Pet
+            </button>
+        </div>
+
+        <!-- Grid -->
+        <div class="pet-grid" id="my-pets-grid">
+            <div class="pet-card skeleton"></div>
+            <div class="pet-card skeleton"></div>
+            <div class="pet-card skeleton"></div>
+            <div class="pet-card skeleton"></div>
+        </div>
+
+        <!-- Empty state -->
+        <div id="no-pets" style="display:none; text-align:center; padding:80px 20px;">
+            <i class="fas fa-paw" style="font-size:48px; color:var(--gray-color); margin-bottom:20px;"></i>
+            <h2>No pets yet</h2>
+            <p style="margin-bottom:24px; color:var(--gray-color);">You haven't added any pet profiles yet.</p>
+            <button class="btn adopt-btn" id="add-pet-btn-empty" style="width:auto; padding:12px 28px; font-size:15px; display:inline-flex;">
+                <i class="fas fa-plus"></i> Add Your First Pet
+            </button>
+        </div>
+    </main>
+
+    <!-- Create Pet Modal -->
+    <div id="pet-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Create Pet Profile</h2>
+                <button class="modal-close" id="close-pet-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="pet-modal-message" style="display:none; font-size:13px; margin-bottom:10px; text-align:center;"></p>
+                <div class="modal-form-grid">
+                    <div class="form-group">
+                        <label>Pet Name <span style="color:red;">*</span></label>
+                        <input type="text" id="pet-name" placeholder="e.g. Max">
+                    </div>
+                    <div class="form-group">
+                        <label>Species <span style="color:red;">*</span></label>
+                        <select id="pet-species">
+                            <option value="">Select species</option>
+                            <option value="dog">Dog</option>
+                            <option value="cat">Cat</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Breed <span style="color:red;">*</span></label>
+                        <input type="text" id="pet-breed" placeholder="e.g. Golden Retriever">
+                    </div>
+                    <div class="form-group">
+                        <label>Gender <span style="color:red;">*</span></label>
+                        <select id="pet-gender">
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Age (months) <span style="color:red;">*</span></label>
+                        <input type="number" id="pet-age" placeholder="e.g. 24" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Health Status <span style="color:red;">*</span></label>
+                        <select id="pet-health">
+                            <option value="">Select status</option>
+                            <option value="healthy">Healthy</option>
+                            <option value="vaccinated">Vaccinated</option>
+                            <option value="needs_care">Needs Care</option>
+                            <option value="special_needs">Special Needs</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Pet Photos <span style="color:red;">*</span> <span style="color:#aaa; font-weight:normal;">(1–5 photos, max 25MB each)</span></label>
+                        <div class="photo-upload-area" id="photo-upload-area">
+                            <i class="fas fa-camera" style="font-size:28px; color:#aaa;"></i>
+                            <p style="margin:8px 0 4px; color:#666; font-size:14px;">Click to upload photos</p>
+                            <p style="margin:0; color:#aaa; font-size:12px;">JPG, PNG, WEBP • Up to 5 photos • 25MB each</p>
+                            <input type="file" id="pet-photo-file" accept="image/*" multiple style="display:none;">
+                        </div>
+                        <div id="photo-previews" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;"></div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Description <span style="color:red;">*</span></label>
+                        <textarea id="pet-description" placeholder="Tell us about your pet..." rows="3"></textarea>
+                    </div>
+
+                    <!-- Use current address checkbox — shown dynamically via JS -->
+                    <div class="form-group full-width" id="use-profile-address-row" style="display:none;">
+                        <label style="flex-direction:row; align-items:center; gap:10px; cursor:pointer; font-weight:500;">
+                            <input type="checkbox" id="use-profile-address-checkbox" style="width:16px; height:16px; accent-color:var(--primary-color); cursor:pointer;">
+                            Use your current address as pet's address
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Province <span style="color:red;">*</span></label>
+                        <select id="pet-province">
+                            <option value="">Select Province</option>
+                            <option value="Bulacan">Bulacan</option>
+                            <option value="Metro Manila">Metro Manila (NCR)</option>
+                            <option value="Cavite">Cavite</option>
+                            <option value="Laguna">Laguna</option>
+                            <option value="Rizal">Rizal</option>
+                            <option value="Pampanga">Pampanga</option>
+                            <option value="Batangas">Batangas</option>
+                            <option value="Quezon">Quezon</option>
+                            <option value="Nueva Ecija">Nueva Ecija</option>
+                            <option value="Tarlac">Tarlac</option>
+                            <option value="Zambales">Zambales</option>
+                            <option value="Bataan">Bataan</option>
+                            <option value="Pangasinan">Pangasinan</option>
+                            <option value="Cebu">Cebu</option>
+                            <option value="Davao del Sur">Davao del Sur</option>
+                            <option value="Iloilo">Iloilo</option>
+                            <option value="Negros Occidental">Negros Occidental</option>
+                            <option value="Benguet">Benguet</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>City / Municipality <span style="color:red;">*</span></label>
+                        <select id="pet-city" disabled>
+                            <option value="">Select Province first</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Barangay <span style="color:red;">*</span></label>
+                        <select id="pet-barangay" disabled>
+                            <option value="">Select Municipality first</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Street / Building <span style="color:red;">*</span></label>
+                        <input type="text" id="pet-street" placeholder="e.g. 123 Rizal St.">
+                    </div>
+                    <div class="form-group">
+                        <label>ZIP Code <span style="color:#aaa; font-weight:normal;">(auto-filled)</span></label>
+                        <input type="text" id="pet-zip" placeholder="e.g. 3016" readonly style="background:#f5f5f5;">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Complete Address <span style="color:#aaa; font-weight:normal; font-size:11px;">(auto-filled)</span></label>
+                        <input type="text" id="pet-address" placeholder="Fill in the fields above" readonly style="background:#f5f5f5; color:#555;">
+                        <p id="location-status" style="font-size:12px; margin:4px 0 0; display:none;"></p>
+                    </div>
+                    <input type="hidden" id="pet-lat">
+                    <input type="hidden" id="pet-lng">
+                    <button class="btn btn-primary full-width" id="submit-pet-btn" style="width:100%; margin-top:20px; padding:14px; border-radius:10px; font-weight:bold; background-color:var(--primary-color); color:white;">
+                        Create Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card" style="max-width:400px; text-align:center;">
+            <div style="padding:40px 24px;">
+                <div style="font-size:60px; margin-bottom:20px;">✓</div>
+                <h2 style="margin:0 0 10px; color:#38a169; font-size:24px;">Success!</h2>
+                <p style="color:#666; margin:0;">Your pet profile has been created successfully!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Address to Profile Modal -->
+    <div id="save-address-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card" style="max-width:440px;">
+            <div class="modal-header">
+                <h2 style="font-size:18px;">Save Address to Your Profile?</h2>
+            </div>
+            <div class="modal-body">
+                <p style="color:#555; font-size:14px; margin-bottom:16px;">
+                    Your profile doesn't have an address yet. Would you like to use this pet's address as your profile address?
+                </p>
+                <div style="background:#f9f9f9; border:1px solid #eee; border-radius:8px; padding:12px 16px; margin-bottom:20px;">
+                    <p style="margin:0; font-size:13px; color:#444;" id="save-address-preview"></p>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-primary" id="save-address-yes" style="flex:1; background-color:var(--primary-color); color:white; padding:11px;">
+                        Yes, save it
+                    </button>
+                    <button class="btn" id="save-address-no" style="flex:1; background:#f0f0f0; color:#555; padding:11px;">
+                        No, skip
+                    </button>
+                </div>
+                <p id="save-address-status" style="display:none; font-size:12px; margin-top:10px; text-align:center;"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../scripts/navbar.js"></script>
+
+    <script type="module">
+        import { locationDataSimplified } from '../scripts/locationData.js';
+
+        await window.navbarReady;
+        const supabase = window._supabase;
+
+        // ── Auth guard ───────────────────────────────────────────────────────
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+            window.location.href = 'login.html';
+        }
+
+        function formatAge(months) {
+            if (months >= 12) {
+                const yrs = Math.floor(months / 12);
+                return yrs + (yrs === 1 ? ' year' : ' years');
+            }
+            return (months || 0) + ' months';
+        }
+
+        function formatStatus(s) {
+            return s ? s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : '';
+        }
+
+        function petCardHTML(pet) {
+            return `
+                <div class="pet-card">
+                    <img src="${pet.photo_url || 'https://via.placeholder.com/250x250?text=Pet'}" alt="${pet.name}"
+                         onerror="this.src='https://via.placeholder.com/250x250?text=Pet'">
+                    <h3>${pet.name}</h3>
+                    <p style="margin-top:-10px;">${formatStatus(pet.health_status)}</p>
+                    <p>${pet.breed || pet.species} • ${formatAge(pet.age_months)} old</p>
+                    <div class="pet-card-actions">
+                        <button class="btn btn-small" onclick="window.location.href='pet.html?id=${pet.id}'">View Details</button>
+                        <span class="adoption-status-pill status-${pet.adoption_status}">${formatStatus(pet.adoption_status)}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadMyPets() {
+            const grid  = document.getElementById('my-pets-grid');
+            const empty = document.getElementById('no-pets');
+
+            const { data: pets, error } = await supabase
+                .from('pets')
+                .select('id, name, health_status, breed, species, age_months, photo_url, adoption_status')
+                .eq('owner_id', session.user.id)
+                .order('created_at', { ascending: false });
+
+            if (error || !pets?.length) {
+                grid.style.display = 'none';
+                empty.style.display = 'block';
+                return;
+            }
+
+            grid.innerHTML = pets.map(petCardHTML).join('');
+        }
+
+        loadMyPets();
+
+        // ── Modal elements ───────────────────────────────────────────────────
+        const overlay        = document.getElementById('pet-modal-overlay');
+        const closeBtn       = document.getElementById('close-pet-modal');
+        const submitBtn      = document.getElementById('submit-pet-btn');
+        const message        = document.getElementById('pet-modal-message');
+        const locationStatus = document.getElementById('location-status');
+        const provinceSelect = document.getElementById('pet-province');
+        const zipInput       = document.getElementById('pet-zip');
+        const addressInput   = document.getElementById('pet-address');
+
+        // ── Save Address Modal elements ──────────────────────────────────────
+        const saveAddressOverlay = document.getElementById('save-address-modal-overlay');
+        const saveAddressPreview = document.getElementById('save-address-preview');
+        const saveAddressStatus  = document.getElementById('save-address-status');
+        const saveAddressYesBtn  = document.getElementById('save-address-yes');
+        const saveAddressNoBtn   = document.getElementById('save-address-no');
+
+        function showMessage(text, isError = true) {
+            message.textContent = text;
+            message.style.display = 'block';
+            message.style.color = isError ? '#e53e3e' : '#38a169';
+        }
+
+        // ── Check profile address & prompt if null ───────────────────────────
+        async function maybePromptSaveAddress(userId, petAddressData) {
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('address, city, barangay, province')
+                .eq('id', userId)
+                .maybeSingle();
+
+            if (profile && !profile.address && !profile.city && !profile.barangay && !profile.province) {
+                saveAddressPreview.textContent = petAddressData.address || '(address from pet profile)';
+                saveAddressStatus.style.display = 'none';
+                saveAddressYesBtn.disabled = false;
+                saveAddressYesBtn.textContent = 'Yes, save it';
+                saveAddressOverlay.style.display = 'flex';
+
+                saveAddressOverlay.dataset.userId    = userId;
+                saveAddressOverlay.dataset.address   = petAddressData.address   || '';
+                saveAddressOverlay.dataset.city      = petAddressData.city      || '';
+                saveAddressOverlay.dataset.province  = petAddressData.province  || '';
+                saveAddressOverlay.dataset.barangay  = petAddressData.barangay  || '';
+                saveAddressOverlay.dataset.latitude  = petAddressData.latitude  || '';
+                saveAddressOverlay.dataset.longitude = petAddressData.longitude || '';
+            }
+        }
+
+        saveAddressYesBtn.addEventListener('click', async () => {
+            saveAddressYesBtn.disabled = true;
+            saveAddressYesBtn.textContent = 'Saving...';
+
+            const userId    = saveAddressOverlay.dataset.userId;
+            const address   = saveAddressOverlay.dataset.address;
+            const city      = saveAddressOverlay.dataset.city;
+            const province  = saveAddressOverlay.dataset.province;
+            const barangay  = saveAddressOverlay.dataset.barangay;
+            const latitude  = parseFloat(saveAddressOverlay.dataset.latitude)  || null;
+            const longitude = parseFloat(saveAddressOverlay.dataset.longitude) || null;
+
+            const { error } = await supabase
+                .from('profiles')
+                .update({ address, city, province, barangay, latitude, longitude })
+                .eq('id', userId);
+
+            saveAddressStatus.style.display = 'block';
+            if (error) {
+                saveAddressStatus.textContent = '⚠ Could not save address. Please update your profile manually.';
+                saveAddressStatus.style.color = '#e53e3e';
+                saveAddressYesBtn.disabled = false;
+                saveAddressYesBtn.textContent = 'Yes, save it';
+            } else {
+                saveAddressStatus.textContent = '✓ Address saved to your profile!';
+                saveAddressStatus.style.color = '#38a169';
+                setTimeout(() => { saveAddressOverlay.style.display = 'none'; }, 1500);
+            }
+        });
+
+        saveAddressNoBtn.addEventListener('click', () => {
+            saveAddressOverlay.style.display = 'none';
+        });
+
+        // ── Open modal ───────────────────────────────────────────────────────
+        async function openModal() {
+            resetModal();
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            // Fetch user profile to check if address is available
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('address, city, barangay, province, latitude, longitude')
+                .eq('id', session.user.id)
+                .maybeSingle();
+
+            const addressRow = document.getElementById('use-profile-address-row');
+            const checkbox   = document.getElementById('use-profile-address-checkbox');
+            if (checkbox) checkbox.checked = false;
+            setAddressFieldsDisabled(false);
+            addressRow.style.display = 'none';
+
+            const hasAddress = profile && (profile.address || profile.city || profile.barangay || profile.province);
+            if (hasAddress) {
+                addressRow.dataset.address   = profile.address   || '';
+                addressRow.dataset.city      = profile.city      || '';
+                addressRow.dataset.barangay  = profile.barangay  || '';
+                addressRow.dataset.province  = profile.province  || '';
+                addressRow.dataset.latitude  = profile.latitude  || '';
+                addressRow.dataset.longitude = profile.longitude || '';
+                addressRow.style.display = 'block';
+            }
+        }
+
+        document.getElementById('add-pet-btn').addEventListener('click', openModal);
+        document.getElementById('add-pet-btn-empty').addEventListener('click', openModal);
+        closeBtn.addEventListener('click', () => { overlay.style.display = 'none'; document.body.style.overflow = ''; });
+        overlay.addEventListener('click', e => { if (e.target === overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; } });
+
+        // ── Use profile address checkbox ─────────────────────────────────────
+        document.getElementById('use-profile-address-checkbox').addEventListener('change', async function () {
+            const addressRow = document.getElementById('use-profile-address-row');
+
+            if (this.checked) {
+                const savedAddress  = addressRow.dataset.address;
+                const savedCity     = addressRow.dataset.city;
+                const savedBarangay = addressRow.dataset.barangay;
+                const savedProvince = addressRow.dataset.province;
+                const savedLat      = addressRow.dataset.latitude;
+                const savedLng      = addressRow.dataset.longitude;
+
+                // Step 1: Set province and trigger its change handler to populate cities
+                const provinceEl = document.getElementById('pet-province');
+                provinceEl.value = savedProvince || '';
+                provinceEl.dispatchEvent(new Event('change'));
+
+                // Wait for the DOM to update after province change
+                await new Promise(r => setTimeout(r, 0));
+
+                const cityEl = document.getElementById('pet-city');
+
+                if (cityEl.tagName === 'INPUT') {
+                    // Non-Bulacan province: just set text inputs directly
+                    cityEl.value = savedCity || '';
+                    const brgyEl = document.getElementById('pet-barangay');
+                    brgyEl.value = savedBarangay || '';
+                } else {
+                    // Bulacan (select): set city value then call onCityChange directly
+                    const matchOpt = [...cityEl.options].find(o => o.value === savedCity);
+                    if (matchOpt) {
+                        cityEl.value = savedCity;
+
+                        onCityChange();
+
+                        // Wait for barangay options to be populated
+                        await new Promise(r => setTimeout(r, 0));
+
+                        const brgyEl = document.getElementById('pet-barangay');
+                        const brgyMatch = [...brgyEl.options].find(o => o.value === savedBarangay);
+                        if (brgyMatch) {
+                            brgyEl.value = savedBarangay;
+                            // Update address display without triggering geocoding
+                            updateAddress();
+                        }
+                    }
+                }
+
+                // Extract street from saved address by stripping city/barangay/province parts
+                const street = savedAddress
+                    ? savedAddress.replace(`, ${savedCity}`, '').replace(`, ${savedBarangay}`, '').replace(`, ${savedProvince}`, '').replace(', Philippines', '').replace(/,?\s*\d{4}/, '').trim()
+                    : '';
+                document.getElementById('pet-street').value = street;
+                document.getElementById('pet-lat').value  = savedLat;
+                document.getElementById('pet-lng').value  = savedLng;
+
+                addressInput.value = savedAddress || '';
+                if (savedLat && savedLng) {
+                    locationStatus.style.display = 'block';
+                    locationStatus.textContent   = '✓ Location from your profile';
+                    locationStatus.style.color   = '#38a169';
+                }
+
+                setAddressFieldsDisabled(true);
+
+            } else {
+                ['pet-province', 'pet-city', 'pet-barangay', 'pet-street'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.value = '';
+                });
+                document.getElementById('pet-lat').value = '';
+                document.getElementById('pet-lng').value = '';
+                addressInput.value = '';
+                zipInput.value = '';
+                locationStatus.style.display = 'none';
+
+                const provinceEl = document.getElementById('pet-province');
+                provinceEl.dispatchEvent(new Event('change'));
+
+                setAddressFieldsDisabled(false);
+            }
+        });
+
+        function setAddressFieldsDisabled(disabled) {
+            ['pet-province', 'pet-city', 'pet-barangay', 'pet-street'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.disabled    = disabled;
+                    el.style.opacity = disabled ? '0.6' : '1';
+                    el.style.cursor  = disabled ? 'not-allowed' : '';
+                }
+            });
+        }
+
+        // ── Province / city / barangay chain ────────────────────────────────
+        provinceSelect.addEventListener('change', () => {
+            const province = provinceSelect.value;
+            let cityEl = document.getElementById('pet-city');
+            let brgyEl = document.getElementById('pet-barangay');
+
+            if (cityEl.tagName === 'INPUT') {
+                const sel = document.createElement('select'); sel.id = 'pet-city'; sel.disabled = true;
+                sel.innerHTML = '<option value="">Select City/Municipality</option>';
+                cityEl.replaceWith(sel); cityEl = document.getElementById('pet-city');
+            } else { cityEl.innerHTML = '<option value="">Select City/Municipality</option>'; cityEl.disabled = true; }
+
+            if (brgyEl.tagName === 'INPUT') {
+                const sel = document.createElement('select'); sel.id = 'pet-barangay'; sel.disabled = true;
+                sel.innerHTML = '<option value="">Select Municipality first</option>';
+                brgyEl.replaceWith(sel); brgyEl = document.getElementById('pet-barangay');
+            } else { brgyEl.innerHTML = '<option value="">Select Municipality first</option>'; brgyEl.disabled = true; }
+
+            zipInput.value = '';
+
+            if (province === 'Bulacan' && locationDataSimplified['Bulacan']) {
+                locationDataSimplified['Bulacan'].municipalities.forEach(mun => {
+                    const opt = document.createElement('option');
+                    opt.value = mun.name; opt.textContent = mun.name; opt.dataset.zip = mun.zipCode;
+                    cityEl.appendChild(opt);
+                });
+                cityEl.disabled = false;
+                cityEl.addEventListener('change', onCityChange);
+            } else if (province) {
+                const cityInput = document.createElement('input');
+                cityInput.type = 'text'; cityInput.id = 'pet-city';
+                cityInput.placeholder = 'e.g. Quezon City';
+                cityInput.addEventListener('input', updateAddress);
+                cityEl.replaceWith(cityInput);
+
+                const brgyInput = document.createElement('input');
+                brgyInput.type = 'text'; brgyInput.id = 'pet-barangay';
+                brgyInput.placeholder = 'e.g. Brgy. San Antonio';
+                brgyInput.addEventListener('input', updateAddress);
+                brgyEl.replaceWith(brgyInput);
+            }
+            updateAddress();
+        });
+
+        function onCityChange() {
+            const cityEl   = document.getElementById('pet-city');
+            const brgyEl   = document.getElementById('pet-barangay');
+            const cityName = cityEl.value;
+            brgyEl.innerHTML = '<option value="">Select Barangay</option>';
+            brgyEl.disabled = true;
+            zipInput.value = '';
+            const selectedOpt = cityEl.options[cityEl.selectedIndex];
+            if (selectedOpt?.dataset.zip) zipInput.value = selectedOpt.dataset.zip;
+            if (cityName && locationDataSimplified[cityName]) {
+                locationDataSimplified[cityName].barangays.forEach(brgy => {
+                    const opt = document.createElement('option');
+                    opt.value = brgy; opt.textContent = brgy;
+                    brgyEl.appendChild(opt);
+                });
+                brgyEl.disabled = false;
+                brgyEl.addEventListener('change', onBarangayChange);
+            }
+            updateAddress();
+        }
+
+        async function onBarangayChange() {
+            updateAddress();
+            const barangay = document.getElementById('pet-barangay').value;
+            const city     = document.getElementById('pet-city').value;
+            const province = provinceSelect.value;
+            if (!barangay || !city) return;
+            locationStatus.style.display = 'block';
+            locationStatus.textContent = '⏳ Finding coordinates...';
+            locationStatus.style.color = '#888';
+            try {
+                const res = await fetch(
+                    `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(`${barangay}, ${city}, ${province}, Philippines`)}`,
+                    { headers: { 'Accept-Language': 'en' } }
+                );
+                const results = await res.json();
+                if (results.length) {
+                    document.getElementById('pet-lat').value = parseFloat(results[0].lat).toFixed(6);
+                    document.getElementById('pet-lng').value = parseFloat(results[0].lon).toFixed(6);
+                    locationStatus.textContent = '✓ Location found';
+                    locationStatus.style.color = '#38a169';
+                } else {
+                    locationStatus.textContent = '⚠ Coordinates not found — address will still be saved';
+                    locationStatus.style.color = '#dd6b20';
+                }
+            } catch { locationStatus.textContent = '⚠ Geocoding failed'; locationStatus.style.color = '#e53e3e'; }
+        }
+
+        document.getElementById('pet-street').addEventListener('input', updateAddress);
+
+        function updateAddress() {
+            const street   = document.getElementById('pet-street').value.trim();
+            const barangay = document.getElementById('pet-barangay').value.trim();
+            const city     = document.getElementById('pet-city').value.trim();
+            const province = provinceSelect.value;
+            const zip      = zipInput.value.trim();
+            const parts = [street, barangay ? `Brgy. ${barangay}` : '', city, province, zip, 'Philippines'].filter(Boolean);
+            addressInput.value = parts.length > 2 ? parts.join(', ') : '';
+        }
+
+        // ── Photo upload ─────────────────────────────────────────────────────
+        const photoUploadArea = document.getElementById('photo-upload-area');
+        const photoFileInput  = document.getElementById('pet-photo-file');
+        const photoPreviews   = document.getElementById('photo-previews');
+        let selectedPhotos = [];
+
+        photoUploadArea.addEventListener('click', () => {
+            if (selectedPhotos.length >= 5) { showMessage('Maximum 5 photos allowed.'); return; }
+            photoFileInput.click();
+        });
+
+        photoFileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            const remaining = 5 - selectedPhotos.length;
+            const toAdd = files.slice(0, remaining).filter(f => f.size <= 25 * 1024 * 1024);
+            toAdd.forEach(file => {
+                selectedPhotos.push(file);
+                const reader = new FileReader();
+                reader.onload = (ev) => addPreview(ev.target.result, selectedPhotos.length - 1);
+                reader.readAsDataURL(file);
+            });
+            photoFileInput.value = '';
+        });
+
+        function addPreview(src, index) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'photo-thumb';
+            wrapper.innerHTML = `
+                <img src="${src}" alt="Pet photo">
+                <button type="button" class="photo-remove-btn" data-index="${index}"><i class="fas fa-times"></i></button>
+                ${index === 0 ? '<span class="photo-main-badge">Main</span>' : ''}
+            `;
+            wrapper.querySelector('.photo-remove-btn').addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectedPhotos.splice(parseInt(e.currentTarget.dataset.index), 1);
+                renderPreviews();
+            });
+            photoPreviews.appendChild(wrapper);
+        }
+
+        function renderPreviews() {
+            photoPreviews.innerHTML = '';
+            selectedPhotos.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = (ev) => addPreview(ev.target.result, index);
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function resetModal() {
+            ['pet-name','pet-breed','pet-age','pet-description','pet-street','pet-lat','pet-lng','pet-address','pet-zip']
+                .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+            ['pet-species','pet-gender','pet-health','pet-province']
+                .forEach(id => { const el = document.getElementById(id); if (el) el.selectedIndex = 0; });
+
+            const cityEl = document.getElementById('pet-city');
+            if (cityEl.tagName === 'INPUT') {
+                const sel = document.createElement('select'); sel.id = 'pet-city'; sel.disabled = true;
+                sel.innerHTML = '<option value="">Select Province first</option>'; cityEl.replaceWith(sel);
+            } else { cityEl.innerHTML = '<option value="">Select Province first</option>'; cityEl.disabled = true; }
+
+            const brgyEl = document.getElementById('pet-barangay');
+            if (brgyEl.tagName === 'INPUT') {
+                const sel = document.createElement('select'); sel.id = 'pet-barangay'; sel.disabled = true;
+                sel.innerHTML = '<option value="">Select Municipality first</option>'; brgyEl.replaceWith(sel);
+            } else { brgyEl.innerHTML = '<option value="">Select Municipality first</option>'; brgyEl.disabled = true; }
+
+            const checkbox = document.getElementById('use-profile-address-checkbox');
+            if (checkbox) checkbox.checked = false;
+            setAddressFieldsDisabled(false);
+            document.getElementById('use-profile-address-row').style.display = 'none';
+
+            selectedPhotos = []; photoPreviews.innerHTML = ''; photoFileInput.value = '';
+            message.style.display = 'none'; locationStatus.style.display = 'none';
+            submitBtn.disabled = false; submitBtn.textContent = 'Create Profile';
+        }
+
+        // ── Submit ───────────────────────────────────────────────────────────
+        submitBtn.addEventListener('click', async () => {
+            const name     = document.getElementById('pet-name').value.trim();
+            const species  = document.getElementById('pet-species').value;
+            const breed    = document.getElementById('pet-breed').value.trim();
+            const gender   = document.getElementById('pet-gender').value;
+            const age      = document.getElementById('pet-age').value;
+            const health   = document.getElementById('pet-health').value;
+            const desc     = document.getElementById('pet-description').value.trim();
+            const province = provinceSelect.value;
+            const city     = document.getElementById('pet-city').value.trim();
+            const barangay = document.getElementById('pet-barangay').value.trim();
+            const street   = document.getElementById('pet-street').value.trim();
+
+            if (!name || !species || !breed || !gender || !age || !health || !desc) { showMessage('Please fill in all required pet details.'); return; }
+            if (!province || !city || !barangay || !street) { showMessage('Please fill in all address fields.'); return; }
+            if (selectedPhotos.length === 0) { showMessage('Please upload at least one photo.'); return; }
+
+            submitBtn.disabled = true; submitBtn.textContent = 'Creating...';
+
+            const { data: { session: currentSession } } = await supabase.auth.getSession();
+            if (!currentSession) { showMessage('Session expired. Please sign in again.'); submitBtn.disabled = false; submitBtn.textContent = 'Create Profile'; return; }
+
+            const photoUrls = [];
+            for (let i = 0; i < selectedPhotos.length; i++) {
+                const file = selectedPhotos[i];
+                const ext = file.name.split('.').pop();
+                const fileName = `${currentSession.user.id}_${Date.now()}_${i}.${ext}`;
+                const { error: uploadError } = await supabase.storage.from('pet-photos').upload(fileName, file);
+                if (uploadError) { showMessage(`Photo ${i + 1} upload failed: ${uploadError.message}`); submitBtn.disabled = false; submitBtn.textContent = 'Create Profile'; return; }
+                const { data: urlData } = supabase.storage.from('pet-photos').getPublicUrl(fileName);
+                photoUrls.push(urlData.publicUrl);
+            }
+
+            const petAddress = addressInput.value.trim() || null;
+            const petLat     = parseFloat(document.getElementById('pet-lat').value) || null;
+            const petLng     = parseFloat(document.getElementById('pet-lng').value) || null;
+
+            const { error: petError } = await supabase.from('pets').insert({
+                owner_id: currentSession.user.id, name, species, breed, gender,
+                age_months: parseInt(age) || null, health_status: health,
+                adoption_status: 'available', photo_url: photoUrls[0], description: desc,
+                address: petAddress, latitude: petLat, longitude: petLng,
+            });
+
+            if (petError) { showMessage('Error creating profile: ' + petError.message); submitBtn.disabled = false; submitBtn.textContent = 'Create Profile'; return; }
+
+            const successModal = document.getElementById('success-modal-overlay');
+            successModal.style.display = 'flex';
+            loadMyPets();
+
+            setTimeout(async () => {
+                successModal.style.display = 'none';
+                overlay.style.display = 'none';
+                document.body.style.overflow = '';
+                resetModal();
+
+                // After closing, check if user's profile needs an address
+                if (petAddress) {
+                    await maybePromptSaveAddress(currentSession.user.id, {
+                        address:   petAddress,
+                        city:      city,
+                        province:  province,
+                        barangay:  barangay,
+                        latitude:  petLat,
+                        longitude: petLng,
+                    });
+                }
+            }, 2500);
+        });
+    </script>
+
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .page-header h1 { margin: 0; }
+
+        .adoption-status-pill {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+        }
+        .status-available { background: #c6f6d5; color: #276749; }
+        .status-adopted   { background: #bee3f8; color: #2a69ac; }
+        .status-pending   { background: #fefcbf; color: #7b6002; }
+
+        .adopt-btn {
+            background: var(--primary-color);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .adopt-btn:hover { background: var(--secondary-color); transform: translateY(-2px); }
+
+        .pet-card.skeleton {
+            height: 320px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+            border-radius: 10px;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        .pet-card-actions { display:flex; align-items:center; gap:8px; margin:0 20px 20px; }
+        .pet-card-actions .btn-small { flex:1; margin:0; width:auto; }
+
+        .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:2000; display:flex; align-items:center; justify-content:center; padding:20px; }
+        .modal-card { background:var(--white-color); border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,0.3); width:100%; max-width:620px; max-height:90vh; overflow-y:auto; }
+        .modal-header { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; border-bottom:1px solid #eee; position:sticky; top:0; background:var(--white-color); z-index:1; }
+        .modal-header h2 { margin:0; font-size:20px; color:var(--dark-color); }
+        .modal-close { background:none; border:none; font-size:24px; cursor:pointer; color:var(--gray-color); line-height:1; }
+        .modal-close:hover { color:var(--dark-color); }
+        .modal-body { padding:24px; }
+        .modal-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        .modal-form-grid .full-width { grid-column:1/-1; }
+        .modal-form-grid .form-group { display:flex; flex-direction:column; gap:5px; }
+        .modal-form-grid label { font-size:13px; font-weight:600; color:var(--dark-color); }
+        .modal-form-grid input, .modal-form-grid select, .modal-form-grid textarea { padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; outline:none; transition:border-color 0.2s; }
+        .modal-form-grid input:focus, .modal-form-grid select:focus, .modal-form-grid textarea:focus { border-color:var(--primary-color); }
+        .modal-form-grid textarea { resize:vertical; }
+        .photo-upload-area { border:2px dashed #ddd; border-radius:8px; padding:24px; text-align:center; cursor:pointer; transition:border-color 0.2s; display:flex; flex-direction:column; align-items:center; }
+        .photo-upload-area:hover { border-color:var(--primary-color); }
+        .photo-thumb { position:relative; width:90px; height:90px; border-radius:8px; overflow:hidden; border:2px solid #eee; }
+        .photo-thumb img { width:100%; height:100%; object-fit:cover; }
+        .photo-remove-btn { position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.6); color:white; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .photo-main-badge { position:absolute; bottom:4px; left:4px; background:var(--primary-color); color:white; font-size:9px; font-weight:bold; padding:2px 5px; border-radius:4px; }
+        @media (max-width:500px) { .modal-form-grid { grid-template-columns:1fr; } }
+        button:disabled { opacity:0.7; cursor:not-allowed; }
+    </style>
+</body>
+</html>

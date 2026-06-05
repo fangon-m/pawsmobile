@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorite Pets - Paws and Pals</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav id="navbar"></nav>
+
+    <main class="container">
+        <section>
+            <h1>My Favorite Pets</h1>
+            <p>Your saved pets are displayed below. Click to view more details or express your interest.</p>
+
+            <div id="favorites-list">
+                <!-- Skeleton loaders -->
+                <div class="pet-grid" id="favorites-grid">
+                    <div class="pet-card skeleton"></div>
+                    <div class="pet-card skeleton"></div>
+                    <div class="pet-card skeleton"></div>
+                    <div class="pet-card skeleton"></div>
+                </div>
+            </div>
+
+            <div id="no-favorites" style="display: none; text-align: center; padding: 60px 20px;">
+                <i class="fas fa-heart-broken" style="font-size: 48px; color: var(--gray-color); margin-bottom: 20px;"></i>
+                <h2>No favorite pets yet</h2>
+                <p style="margin-bottom: 20px;">Start browsing and add pets to your favorites!</p>
+                <a href="../index.html" class="btn btn-primary">Browse Pets</a>
+            </div>
+        </section>
+    </main>
+
+    <script src="../scripts/navbar.js"></script>
+
+    <script type="module">
+        await window.navbarReady;
+        const supabase = window._supabase;
+
+        function formatAge(months) {
+            if (months >= 12) {
+                const yrs = Math.floor(months / 12);
+                return yrs + (yrs === 1 ? ' year' : ' years');
+            }
+            return (months || 0) + ' months';
+        }
+
+        function petCardHTML(pet, favoriteId) {
+            return `
+                <div class="pet-card" data-favorite-id="${favoriteId}" data-pet-id="${pet.id}">
+                    <img src="${pet.photo_url || 'https://via.placeholder.com/250x250?text=Pet'}" alt="${pet.name}"
+                         onerror="this.src='https://via.placeholder.com/250x250?text=Pet'">
+                    <h3>${pet.name}</h3>
+                    <p style="margin-top:-10px;">${pet.health_status ? pet.health_status.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : ''}</p>
+                    <p>${pet.breed || pet.species} • ${formatAge(pet.age_months)} old</p>
+                    <div class="pet-card-actions">
+                        <button class="btn btn-small" onclick="window.location.href='pet.html?id=${pet.id}'">View Details</button>
+                        <button class="btn-favorite favorited btn-remove" data-favorite-id="${favoriteId}" title="Remove from favorites">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadFavorites() {
+            const grid = document.getElementById('favorites-grid');
+            const noFavs = document.getElementById('no-favorites');
+
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Join favorites with pets data
+            const { data: favorites, error } = await supabase
+                .from('favorites')
+                .select(`
+                    id,
+                    pet_id,
+                    pets (
+                        id, name, health_status, breed, species, age_months, photo_url
+                    )
+                `)
+                .eq('user_id', session.user.id)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#e53e3e;">Failed to load favorites. Please try again.</p>';
+                return;
+            }
+
+            const valid = favorites?.filter(f => f.pets) || [];
+
+            if (!valid.length) {
+                grid.closest('#favorites-list').style.display = 'none';
+                noFavs.style.display = 'block';
+                return;
+            }
+
+            grid.innerHTML = valid.map(f => petCardHTML(f.pets, f.id)).join('');
+            attachRemoveHandlers();
+        }
+
+        function attachRemoveHandlers() {
+            document.querySelectorAll('.btn-remove').forEach(btn => {
+                btn.addEventListener('mouseenter', () => {
+                    btn.style.borderColor = '#e8e6e6';
+                    btn.style.color = '#e0dada';
+                    btn.style.background = '#ffffff';
+                });
+                btn.addEventListener('mouseleave', () => {
+                    if (!btn.disabled) {
+                        btn.style.borderColor = '';
+                        btn.style.color = '';
+                        btn.style.background = '';
+                    }
+                });
+                btn.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    const favoriteId = btn.dataset.favoriteId;
+                    const card = btn.closest('.pet-card');
+
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+                    const { error } = await supabase
+                        .from('favorites')
+                        .delete()
+                        .eq('id', favoriteId);
+
+                    if (error) {
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-heart"></i>';
+                        alert('Failed to remove favorite. Please try again.');
+                        return;
+                    }
+
+                    card.style.transition = 'opacity 0.3s, transform 0.3s';
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        card.remove();
+                        const remaining = document.querySelectorAll('#favorites-grid .pet-card:not(.skeleton)');
+                        if (!remaining.length) {
+                            document.getElementById('favorites-list').style.display = 'none';
+                            document.getElementById('no-favorites').style.display = 'block';
+                        }
+                    }, 300);
+                });
+            });
+        }
+
+        loadFavorites();
+    </script>
+
+    <style>
+        .pet-card.skeleton {
+            height: 320px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+            border-radius: 10px;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        .pet-card-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 20px 20px;
+        }
+        .pet-card-actions .btn-small {
+            flex: 1;
+            margin: 0;
+            width: auto;
+        }
+    </style>
+</body>
+</html>

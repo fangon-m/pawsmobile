@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Paws and Pals</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav id="navbar"></nav>
+
+    <main class="signup-page-main">
+        <section class="signup-section">
+            <div class="signup-card">
+                <h1>Create Your Account</h1>
+                <form id="signup-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first-name">First Name</label>
+                            <input type="text" id="first-name" placeholder="Enter your first name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Last Name</label>
+                            <input type="text" id="last-name" placeholder="Enter your last name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="Choose a username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">Email Address</label>
+                        <input type="email" id="signup-email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" placeholder="Create a password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" placeholder="Confirm your password" required>
+                    </div>
+                    <p id="form-message" style="display:none; font-size:13px; margin: 8px 0; text-align:center;"></p>
+                    <button type="submit" id="submit-btn" class="btn btn-primary" style="width:100%; margin-top:20px; margin-bottom:20px; background-color:var(--primary-color); border-radius:15px; padding:20px; color:white; font-weight:bold;">Sign Up</button>
+                    <div style="text-align:center; font-size:12px; color:var(--gray-color);">
+                        By signing up, you agree to our <a href="#" style="color:var(--primary-color); text-decoration:none;">Terms of Service</a> and <a href="#" style="color:var(--primary-color); text-decoration:none;">Privacy Policy</a>.
+                    </div>
+                </form>
+                <p class="text-center">
+                    Already have an account? <a href="login.html" style="color:var(--primary-color); text-decoration:none; font-weight:bold;">Sign In</a>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script type="module" src="../scripts/navbar.js"></script>
+    <script type="module">
+        await window.navbarReady;
+
+        const form = document.getElementById('signup-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const formMessage = document.getElementById('form-message');
+
+        function showMessage(text, isError = true) {
+            formMessage.textContent = text;
+            formMessage.style.display = 'block';
+            formMessage.style.color = isError ? '#e53e3e' : '#38a169';
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const firstName = document.getElementById('first-name').value.trim();
+            const lastName = document.getElementById('last-name').value.trim();
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (password !== confirmPassword) { showMessage('Passwords do not match!'); return; }
+            if (password.length < 6) { showMessage('Password must be at least 6 characters!'); return; }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating account...';
+
+            const success = await window.signup(email, password, firstName, lastName, username);
+            if (success) {
+                showMessage('Account created! Redirecting to sign in...', false);
+                setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+            } else {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign Up';
+            }
+        });
+    </script>
+
+    <style>
+        html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+        #navbar { position: fixed; top: 0; width: 100%; z-index: 1001; }
+        .signup-page-main { margin: 0; padding: 0; height: 108vh; width: 100%; }
+        .signup-section {
+            display: flex; justify-content: center; align-items: center; height: 100%;
+            background-image: url('../images/login-bg.jpg');
+            background-size: cover; background-position: center;
+            background-attachment: fixed; position: relative;
+            overflow-y: auto; padding: 70px 20px;
+        }
+        .signup-section::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.5); z-index: 1;
+        }
+        .signup-card {
+            background-color: var(--white-color); padding: 30px; border-radius: 10px;
+            box-shadow: var(--shadow); max-width: 420px; width: 100%; position: relative; z-index: 2;
+        }
+        .signup-card h1 { margin-bottom: 8px; color: var(--dark-color); font-size: 28px; }
+        .signup-card a { text-decoration: none; color: var(--primary-color); }
+        .signup-card a:hover { text-decoration: underline; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+        .signup-footer { position: fixed; bottom: 0; width: 100%; color: white; text-align: center; padding: 10px; font-size: 12px; z-index: 1000; }
+        button:disabled { opacity: 0.7; cursor: not-allowed; }
+    </style>
+</body>
+</html>

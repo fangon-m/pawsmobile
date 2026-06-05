@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Details - Paws & Pals</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav id="navbar"></nav>
+
+    <main class="container" id="pet-detail-main">
+        <div id="pet-skeleton">
+            <div class="skeleton-back"></div>
+            <div class="detail-layout">
+                <div class="detail-gallery-col">
+                    <div class="skeleton skeleton-img"></div>
+                    <div class="skeleton-thumbs">
+                        <div class="skeleton skeleton-thumb"></div>
+                        <div class="skeleton skeleton-thumb"></div>
+                        <div class="skeleton skeleton-thumb"></div>
+                    </div>
+                </div>
+                <div class="detail-info-col">
+                    <div class="skeleton skeleton-title"></div>
+                    <div class="skeleton skeleton-line"></div>
+                    <div class="skeleton skeleton-line short"></div>
+                    <div class="skeleton skeleton-line"></div>
+                    <div class="skeleton skeleton-line short"></div>
+                    <div class="skeleton skeleton-block"></div>
+                    <div class="skeleton skeleton-owner"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="pet-detail-content" style="display:none;">
+            <a href="javascript:history.back()" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+
+            <div class="detail-layout">
+                <div class="detail-gallery-col">
+                    <div class="main-photo-wrap">
+                        <img id="main-photo" src="" alt="Pet photo">
+                        <span id="adoption-badge" class="adoption-badge"></span>
+                    </div>
+                    <div id="thumb-strip" class="thumb-strip"></div>
+                </div>
+
+                <div class="detail-info-col">
+                    <div class="name-row">
+                        <h1 id="pet-name"></h1>
+                        <button class="btn-favorite" id="fav-btn" title="Add to favorites"><i class="fas fa-heart"></i></button>
+                    </div>
+
+                    <div class="tag-row" id="tag-row"></div>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label"><i class="fas fa-paw"></i> Species</span>
+                            <span class="info-value" id="pet-species"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label"><i class="fas fa-dna"></i> Breed</span>
+                            <span class="info-value" id="pet-breed"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label"><i class="fas fa-venus-mars"></i> Gender</span>
+                            <span class="info-value" id="pet-gender"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label"><i class="fas fa-birthday-cake"></i> Age</span>
+                            <span class="info-value" id="pet-age"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label"><i class="fas fa-heartbeat"></i> Health</span>
+                            <span class="info-value" id="pet-health"></span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label"><i class="fas fa-map-marker-alt"></i> Location</span>
+                            <span class="info-value" id="pet-location"></span>
+                        </div>
+                    </div>
+
+                    <div class="description-box">
+                        <h3>About</h3>
+                        <p id="pet-description"></p>
+                    </div>
+
+                    <div class="owner-card">
+                        <h3>Owner</h3>
+                        <div class="owner-row">
+                            <div class="owner-avatar-wrap">
+                                <img id="owner-avatar" src="" alt="Owner avatar" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=?&background=FBAD38&color=fff&size=56'">
+                            </div>
+                            <div class="owner-info">
+                                <p class="owner-name" id="owner-name"></p>
+                                <p class="owner-sub" id="owner-bio"></p>
+                                <p class="owner-sub" id="owner-location"></p>
+                                <p class="owner-sub" id="owner-contact"></p>                               
+                            </div>
+                        </div>
+                        <div class="owner-contact" id="owner-contact"></div>
+                    </div>
+
+                    <div id="action-buttons" class="action-buttons-group">
+                        <button class="btn adopt-btn" id="adopt-btn">
+                            <i class="fas fa-home"></i> Express Interest in Adopting
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="pet-not-found" style="display:none; text-align:center; padding:80px 20px;">
+            <i class="fas fa-search" style="font-size:48px; color:var(--gray-color); margin-bottom:20px;"></i>
+            <h2>Pet not found</h2>
+            <p style="margin-bottom:24px; color:var(--gray-color);">This pet profile may have been removed.</p>
+            <a href="../index.html" class="btn btn-primary" style="background:var(--primary-color); color:white;">Back to Home</a>
+        </div>
+    </main>
+
+    <!-- ── Generic Alert Modal ─────────────────────────────────────────── -->
+    <div id="alert-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card" style="max-width:400px; text-align:center;">
+            <div style="padding:32px 28px 28px;">
+                <div id="alert-modal-icon" style="font-size:44px; margin-bottom:16px;">ℹ️</div>
+                <h3 id="alert-modal-title" style="margin:0 0 10px; font-size:20px; color:var(--dark-color, #222);"></h3>
+                <p id="alert-modal-message" style="color:#666; margin:0 0 24px; font-size:14px; line-height:1.5;"></p>
+                <div id="alert-modal-actions" style="display:flex; gap:10px; justify-content:center;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Mark as Adopted Modal ──────────────────────────────────────── -->
+    <div id="adopt-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Mark as Adopted</h2>
+                <button class="modal-close" id="adopt-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:15px; color:var(--dark-color); margin-bottom:20px; line-height:1.6;">
+                    Are you sure you want to mark this pet as adopted? This action will update the pet's status and notify interested adopters.
+                </p>
+                <p id="adopt-modal-message" style="display:none; font-size:13px; margin-bottom:15px; padding:10px; border-radius:8px; text-align:center;"></p>
+                <div style="display:flex; gap:12px; margin-top:24px;">
+                    <button id="adopt-modal-cancel" class="btn" style="flex:1; background:#f0f0f0; color:#555; border-radius:12px; font-size:16px; font-weight:700; padding:15px; border:none; cursor:pointer;">
+                        Cancel
+                    </button>
+                    <button id="adopt-modal-confirm" class="btn mark-adopted-btn" style="flex:1;">
+                        <i class="fas fa-check-circle"></i> Confirm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Mark as Available Modal ────────────────────────────────────── -->
+    <div id="available-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Mark as Available for Adoption</h2>
+                <button class="modal-close" id="available-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:15px; color:var(--dark-color); margin-bottom:20px; line-height:1.6;">
+                    Are you sure you want to mark this pet as available for adoption again? This will update the pet's status.
+                </p>
+                <p id="available-modal-message" style="display:none; font-size:13px; margin-bottom:15px; padding:10px; border-radius:8px; text-align:center;"></p>
+                <div style="display:flex; gap:12px; margin-top:24px;">
+                    <button id="available-modal-cancel" class="btn" style="flex:1; background:#f0f0f0; color:#555; border-radius:12px; font-size:16px; font-weight:700; padding:15px; border:none; cursor:pointer;">
+                        Cancel
+                    </button>
+                    <button id="available-modal-confirm" class="btn mark-adopted-btn" style="flex:1; background:#3182ce;">
+                        <i class="fas fa-check-circle"></i> Confirm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Delete Profile Modal ───────────────────────────────────────── -->
+    <div id="delete-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Delete Pet Profile</h2>
+                <button class="modal-close" id="delete-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:15px; color:var(--dark-color); margin-bottom:20px; line-height:1.6;">
+                    Are you sure you want to delete this pet profile permanently? This action cannot be undone and will remove all profile info and associated images from the platform.
+                </p>
+                <p id="delete-modal-message" style="display:none; font-size:13px; margin-bottom:15px; padding:10px; border-radius:8px; text-align:center;"></p>
+                <div style="display:flex; gap:12px; margin-top:24px;">
+                    <button id="delete-modal-cancel" class="btn" style="flex:1; background:#f0f0f0; color:#555; border-radius:12px; font-size:16px; font-weight:700; padding:15px; border:none; cursor:pointer;">
+                        Cancel
+                    </button>
+                    <button id="delete-modal-confirm" class="btn" style="flex:1; background:#e53e3e; color:white; border-radius:12px; font-size:16px; font-weight:700; padding:15px; border:none; cursor:pointer;">
+                        <i class="fas fa-trash-alt"></i> Delete Permanently
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Edit Modal ─────────────────────────────────────────────────── -->
+    <div id="edit-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Edit Pet Information</h2>
+                <button class="modal-close" id="edit-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="edit-modal-message" style="display:none; font-size:13px; margin-bottom:10px; text-align:center;"></p>
+                <div class="modal-form-grid">
+                    <div class="form-group">
+                        <label>Pet Name <span style="color:red;">*</span></label>
+                        <input type="text" id="edit-name" placeholder="e.g. Max">
+                    </div>
+                    <div class="form-group">
+                        <label>Species <span style="color:red;">*</span></label>
+                        <select id="edit-species">
+                            <option value="">Select species</option>
+                            <option value="dog">Dog</option>
+                            <option value="cat">Cat</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Breed <span style="color:red;">*</span></label>
+                        <input type="text" id="edit-breed" placeholder="e.g. Golden Retriever">
+                    </div>
+                    <div class="form-group">
+                        <label>Gender <span style="color:red;">*</span></label>
+                        <select id="edit-gender">
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Age (months) <span style="color:red;">*</span></label>
+                        <input type="number" id="edit-age" placeholder="e.g. 24" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Health Status <span style="color:red;">*</span></label>
+                        <select id="edit-health">
+                            <option value="">Select status</option>
+                            <option value="healthy">Healthy</option>
+                            <option value="vaccinated">Vaccinated</option>
+                            <option value="needs_care">Needs Care</option>
+                            <option value="special_needs">Special Needs</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Description <span style="color:red;">*</span></label>
+                        <textarea id="edit-description" placeholder="Tell us about your pet..." rows="4"></textarea>
+                    </div>
+                    <div class="form-group full-width" style="display:flex; gap:12px; margin-top:8px;">
+                        <button class="btn adopt-btn" id="edit-save-btn" style="flex:1;">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                        <button class="btn" id="edit-cancel-btn" style="flex:1; background:#f0f0f0; color:#555; border-radius:12px; font-size:16px; font-weight:700; padding:15px; border:none; cursor:pointer;">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../scripts/navbar.js"></script>
+
+    <script type="module">
+    await window.navbarReady;
+    const supabase = window._supabase;
+
+    const params = new URLSearchParams(window.location.search);
+    const petId  = params.get('id');
+    let currentPetData = null;
+
+    // ── Generic Alert Modal Helper ────────────────────────────────────────
+    function showAlertModal({ icon = 'ℹ️', title = '', message = '', buttons = [] }) {
+        const overlay   = document.getElementById('alert-modal-overlay');
+        const iconEl    = document.getElementById('alert-modal-icon');
+        const titleEl   = document.getElementById('alert-modal-title');
+        const msgEl     = document.getElementById('alert-modal-message');
+        const actionsEl = document.getElementById('alert-modal-actions');
+
+        iconEl.textContent  = icon;
+        titleEl.textContent = title;
+        msgEl.textContent   = message;
+        actionsEl.innerHTML = '';
+
+        const btns = buttons.length ? buttons : [{ label: 'OK', primary: true }];
+        btns.forEach(btn => {
+            const el = document.createElement('button');
+            el.textContent = btn.label;
+            el.className   = 'btn' + (btn.primary ? ' btn-primary' : '');
+            el.style.cssText = btn.primary
+                ? 'background-color:var(--primary-color); color:white; padding:10px 28px; min-width:100px;'
+                : 'background:#f0f0f0; color:#555; padding:10px 28px; min-width:100px;';
+            el.addEventListener('click', () => {
+                overlay.style.display = 'none';
+                document.body.style.overflow = '';
+                if (btn.onClick) btn.onClick();
+            });
+            actionsEl.appendChild(el);
+        });
+
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        overlay.onclick = (e) => {
+            if (e.target === overlay) {
+                overlay.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        };
+    }
+
+    // ── Mark as Adopted Modal ─────────────────────────────────────────────
+    const adoptModalOverlay    = document.getElementById('adopt-modal-overlay');
+    const adoptModalCloseBtn   = document.getElementById('adopt-modal-close');
+    const adoptModalCancelBtn  = document.getElementById('adopt-modal-cancel');
+    const adoptModalConfirmBtn = document.getElementById('adopt-modal-confirm');
+    const adoptModalMessage    = document.getElementById('adopt-modal-message');
+
+    function openAdoptModal() {
+        adoptModalMessage.style.display = 'none';
+        adoptModalConfirmBtn.disabled = false;
+        adoptModalConfirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirm';
+        adoptModalOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAdoptModal() {
+        adoptModalOverlay.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    adoptModalCloseBtn.addEventListener('click', closeAdoptModal);
+    adoptModalCancelBtn.addEventListener('click', closeAdoptModal);
+    adoptModalOverlay.addEventListener('click', e => { if (e.target === adoptModalOverlay) closeAdoptModal(); });
+
+    // ── Available for Adoption Modal ──────────────────────────────────────
+    const availableModalOverlay    = document.getElementById('available-modal-overlay');
+    const availableModalCloseBtn   = document.getElementById('available-modal-close');
+    const availableModalCancelBtn  = document.getElementById('available-modal-cancel');
+    const availableModalConfirmBtn = document.getElementById('available-modal-confirm');
+    const availableModalMessage    = document.getElementById('available-modal-message');
+
+    function openAvailableModal() {
+        availableModalMessage.style.display = 'none';
+        availableModalConfirmBtn.disabled = false;
+        availableModalConfirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirm';
+        availableModalOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAvailableModal() {
+        availableModalOverlay.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    availableModalCloseBtn.addEventListener('click', closeAvailableModal);
+    availableModalCancelBtn.addEventListener('click', closeAvailableModal);
+    availableModalOverlay.addEventListener('click', e => { if (e.target === availableModalOverlay) closeAvailableModal(); });
+
+    // ── Delete Profile Modal ──────────────────────────────────────────────
+    const deleteModalOverlay    = document.getElementById('delete-modal-overlay');
+    const deleteModalCloseBtn   = document.getElementById('delete-modal-close');
+    const deleteModalCancelBtn  = document.getElementById('delete-modal-cancel');
+    const deleteModalConfirmBtn = document.getElementById('delete-modal-confirm');
+    const deleteModalMessage    = document.getElementById('delete-modal-message');
+
+    function openDeleteModal() {
+        deleteModalMessage.style.display = 'none';
+        deleteModalConfirmBtn.disabled = false;
+        deleteModalConfirmBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Delete Permanently';
+        deleteModalOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDeleteModal() {
+        deleteModalOverlay.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    deleteModalCloseBtn.addEventListener('click', closeDeleteModal);
+    deleteModalCancelBtn.addEventListener('click', closeDeleteModal);
+    deleteModalOverlay.addEventListener('click', e => { if (e.target === deleteModalOverlay) closeDeleteModal(); });
+
+    deleteModalConfirmBtn.addEventListener('click', async () => {
+        deleteModalConfirmBtn.disabled = true;
+        deleteModalConfirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+
+        const { error } = await supabase.from('pets').delete().eq('id', petId);
+
+        if (error) {
+            deleteModalMessage.textContent = 'Failed to delete profile: ' + error.message;
+            deleteModalMessage.style.color = '#e53e3e';
+            deleteModalMessage.style.background = '#fff5f5';
+            deleteModalMessage.style.display = 'block';
+            deleteModalConfirmBtn.disabled = false;
+            deleteModalConfirmBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Delete Permanently';
+            return;
+        }
+
+        deleteModalMessage.textContent = 'Pet profile permanently deleted successfully.';
+        deleteModalMessage.style.color = '#276749';
+        deleteModalMessage.style.background = '#c6f6d5';
+        deleteModalMessage.style.display = 'block';
+
+        setTimeout(() => {
+            closeDeleteModal();
+            window.location.href = '../index.html';
+        }, 1800);
+    });
+
+    // ── Edit Modal ────────────────────────────────────────────────────────
+    const editOverlay   = document.getElementById('edit-modal-overlay');
+    const editCloseBtn  = document.getElementById('edit-modal-close');
+    const editCancelBtn = document.getElementById('edit-cancel-btn');
+    const editSaveBtn   = document.getElementById('edit-save-btn');
+    const editMessage   = document.getElementById('edit-modal-message');
+
+    function openEditModal(pet) {
+        document.getElementById('edit-name').value        = pet.name          || '';
+        document.getElementById('edit-species').value     = pet.species       || '';
+        document.getElementById('edit-breed').value       = pet.breed         || '';
+        document.getElementById('edit-gender').value      = pet.gender        || '';
+        document.getElementById('edit-age').value         = pet.age_months    ?? '';
+        document.getElementById('edit-health').value      = pet.health_status || '';
+        document.getElementById('edit-description').value = pet.description   || '';
+        editMessage.style.display = 'none';
+        editSaveBtn.disabled = false;
+        editSaveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+        editOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeEditModal() {
+        editOverlay.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    editCloseBtn.addEventListener('click', closeEditModal);
+    editCancelBtn.addEventListener('click', closeEditModal);
+    editOverlay.addEventListener('click', e => { if (e.target === editOverlay) closeEditModal(); });
+
+    editSaveBtn.addEventListener('click', async () => {
+        const name        = document.getElementById('edit-name').value.trim();
+        const species     = document.getElementById('edit-species').value;
+        const breed       = document.getElementById('edit-breed').value.trim();
+        const gender      = document.getElementById('edit-gender').value;
+        const age         = document.getElementById('edit-age').value;
+        const health      = document.getElementById('edit-health').value;
+        const description = document.getElementById('edit-description').value.trim();
+
+        if (!name || !species || !breed || !gender || !age || !health || !description) {
+            editMessage.textContent = 'Please fill in all required fields.';
+            editMessage.style.color = '#e53e3e';
+            editMessage.style.display = 'block';
+            return;
+        }
+
+        editSaveBtn.disabled = true;
+        editSaveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) { closeEditModal(); return; }
+
+        const { error } = await supabase.from('pets').update({
+            name, species, breed, gender,
+            age_months: parseInt(age) || null,
+            health_status: health,
+            description,
+        }).eq('id', petId);
+
+        if (error) {
+            editMessage.textContent = 'Failed to save: ' + error.message;
+            editMessage.style.color = '#e53e3e';
+            editMessage.style.display = 'block';
+            editSaveBtn.disabled = false;
+            editSaveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+            return;
+        }
+
+        // Cache changes locally to ensure synced components preserve dataset updates
+        currentPetData.name = name;
+        currentPetData.species = species;
+        currentPetData.breed = breed;
+        currentPetData.gender = gender;
+        currentPetData.age_months = parseInt(age);
+        currentPetData.health_status = health;
+        currentPetData.description = description;
+
+        // Refresh dynamic views
+        document.getElementById('pet-name').textContent        = name;
+        document.getElementById('pet-species').textContent     = capitalize(species);
+        document.getElementById('pet-breed').textContent       = breed;
+        document.getElementById('pet-gender').textContent      = capitalize(gender);
+        document.getElementById('pet-age').textContent         = formatAge(parseInt(age));
+        document.getElementById('pet-health').textContent      = formatStatus(health);
+        document.getElementById('pet-description').textContent = description;
+
+        const tagRow = document.getElementById('tag-row');
+        const tags = [
+            { label: capitalize(species), icon: 'fa-paw' },
+            { label: capitalize(gender),  icon: 'fa-venus-mars' },
+            { label: formatStatus(health), icon: 'fa-heartbeat' },
+        ].filter(t => t.label && t.label !== '—');
+        tagRow.innerHTML = tags.map(t =>
+            `<span class="tag"><i class="fas ${t.icon}"></i> ${t.label}</span>`
+        ).join('');
+
+        closeEditModal();
+    });
+
+    // ── Helpers ───────────────────────────────────────────────────────────
+    function formatAge(months) {
+        if (!months && months !== 0) return '—';
+        if (months >= 12) {
+            const yrs = Math.floor(months / 12);
+            const mos = months % 12;
+            return yrs + (yrs === 1 ? ' year' : ' years') + (mos ? ` ${mos} mo` : '');
+        }
+        return months + ' month' + (months !== 1 ? 's' : '');
+    }
+
+    function formatStatus(s) {
+        return s ? s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : '—';
+    }
+
+    function capitalize(s) {
+        return s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
+    }
+
+    function showNotFound() {
+        document.getElementById('pet-skeleton').style.display  = 'none';
+        document.getElementById('pet-not-found').style.display = 'block';
+    }
+
+    // ── Render Dynamic Management Buttons Matrix (Owner Perspective) ──────
+    function renderManagementGrid(status) {
+        const actionButtonsGroup = document.getElementById('action-buttons');
+        actionButtonsGroup.innerHTML = '';
+
+        // Button 1: Reversible Status Modifier Element
+        const statusBtn = document.createElement('button');
+        if (status === 'adopted') {
+            statusBtn.className = 'btn mark-adopted-btn';
+            statusBtn.style.background = '#3182ce'; 
+            statusBtn.innerHTML = '<i class="fas fa-undo"></i> Mark as Available';
+            statusBtn.style.width = '100%';
+            statusBtn.addEventListener('click', () => openAvailableModal());
+        } else {
+            statusBtn.className = 'btn mark-adopted-btn';
+            statusBtn.innerHTML = '<i class="fas fa-check-circle"></i> Mark as Adopted';
+            statusBtn.style.width = '100%';
+            statusBtn.addEventListener('click', () => openAdoptModal());
+        }
+
+        // Button 2: Profile Update Form Interactivity Trigger
+        const editBtn = document.createElement('button');
+        editBtn.className = 'btn adopt-btn';
+        editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit Information';
+        editBtn.style.width = '100%';
+        editBtn.addEventListener('click', () => openEditModal(currentPetData));
+
+        // Button 3: Permanent Datastore Removal Engine
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn';
+        deleteBtn.style.cssText = 'width: 100%; padding: 15px; background: #e53e3e; color: white; font-size: 16px; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background 0.2s, transform 0.15s;';
+        deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Delete Profile';
+        deleteBtn.addEventListener('mouseenter', () => deleteBtn.style.background = '#c53030');
+        deleteBtn.addEventListener('mouseleave', () => deleteBtn.style.background = '#e53e3e');
+        deleteBtn.addEventListener('click', () => openDeleteModal());
+
+        // Construct 3-Column management layout
+        actionButtonsGroup.appendChild(statusBtn);
+        actionButtonsGroup.appendChild(editBtn);
+        actionButtonsGroup.appendChild(deleteBtn);
+    }
+
+    // ── Page load ─────────────────────────────────────────────────────────
+    if (!petId) { showNotFound(); }
+    else { loadPet(petId); }
+
+    async function loadPet(id) {
+        const { data: pet, error } = await supabase
+            .from('pets')
+            .select('*, profiles:owner_id ( id, username, full_name, avatar_url, phone, bio, address, city, province, country )')
+            .eq('id', id)
+            .maybeSingle();
+
+        document.getElementById('pet-skeleton').style.display = 'none';
+
+        if (error || !pet) { showNotFound(); return; }
+        
+        currentPetData = pet; 
+
+        // ── Page title
+        document.title = `${pet.name} - Paws & Pals`;
+
+        // ── Gallery
+        const photos = Array.isArray(pet.photo_urls) && pet.photo_urls.length
+            ? pet.photo_urls
+            : [pet.photo_url || 'https://via.placeholder.com/600x500?text=No+Photo'];
+
+        const mainPhoto  = document.getElementById('main-photo');
+        mainPhoto.src    = photos[0];
+        mainPhoto.alt    = pet.name;
+
+        const thumbStrip = document.getElementById('thumb-strip');
+        if (photos.length > 1) {
+            photos.forEach((url, i) => {
+                const t = document.createElement('img');
+                t.src       = url;
+                t.alt       = `Photo ${i + 1}`;
+                t.className = 'thumb' + (i === 0 ? ' active' : '');
+                t.addEventListener('click', () => {
+                    mainPhoto.src = url;
+                    thumbStrip.querySelectorAll('.thumb').forEach(x => x.classList.remove('active'));
+                    t.classList.add('active');
+                });
+                thumbStrip.appendChild(t);
+            });
+        }
+
+        // ── Adoption badge
+        const badge = document.getElementById('adoption-badge');
+        badge.textContent = formatStatus(pet.adoption_status);
+        badge.className   = 'adoption-badge status-' + (pet.adoption_status || 'unknown');
+
+        // ── Name & tags
+        document.getElementById('pet-name').textContent = pet.name;
+
+        const tagRow = document.getElementById('tag-row');
+        const tags = [
+            { label: capitalize(pet.species),          icon: 'fa-paw' },
+            { label: capitalize(pet.gender),            icon: 'fa-venus-mars' },
+            { label: formatStatus(pet.health_status),  icon: 'fa-heartbeat' },
+        ].filter(t => t.label && t.label !== '—');
+        tagRow.innerHTML = tags.map(t =>
+            `<span class="tag"><i class="fas ${t.icon}"></i> ${t.label}</span>`
+        ).join('');
+
+        // ── Info grid
+        document.getElementById('pet-species').textContent  = capitalize(pet.species)      || '—';
+        document.getElementById('pet-breed').textContent    = pet.breed                     || '—';
+        document.getElementById('pet-gender').textContent   = capitalize(pet.gender)        || '—';
+        document.getElementById('pet-age').textContent      = formatAge(pet.age_months);
+        document.getElementById('pet-health').textContent   = formatStatus(pet.health_status);
+        document.getElementById('pet-location').textContent = pet.address
+            ? pet.address.split(',').slice(0).join(',').trim()
+            : '—';
+
+        // ── Description
+        document.getElementById('pet-description').textContent = pet.description || 'No description provided.';
+
+        // ── Owner card
+        const owner = pet.profiles;
+        if (owner) {
+            const avatarEl = document.getElementById('owner-avatar');
+            avatarEl.src = owner.avatar_url
+                || `https://ui-avatars.com/api/?name=${encodeURIComponent(owner.full_name || owner.username || '?')}&background=FBAD38&color=fff&size=56`;
+
+            document.getElementById('owner-name').textContent =
+                owner.full_name || owner.username || 'Anonymous';
+
+            const ownerBio = document.getElementById('owner-bio');
+            const ownerLoc = document.getElementById('owner-location');
+            const contactEl = document.getElementById('owner-contact');
+
+            const fullAddress = owner.address
+                || [owner.city, owner.province, owner.country].filter(Boolean).join(', ');
+
+            if (owner.bio)   { ownerBio.textContent = owner.bio; }
+            else             { ownerBio.style.display = 'none'; }
+
+            if (fullAddress) { ownerLoc.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${fullAddress}`; }
+            else             { ownerLoc.style.display = 'none'; }
+
+            if (owner.phone) { contactEl.innerHTML = `<i class="fas fa-phone"></i> ${owner.phone}`; }
+            else             { contactEl.style.display = 'none'; }
+
+            if (!owner.bio && !fullAddress && !owner.phone) {
+                ownerBio.style.display  = 'block';
+                ownerBio.textContent    = 'No information available.';
+            }
+        } else {
+            document.querySelector('.owner-card').style.display = 'none';
+        }
+
+        // ── Session-dependent UI
+        const { data: { session } } = await supabase.auth.getSession();
+        const isOwner = session && pet.owner_id === session.user.id;
+
+        // ── Favorite button
+        const favBtn = document.getElementById('fav-btn');
+        if (session && !isOwner) {
+            const { data: existing } = await supabase.from('favorites')
+                .select('id').eq('user_id', session.user.id).eq('pet_id', id).maybeSingle();
+            if (existing) favBtn.classList.add('favorited');
+
+            favBtn.addEventListener('mouseenter', () => {
+                if (favBtn.classList.contains('favorited')) {
+                    favBtn.style.borderColor = '#e53e3e';
+                    favBtn.style.color       = '#e53e3e';
+                    favBtn.style.background  = '#fff5f5';
+                }
+            });
+            favBtn.addEventListener('mouseleave', () => {
+                if (favBtn.classList.contains('favorited')) {
+                    favBtn.style.borderColor = '';
+                    favBtn.style.color       = '';
+                    favBtn.style.background  = '';
+                }
+            });
+            favBtn.addEventListener('click', async () => {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session) {
+                    showAlertModal({
+                        icon: '🔒',
+                        title: 'Sign In Required',
+                        message: 'Please sign in to save your favorite pets and keep track of ones you love.',
+                        buttons: [
+                            { label: 'Sign In', primary: true, onClick: () => window.location.href = 'login.html' },
+                            { label: 'Cancel', primary: false }
+                        ]
+                    });
+                    return;
+                }
+                const { data: ex } = await supabase.from('favorites')
+                    .select('id').eq('user_id', session.user.id).eq('pet_id', id).maybeSingle();
+                if (ex) {
+                    await supabase.from('favorites').delete().eq('id', ex.id);
+                    favBtn.classList.remove('favorited');
+                } else {
+                    await supabase.from('favorites').insert({ user_id: session.user.id, pet_id: id });
+                    favBtn.classList.add('favorited');
+                }
+                favBtn.style.borderColor = '';
+                favBtn.style.color       = '';
+                favBtn.style.background  = '';
+            });
+        } else {
+            favBtn.style.display = 'none';
+        }
+
+        // ── Adopt / Edit / Message action routers
+        const adoptBtn = document.getElementById('adopt-btn');
+        document.getElementById('action-buttons').style.gridTemplateColumns = '1fr';
+        
+        if (isOwner) {
+            // Render 3 column management UI cleanly based on active state variables
+            renderManagementGrid(pet.adoption_status);
+
+            // Connect Active-State triggers for instant UI feedback
+            adoptModalConfirmBtn.addEventListener('click', async () => {
+                adoptModalConfirmBtn.disabled = true;
+                adoptModalConfirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+
+                const { error } = await supabase.from('pets').update({
+                    adoption_status: 'adopted'
+                }).eq('id', petId);
+
+                if (error) {
+                    adoptModalMessage.textContent = 'Failed: ' + error.message;
+                    adoptModalMessage.style.color = '#e53e3e';
+                    adoptModalMessage.style.background = '#fff5f5';
+                    adoptModalMessage.style.display = 'block';
+                    adoptModalConfirmBtn.disabled = false;
+                    adoptModalConfirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirm';
+                    return;
+                }
+
+                // Update UI state components instantly without window reload
+                currentPetData.adoption_status = 'adopted';
+                const badge = document.getElementById('adoption-badge');
+                badge.textContent = 'Adopted';
+                badge.className = 'adoption-badge status-adopted';
+                
+                renderManagementGrid('adopted');
+
+                adoptModalMessage.textContent = 'Pet has been marked as adopted!';
+                adoptModalMessage.style.color = '#276749';
+                adoptModalMessage.style.background = '#c6f6d5';
+                adoptModalMessage.style.display = 'block';
+                adoptModalConfirmBtn.disabled = true;
+                adoptModalConfirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Done';
+
+                setTimeout(() => closeAdoptModal(), 1000);
+            });
+
+            availableModalConfirmBtn.addEventListener('click', async () => {
+                availableModalConfirmBtn.disabled = true;
+                availableModalConfirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+
+                const { error } = await supabase.from('pets').update({
+                    adoption_status: 'available'
+                }).eq('id', petId);
+
+                if (error) {
+                    availableModalMessage.textContent = 'Failed: ' + error.message;
+                    availableModalMessage.style.color = '#e53e3e';
+                    availableModalMessage.style.background = '#fff5f5';
+                    availableModalMessage.style.display = 'block';
+                    availableModalConfirmBtn.disabled = false;
+                    availableModalConfirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirm';
+                    return;
+                }
+
+                // Update UI state components instantly without window reload
+                currentPetData.adoption_status = 'available';
+                const badge = document.getElementById('adoption-badge');
+                badge.textContent = 'Available';
+                badge.className = 'adoption-badge status-available';
+                
+                renderManagementGrid('available');
+
+                availableModalMessage.textContent = 'Pet is now available for adoption!';
+                availableModalMessage.style.color = '#276749';
+                availableModalMessage.style.background = '#c6f6d5';
+                availableModalMessage.style.display = 'block';
+                availableModalConfirmBtn.disabled = true;
+                availableModalConfirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Done';
+
+                setTimeout(() => closeAvailableModal(), 1000);
+            });
+
+        } else if (session) {
+            if (pet.adoption_status !== 'available') {
+                adoptBtn.textContent = 'Not Available for Adoption';
+                adoptBtn.disabled    = true;
+            } else {
+                adoptBtn.innerHTML = '<i class="fas fa-comment-dots"></i> Message Owner';
+                adoptBtn.addEventListener('click', () => {
+                    window.location.href = `messages.html?to=${encodeURIComponent(pet.profiles?.id)}`;
+                });
+            }
+        } else {
+            adoptBtn.addEventListener('click', () => {
+                showAlertModal({
+                    icon: '🔒',
+                    title: 'Sign In Required',
+                    message: 'Please sign in to express your interest in adopting this pet.',
+                    buttons: [
+                        { label: 'Sign In', primary: true, onClick: () => window.location.href = 'login.html' },
+                        { label: 'Cancel', primary: false }
+                    ]
+                });
+            });
+        }
+
+        // ── Reveal page
+        document.getElementById('pet-detail-content').style.display = 'block';
+    }
+    </script>
+
+    <style>
+        /* ── Back link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray-color);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 28px;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--primary-color); }
+
+        /* ── Two-column layout */
+        .detail-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: stretch;
+        }
+        @media (max-width: 820px) {
+            .detail-layout { grid-template-columns: 1fr; }
+        }
+
+        /* ── Gallery */
+        .detail-gallery-col {
+            display: flex;
+            flex-direction: column;
+        }
+        .main-photo-wrap {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #f5f5f5;
+            flex: 1;
+            min-height: 300px;
+        }
+        .main-photo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: opacity 0.2s;
+        }
+        .thumb-strip {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .thumb-strip .thumb {
+            width: 72px;
+            height: 72px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s, opacity 0.2s;
+            opacity: 0.7;
+        }
+        .thumb-strip .thumb:hover { opacity: 1; }
+        .thumb-strip .thumb.active {
+            border-color: var(--primary-color);
+            opacity: 1;
+        }
+
+        /* ── Adoption badge */
+        .adoption-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            padding: 5px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .status-available    { background: #c6f6d5; color: #276749; }
+        .status-adopted      { background: #bee3f8; color: #2a69ac; }
+        .status-pending      { background: #fefcbf; color: #7b6002; }
+        .status-unknown      { background: #eee;    color: #666; }
+
+        /* ── Info col */
+        .name-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .name-row h1 {
+            font-size: 32px;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        /* ── Tags */
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fff8ee;
+            color: #c47d00;
+            border: 1px solid #fde68a;
+            border-radius: 20px;
+            padding: 5px 14px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* ── Info grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .info-item {
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .info-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-color);
+        }
+        .info-label i { margin-right: 4px; color: var(--primary-color); }
+        .info-value {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        /* ── Description */
+        .description-box {
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin-bottom: 24px;
+        }
+        .description-box h3 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-color);
+            margin-bottom: 10px;
+        }
+        .description-box p {
+            font-size: 15px;
+            color: #444;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* ── Owner card */
+        .owner-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding-top: 18px;
+            padding-left: 20px;
+            padding-right: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .owner-card h3 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-color);
+            margin-bottom: 14px;
+        }
+        .owner-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+        .owner-avatar-wrap img {
+            width: 100px;
+            height: 120px;
+            border-radius: 10%;
+            object-fit: cover;
+            border: 2px solid #eee;
+            flex-shrink: 0;
+        }
+        .owner-info { flex: 1; }
+        .owner-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark-color);
+        }
+        .owner-sub {
+            font-size: 13px;
+            color: var(--gray-color);
+            margin-bottom: 4px;
+        }
+        .owner-sub i { margin-right: 4px; }
+        .owner-contact { margin-top: 14px; }
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff8ee;
+            color: #c47d00;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .contact-btn:hover { background: #fde68a; }
+        .contact-btn-msg {
+            background: #ebf8ff;
+            color: #2b6cb0;
+            border-color: #bee3f8;
+        }
+        .contact-btn-msg:hover { background: #bee3f8; }
+        .owner-address-inline {
+            font-size: 13px;
+            color: var(--gray-color);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 1;
+            min-width: 0;
+        }
+        .owner-address-inline i { color: var(--primary-color); flex-shrink: 0; }
+
+        /* ── Action buttons 3-column layout structure */
+        .action-buttons-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+
+        /* ── Adopt button */
+        .adopt-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .adopt-btn:hover:not(:disabled) {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        .adopt-btn:disabled {
+            background: #ddd;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        /* ── Mark as Adopted button */
+        .mark-adopted-btn {
+            width: 100%;
+            padding: 15px;
+            background: #48bb78;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .mark-adopted-btn:hover:not(:disabled) {
+            background: #38a169;
+            transform: translateY(-2px);
+        }
+        .mark-adopted-btn:disabled {
+            background: #ddd;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        /* ── Modal */
+        .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:2000; display:flex; align-items:center; justify-content:center; padding:20px; }
+        .modal-card { background:var(--white-color, #fff); border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,0.3); width:100%; max-width:620px; max-height:90vh; overflow-y:auto; }
+        .modal-header { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; border-bottom:1px solid #eee; position:sticky; top:0; background:var(--white-color, #fff); z-index:1; }
+        .modal-header h2 { margin:0; font-size:20px; color:var(--dark-color, #222); }
+        .modal-close { background:none; border:none; font-size:24px; cursor:pointer; color:var(--gray-color, #888); line-height:1; }
+        .modal-close:hover { color:var(--dark-color, #222); }
+        .modal-body { padding:24px; }
+        .modal-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        .modal-form-grid .full-width { grid-column:1/-1; }
+        .modal-form-grid .form-group { display:flex; flex-direction:column; gap:5px; }
+        .modal-form-grid label { font-size:13px; font-weight:600; color:var(--dark-color, #222); }
+        .modal-form-grid input,
+        .modal-form-grid select,
+        .modal-form-grid textarea { padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; outline:none; transition:border-color 0.2s; }
+        .modal-form-grid input:focus,
+        .modal-form-grid select:focus,
+        .modal-form-grid textarea:focus { border-color:var(--primary-color, #FBAD38); }
+        .modal-form-grid textarea { resize:vertical; }
+
+        /* ── Alert modal */
+        #alert-modal-overlay .modal-card { max-width:400px; }
+        #alert-modal-overlay h3 { color: var(--dark-color, #222); }
+
+        @media (max-width:640px) { 
+            .action-buttons-group { grid-template-columns: 1fr; }
+        }
+        button:disabled { opacity:0.7; cursor:not-allowed; }
+
+        /* ── Skeletons */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+            border-radius: 10px;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .skeleton-back  { width: 80px; height: 20px; margin-bottom: 28px; border-radius: 6px; }
+        .skeleton-img   { width: 100%; aspect-ratio: 4/3; border-radius: 16px; }
+        .skeleton-thumbs { display: flex; gap: 10px; margin-top: 12px; }
+        .skeleton-thumb { width: 72px; height: 72px; border-radius: 10px; flex-shrink: 0; }
+        .skeleton-title { width: 60%; height: 36px; margin-bottom: 16px; }
+        .skeleton-line  { width: 100%; height: 16px; margin-bottom: 10px; }
+        .skeleton-line.short { width: 60%; }
+        .skeleton-block { width: 100%; height: 100px; margin-bottom: 16px; border-radius: 12px; }
+        .skeleton-owner { width: 100%; height: 80px; border-radius: 12px; }
+    </style>
+</body>
+</html>

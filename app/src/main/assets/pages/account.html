@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - Paws and Pals</title>
+    <link class="df" rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav id="navbar"></nav>
+
+    <main class="container">
+        <section>
+            <div class="account-container">
+                <div class="account-sidebar">
+                    <div class="profile-card">
+                        <div class="profile-avatar-wrap">
+                            <div class="profile-avatar" id="avatar-display">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <button class="avatar-edit-btn" id="avatar-edit-btn" title="Change photo">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <input type="file" id="avatar-file-input" accept="image/*" style="display:none;">
+                        </div>
+                        <h2 id="account-name">—</h2>
+                        <p id="account-username" style="color:var(--primary-color); font-size:13px; font-weight:600; margin:2px 0 6px;"></p>
+                        <p id="account-bio" style="color:var(--gray-color); font-size:13px; margin:0; line-height:1.5;"></p>
+                    </div>
+
+                    <nav class="account-menu">
+                        <a href="#profile" class="account-menu-item active">My Profile</a>
+                        <a href="#preferences" class="account-menu-item">My Pet Preferences</a>
+                        <a href="#settings" class="account-menu-item">Settings</a>
+                    </nav>
+
+                    <button id="signout-btn" class="btn" style="width:100%; margin-top:20px; background:#f5f5f5; color:#e53e3e; font-weight:600; border:1px solid #eee; border-radius:8px;">
+                        <i class="fas fa-sign-out-alt" style="margin-right:6px;"></i> Sign Out
+                    </button>
+                </div>
+
+                <div class="account-content">
+                    <div id="profile" class="content-section active">
+                        <h1>My Profile</h1>
+                        <p id="profile-save-msg" style="display:none; font-size:13px; margin-bottom:12px;"></p>
+                        <div class="profile-two-col">
+
+                            <div class="profile-form">
+                                <h3 class="form-section-title">Personal Info</h3>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="first-name">First Name</label>
+                                        <input type="text" id="first-name" placeholder="First name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="last-name">Last Name</label>
+                                        <input type="text" id="last-name" placeholder="Last name">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="username-field">Username</label>
+                                    <input type="text" id="username-field" placeholder="e.g. pawslover123">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" placeholder="your@email.com" readonly
+                                        style="background:#f9f9f9; color:#888; cursor:not-allowed;"
+                                        title="Email cannot be changed here">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" placeholder="e.g. 09171234567" maxlength="12" minlength="11" pattern="[0-9]{11,12}">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="bio-field">Bio</label>
+                                    <textarea id="bio-field" rows="3" placeholder="Tell others a bit about yourself..."
+                                        style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; resize:vertical; outline:none; transition:border-color 0.2s; font-family:inherit; width:100%; box-sizing:border-box;"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="profile-form">
+                                <h3 class="form-section-title">My Address</h3>
+
+                                <div class="form-group">
+                                    <label for="profile-province">Province</label>
+                                    <select id="profile-province">
+                                        <option value="">Select Province</option>
+                                        <option value="Bulacan">Bulacan</option>
+                                        <option value="Metro Manila">Metro Manila (NCR)</option>
+                                        <option value="Cavite">Cavite</option>
+                                        <option value="Laguna">Laguna</option>
+                                        <option value="Rizal">Rizal</option>
+                                        <option value="Pampanga">Pampanga</option>
+                                        <option value="Batangas">Batangas</option>
+                                        <option value="Quezon">Quezon</option>
+                                        <option value="Nueva Ecija">Nueva Ecija</option>
+                                        <option value="Tarlac">Tarlac</option>
+                                        <option value="Zambales">Zambales</option>
+                                        <option value="Bataan">Bataan</option>
+                                        <option value="Pangasinan">Pangasinan</option>
+                                        <option value="Cebu">Cebu</option>
+                                        <option value="Davao del Sur">Davao del Sur</option>
+                                        <option value="Iloilo">Iloilo</option>
+                                        <option value="Negros Occidental">Negros Occidental</option>
+                                        <option value="Benguet">Benguet</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profile-city">City / Municipality</label>
+                                    <select id="profile-city" disabled>
+                                        <option value="">Select Province first</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profile-barangay">Barangay</label>
+                                    <select id="profile-barangay" disabled>
+                                        <option value="">Select Municipality first</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profile-street">Street / Building</label>
+                                    <input type="text" id="profile-street" placeholder="e.g. 123 Rizal St.">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profile-zip">ZIP Code <span style="color:#aaa; font-weight:normal; font-size:11px;">(auto-filled)</span></label>
+                                    <input type="text" id="profile-zip" readonly style="background:#f9f9f9; color:#888;">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profile-address">Complete Address <span style="color:#aaa; font-weight:normal; font-size:11px;">(auto-filled)</span></label>
+                                    <input type="text" id="profile-address" readonly style="background:#f9f9f9; color:#555;">
+                                </div>
+
+                                <div class="form-group" style="margin-top:-10px;">
+                                    <p id="profile-location-status" style="font-size:12px; margin:0; display:none;"></p>
+                                </div>
+
+                                <input type="hidden" id="profile-lat">
+                                <input type="hidden" id="profile-lng">
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" id="save-profile-btn"
+                            disabled style="opacity:0.5; cursor:not-allowed; margin-top:10px;">Save Changes</button>
+                    </div>
+
+                    <div id="preferences" class="content-section">
+                        <h1>My Pet Preferences</h1>
+                        <p id="preferences-save-msg" style="display:none; font-size:13px; margin-bottom:12px;"></p>
+                        
+                        <div class="profile-form" style="max-width: 500px;">
+                            <p style="color: var(--gray-color); font-size: 14px; margin-bottom: 20px;">
+                                Customize your preferred matching options. These values filter listing feeds globally across the application.
+                            </p>
+
+                            <div class="form-group">
+                                <label for="pref-species">Preferred Species</label>
+                                <select id="pref-species">
+                                    <option value="">Any Species</option>
+                                    <option value="Dog">Dog</option>
+                                    <option value="Cat">Cat</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pref-gender">Preferred Gender</label>
+                                <select id="pref-gender">
+                                    <option value="">Any Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+
+                            <button type="button" class="btn btn-primary" id="save-preferences-btn" style="margin-top: 10px; background-color: var(--primary-color); color: white;">Save Preferences</button>
+                        </div>
+                    </div>
+
+                    <div id="settings" class="content-section">
+                        <h1>Account Settings</h1>
+                        <div class="settings-item" style="margin-top:20px;">
+                            <h3>Change Password</h3>
+                            <p id="password-msg" style="display:none; font-size:13px; margin-bottom:10px;"></p>
+                            <div class="form-group">
+                                <label for="new-password">New Password</label>
+                                <input type="password" id="new-password" placeholder="Enter new password">
+                            </div>
+                            <div class="form-group" style="margin-top:14px;">
+                                <label for="confirm-password">Confirm New Password</label>
+                                <input type="password" id="confirm-password" placeholder="Confirm new password">
+                            </div>
+                            <button type="button" class="btn btn-primary" id="update-password-btn" disabled style="margin-top:14px; background-color: var(--primary-color); color: white; opacity: 0.5; cursor: not-allowed;">Update Password</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="../scripts/navbar.js"></script>
+
+    <script type="module">
+        import { locationDataSimplified } from '../scripts/locationData.js';
+
+        console.log("🚀 Account module initialization sequence activated.");
+
+        // Defensive Circuit Breaker for Navbar loading lock
+        try {
+            await Promise.race([
+                window.navbarReady,
+                new Promise((_, reject) => setTimeout(() => reject(new Error("Navbar resolution timed out")), 2000))
+            ]);
+            console.log("✅ window.navbarReady promise tracking completed.");
+        } catch (e) {
+            console.warn("⚠️ Circuit breaker triggered: Navbar connection blocked or timed out. Bypassing lock to force profile parsing.");
+        }
+
+        // Expanded Global context resolution mapping 
+        const supabase = window._supabase || window.supabase;
+
+        // Diagnostic validation checkpoint
+        if (!supabase) {
+            console.error("❌ CRITICAL FAULT: Supabase context instance is completely undefined.");
+            document.getElementById('account-name').textContent = "Error: Database Connection Offline";
+        } else {
+            console.log("⚡ Supabase service verified and targeted successfully:", supabase);
+        }
+
+        // ── Snapshot for dirty-checking ──────────────────────────────────────
+        let originalSnapshot = null;
+
+        function getSnapshot() {
+            return {
+                firstName : document.getElementById('first-name').value.trim(),
+                lastName  : document.getElementById('last-name').value.trim(),
+                username  : document.getElementById('username-field').value.trim(),
+                phone     : document.getElementById('phone').value.trim(),
+                bio       : document.getElementById('bio-field').value.trim(),
+                province  : document.getElementById('profile-province').value,
+                city      : document.getElementById('profile-city').value.trim(),
+                barangay  : document.getElementById('profile-barangay').value.trim(),
+                street    : document.getElementById('profile-street').value.trim(),
+            };
+        }
+
+        function checkDirty() {
+            if (!originalSnapshot) return;
+            const current = getSnapshot();
+            const isDirty = Object.keys(originalSnapshot).some(k => originalSnapshot[k] !== current[k]);
+            const btn = document.getElementById('save-profile-btn');
+            btn.disabled      = !isDirty;
+            btn.style.opacity = isDirty ? '1' : '0.5';
+            btn.style.cursor  = isDirty ? 'pointer' : 'not-allowed';
+        }
+
+        function attachDirtyListeners() {
+            const ids = ['first-name', 'last-name', 'username-field', 'phone', 'bio-field',
+                         'profile-province', 'profile-city', 'profile-barangay', 'profile-street'];
+            ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.addEventListener('input', checkDirty);
+                el.addEventListener('change', checkDirty);
+            });
+        }
+
+        // ── Live Password Form Validation Listener ────────────────────────────
+        function checkPasswordFields() {
+            const passEl = document.getElementById('new-password');
+            const confirmEl = document.getElementById('confirm-password');
+            const btn = document.getElementById('update-password-btn');
+            
+            if (!passEl || !confirmEl || !btn) return;
+            
+            const pass = passEl.value;
+            const confirm = confirmEl.value;
+            const isNotEmpty = pass.trim().length > 0 && confirm.trim().length > 0;
+            
+            btn.disabled = !isNotEmpty;
+            btn.style.opacity = isNotEmpty ? '1' : '0.5';
+            btn.style.cursor  = isNotEmpty ? 'pointer' : 'not-allowed';
+        }
+
+        document.getElementById('new-password').addEventListener('input', checkPasswordFields);
+        document.getElementById('confirm-password').addEventListener('input', checkPasswordFields);
+
+        // ── Avatar renderer ──────────────────────────────────────────────────
+        function renderAvatar(url) {
+            const display = document.getElementById('avatar-display');
+            if (url) {
+                display.innerHTML = `<img src="${url}" alt="Avatar"
+                    onerror="this.parentElement.innerHTML='<i class=\\'fas fa-user-circle\\'></i>'">`;
+            } else {
+                display.innerHTML = `<i class="fas fa-user-circle"></i>`;
+            }
+        }
+
+        // Updates the navbar avatar in-place without a page reload
+        function updateNavbarAvatar(url) {
+            const toggle = document.getElementById('user-menu-toggle');
+            if (!toggle) return;
+            const existingImg  = toggle.querySelector('img.nav-avatar');
+            const existingIcon = toggle.querySelector('i.fa-user-circle');
+            if (url) {
+                if (existingImg) {
+                    existingImg.src = url;
+                } else {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = 'avatar';
+                    img.className = 'nav-avatar';
+                    if (existingIcon) existingIcon.replaceWith(img);
+                    else toggle.prepend(img);
+                }
+            } else {
+                if (existingImg) {
+                    const i = document.createElement('i');
+                    i.className = 'fas fa-user-circle';
+                    existingImg.replaceWith(i);
+                }
+            }
+        }
+
+        // ── Profile location dropdowns ───────────────────────────────────────
+        const profileProvinceSelect = document.getElementById('profile-province');
+        const profileZipInput       = document.getElementById('profile-zip');
+        const profileAddressInput   = document.getElementById('profile-address');
+        const profileLocationStatus = document.getElementById('profile-location-status');
+
+        function updateProfileAddress() {
+            const street = document.getElementById('profile-street').value.trim();
+            const cityEl = document.getElementById('profile-city');
+            const brgyEl = document.getElementById('profile-barangay');
+            
+            const city = cityEl ? cityEl.value.trim() : '';
+            const barangay = brgyEl ? brgyEl.value.trim() : '';
+            const province = profileProvinceSelect.value;
+            const zip      = profileZipInput.value.trim();
+            const parts    = [street, barangay ? `Brgy. ${barangay}` : '', city, province, zip, 'Philippines'].filter(Boolean);
+            profileAddressInput.value = parts.length > 2 ? parts.join(', ') : '';
+        }
+
+        function profileOnCityChange() {
+            const cityEl   = document.getElementById('profile-city');
+            const brgyEl   = document.getElementById('profile-barangay');
+            const cityName = cityEl.value;
+
+            if (!brgyEl) return;
+
+            brgyEl.innerHTML = '<option value="">Select Barangay</option>';
+            brgyEl.disabled  = true;
+            profileZipInput.value = '';
+            document.getElementById('profile-lat').value = '';
+            document.getElementById('profile-lng').value = '';
+            profileLocationStatus.style.display = 'none';
+
+            const selectedOpt = cityEl.options[cityEl.selectedIndex];
+            if (selectedOpt?.dataset.zip) profileZipInput.value = selectedOpt.dataset.zip;
+
+            if (cityName && locationDataSimplified[cityName]) {
+                locationDataSimplified[cityName].barangays.forEach(brgy => {
+                    const opt = document.createElement('option');
+                    opt.value = brgy; opt.textContent = brgy;
+                    brgyEl.appendChild(opt);
+                });
+                brgyEl.disabled = false;
+                brgyEl.addEventListener('change', profileOnBarangayChange);
+            }
+            updateProfileAddress();
+            checkDirty();
+        }
+
+        async function profileOnBarangayChange() {
+            updateProfileAddress();
+            const barangay = document.getElementById('profile-barangay').value;
+            const city     = document.getElementById('profile-city').value;
+            const province = profileProvinceSelect.value;
+            if (!barangay || !city) return;
+
+            profileLocationStatus.style.display = 'block';
+            profileLocationStatus.textContent   = '⏳ Finding coordinates...';
+            profileLocationStatus.style.color   = '#888';
+
+            try {
+                const res = await fetch(
+                    `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(`${barangay}, ${city}, ${province}, Philippines`)}`,
+                    { headers: { 'Accept-Language': 'en' } }
+                );
+                const results = await res.json();
+                if (results.length) {
+                    document.getElementById('profile-lat').value = parseFloat(results[0].lat).toFixed(6);
+                    document.getElementById('profile-lng').value = parseFloat(results[0].lon).toFixed(6);
+                    profileLocationStatus.textContent = '✓ Location found';
+                    profileLocationStatus.style.color = '#38a169';
+                } else {
+                    profileLocationStatus.textContent = '⚠ Coordinates not found — address will still be saved';
+                    profileLocationStatus.style.color = '#dd6b20';
+                }
+            } catch {
+                profileLocationStatus.textContent = '⚠ Geocoding failed';
+                profileLocationStatus.style.color = '#e53e3e';
+            }
+            checkDirty();
+        }
+
+        profileProvinceSelect.addEventListener('change', () => {
+            const province = profileProvinceSelect.value;
+            let cityEl = document.getElementById('profile-city');
+            let brgyEl = document.getElementById('profile-barangay');
+
+            if (cityEl.tagName === 'INPUT') {
+                const sel = document.createElement('select');
+                sel.id = 'profile-city'; sel.disabled = true;
+                sel.innerHTML = '<option value="">Select City/Municipality</option>';
+                cityEl.replaceWith(sel); cityEl = document.getElementById('profile-city');
+            } else {
+                cityEl.innerHTML = '<option value="">Select City/Municipality</option>';
+                cityEl.disabled = true;
+            }
+
+            if (brgyEl.tagName === 'INPUT') {
+                const sel = document.createElement('select');
+                sel.id = 'profile-barangay'; sel.disabled = true;
+                sel.innerHTML = '<option value="">Select Municipality first</option>';
+                brgyEl.replaceWith(sel); brgyEl = document.getElementById('profile-barangay');
+            } else {
+                brgyEl.innerHTML = '<option value="">Select Municipality first</option>';
+                brgyEl.disabled = true;
+            }
+
+            profileZipInput.value = '';
+            profileLocationStatus.style.display = 'none';
+            document.getElementById('profile-lat').value = '';
+            document.getElementById('profile-lng').value = '';
+
+            if (province === 'Bulacan' && locationDataSimplified['Bulacan']) {
+                locationDataSimplified['Bulacan'].municipalities.forEach(mun => {
+                    const opt = document.createElement('option');
+                    opt.value = mun.name; opt.textContent = mun.name; opt.dataset.zip = mun.zipCode;
+                    cityEl.appendChild(opt);
+                });
+                cityEl.disabled = false;
+                cityEl.addEventListener('change', profileOnCityChange);
+            } else if (province) {
+                const cityInput = document.createElement('input');
+                cityInput.type = 'text'; cityInput.id = 'profile-city';
+                cityInput.placeholder = 'e.g. Quezon City';
+                cityInput.addEventListener('input', () => { updateProfileAddress(); checkDirty(); });
+                cityEl.replaceWith(cityInput);
+
+                const brgyInput = document.createElement('input');
+                brgyInput.type = 'text'; brgyInput.id = 'profile-barangay';
+                brgyInput.placeholder = 'e.g. Brgy. San Antonio';
+                brgyInput.addEventListener('input', () => { updateProfileAddress(); checkDirty(); });
+                brgyEl.replaceWith(brgyInput);
+            }
+
+            updateProfileAddress();
+            checkDirty();
+        });
+
+        document.getElementById('profile-street').addEventListener('input', updateProfileAddress);
+
+        // ── Load profile data ────────────────────────────────────────────────
+        async function loadProfile() {
+            if (!supabase) {
+                console.error("❌ Profile fetch aborted: Supabase initialization was missing.");
+                return;
+            }
+
+            try {
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                if (sessionError) throw sessionError;
+                if (!session) { window.location.href = 'login.html'; return; }
+
+                const userId = session.user.id;
+                const email  = session.user.email;
+
+                document.getElementById('email').value = email || '';
+
+                // ── Step 1: Fetch core profile fields (always present) ────────
+                const { data: profile, error: profileError } = await supabase
+                    .from('profiles')
+                    .select('full_name, username, bio, phone, address, city, province, barangay, latitude, longitude, avatar_url')
+                    .eq('id', userId)
+                    .maybeSingle();
+
+                if (profileError) throw profileError;
+                if (!profile) {
+                    console.warn("⚠️ No profile row found for this user.");
+                    originalSnapshot = getSnapshot();
+                    attachDirtyListeners();
+                    return;
+                }
+
+                const fullName = profile.full_name || '';
+                const parts    = fullName.trim().split(' ');
+                document.getElementById('first-name').value     = parts[0] || '';
+                document.getElementById('last-name').value      = parts.slice(1).join(' ') || '';
+                document.getElementById('username-field').value = profile.username || '';
+                document.getElementById('bio-field').value      = profile.bio || '';
+                document.getElementById('phone').value          = profile.phone || '';
+
+                document.getElementById('account-name').textContent    = fullName || email;
+                document.getElementById('account-username').textContent = profile.username ? `@${profile.username}` : '';
+                document.getElementById('account-bio').textContent      = profile.bio || '';
+
+                renderAvatar(profile.avatar_url);
+
+                if (profile.province || profile.city || profile.address) {
+                    if (profile.province) {
+                        profileProvinceSelect.value = profile.province;
+                        profileProvinceSelect.dispatchEvent(new Event('change'));
+                        await new Promise(r => setTimeout(r, 0));
+                    }
+
+                    const cityEl = document.getElementById('profile-city');
+                    if (profile.city && cityEl) {
+                        if (cityEl.tagName === 'SELECT') {
+                            const matchOpt = [...cityEl.options].find(o => o.value === profile.city);
+                            if (matchOpt) {
+                                cityEl.value = profile.city;
+                                cityEl.dispatchEvent(new Event('change'));
+                                await new Promise(r => setTimeout(r, 0));
+                            }
+                        } else {
+                            cityEl.value = profile.city;
+                        }
+                    }
+
+                    const brgyEl = document.getElementById('profile-barangay');
+                    if (profile.barangay && brgyEl) {
+                        if (brgyEl.tagName === 'SELECT') {
+                            const matchOpt = [...brgyEl.options].find(o => o.value === profile.barangay);
+                            if (matchOpt) brgyEl.value = profile.barangay;
+                        } else {
+                            brgyEl.value = profile.barangay;
+                        }
+                    }
+
+                    if (profile.address) {
+                        let street = profile.address;
+                        if (profile.city)     street = street.replace(`, ${profile.city}`, '');
+                        if (profile.province) street = street.replace(`, ${profile.province}`, '');
+                        street = street.replace(', Philippines', '').replace(/,?\s*\d{4}/, '').trim();
+                        document.getElementById('profile-street').value = street;
+                    }
+
+                    if (profile.latitude)  document.getElementById('profile-lat').value = profile.latitude;
+                    if (profile.longitude) document.getElementById('profile-lng').value = profile.longitude;
+
+                    profileAddressInput.value = profile.address || '';
+                    if (profile.latitude && profile.longitude) {
+                        profileLocationStatus.style.display = 'block';
+                        profileLocationStatus.textContent   = '✓ Location saved';
+                        profileLocationStatus.style.color   = '#38a169';
+                    }
+                }
+
+                // ── Step 2: Fetch preferences columns separately (may not exist yet) ──
+                try {
+                    const { data: prefs, error: prefsError } = await supabase
+                        .from('profiles')
+                        .select('preferred_species, preferred_gender')
+                        .eq('id', userId)
+                        .maybeSingle();
+
+                    if (prefsError) {
+                        // Columns don't exist yet — log quietly and skip. Profile still loaded fine.
+                        console.warn("ℹ️ Pet preferences columns not found in DB yet. Run the migration to add them:", prefsError.message);
+                    } else if (prefs) {
+                        if (prefs.preferred_species) document.getElementById('pref-species').value = prefs.preferred_species;
+                        if (prefs.preferred_gender)  document.getElementById('pref-gender').value  = prefs.preferred_gender;
+
+                        // Sync to localStorage so other views can read instantly
+                        localStorage.setItem('preferred_species', prefs.preferred_species || '');
+                        localStorage.setItem('preferred_gender',  prefs.preferred_gender  || '');
+                    }
+                } catch (prefsEx) {
+                    console.warn("ℹ️ Could not load pet preferences (non-fatal):", prefsEx.message);
+                }
+
+                // Take snapshot AFTER all fields are populated, then start watching
+                originalSnapshot = getSnapshot();
+                attachDirtyListeners();
+
+            } catch (err) {
+                console.error("❌ Exception captured during loadProfile initialization sequence:", err);
+            }
+        }
+
+        // ── Save profile ─────────────────────────────────────────────────────
+        document.getElementById('save-profile-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('save-profile-btn');
+            const msg = document.getElementById('profile-save-msg');
+            btn.disabled      = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor  = 'not-allowed';
+            btn.textContent   = 'Saving...';
+
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) return;
+
+            const firstName = document.getElementById('first-name').value.trim();
+            const lastName  = document.getElementById('last-name').value.trim();
+            const fullName  = [firstName, lastName].filter(Boolean).join(' ');
+            const username  = document.getElementById('username-field').value.trim();
+            const bio       = document.getElementById('bio-field').value.trim();
+            const phone     = document.getElementById('phone').value.trim();
+            const province  = profileProvinceSelect.value;
+            const city      = document.getElementById('profile-city').value.trim();
+            const barangay  = document.getElementById('profile-barangay').value.trim();
+            const address   = profileAddressInput.value.trim();
+            const latitude  = parseFloat(document.getElementById('profile-lat').value)  || null;
+            const longitude = parseFloat(document.getElementById('profile-lng').value) || null;
+
+            if (phone && (phone.length < 11 || phone.length > 12 || !/^[0-9]+$/.test(phone))) {
+                msg.textContent   = '⚠ Phone number must be 11 or 12 digits.';
+                msg.style.color   = '#e53e3e';
+                msg.style.display = 'block';
+                btn.disabled      = false;
+                btn.style.opacity = '1';
+                btn.style.cursor  = 'pointer';
+                btn.textContent   = 'Save Changes';
+                return;
+            }
+
+            const { error } = await supabase
+                .from('profiles')
+                .update({ full_name: fullName, username, bio, phone, province, city, barangay, address, latitude, longitude })
+                .eq('id', session.user.id);
+
+            msg.style.display = 'block';
+            if (error) {
+                msg.textContent   = '⚠ ' + error.message;
+                msg.style.color   = '#e53e3e';
+                btn.disabled      = false;
+                btn.style.opacity = '1';
+                btn.style.cursor  = 'pointer';
+            } else {
+                msg.textContent = '✓ Profile updated successfully!';
+                msg.style.color = '#38a169';
+
+                originalSnapshot = getSnapshot();
+
+                document.getElementById('account-name').textContent    = fullName || session.user.email;
+                document.getElementById('account-username').textContent = username ? `@${username}` : '';
+                document.getElementById('account-bio').textContent      = bio || '';
+
+                const navToggle = document.getElementById('user-menu-toggle');
+                if (navToggle) {
+                    [...navToggle.childNodes]
+                        .filter(n => n.nodeType === Node.TEXT_NODE)
+                        .forEach(n => n.remove());
+                    navToggle.appendChild(document.createTextNode(` ${username || 'User'}`));
+                }
+
+                setTimeout(() => { msg.style.display = 'none'; }, 3000);
+            }
+
+            btn.textContent = 'Save Changes';
+        });
+
+        // ── Save Preferences ──────────────────────────────────────────────────
+        document.getElementById('save-preferences-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('save-preferences-btn');
+            const msg = document.getElementById('preferences-save-msg');
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) return;
+
+            const species = document.getElementById('pref-species').value;
+            const gender  = document.getElementById('pref-gender').value;
+
+            const { error } = await supabase
+                .from('profiles')
+                .update({ preferred_species: species, preferred_gender: gender })
+                .eq('id', session.user.id);
+
+            msg.style.display = 'block';
+            if (error) {
+                msg.textContent = '⚠ ' + error.message;
+                msg.style.color = '#e53e3e';
+            } else {
+                msg.textContent = '✓ Preferences updated successfully!';
+                msg.style.color = '#38a169';
+                
+                // Write directly to local storage to reflect globally across other static views
+                localStorage.setItem('preferred_species', species);
+                localStorage.setItem('preferred_gender',  gender);
+                
+                setTimeout(() => { msg.style.display = 'none'; }, 3000);
+            }
+            btn.disabled = false;
+            btn.textContent = 'Save Preferences';
+        });
+
+        // ── Update password (Fixed & Protected) ───────────────────────────────
+document.getElementById('update-password-btn').addEventListener('click', async () => {
+    const btn      = document.getElementById('update-password-btn');
+    const msg      = document.getElementById('password-msg');
+    const passEl   = document.getElementById('new-password');
+    const confirmEl = document.getElementById('confirm-password');
+
+    const newPass  = passEl.value;
+    const confPass = confirmEl.value;
+
+    if (!newPass || newPass.length < 6) {
+        msg.textContent = '⚠ Password must be at least 6 characters.';
+        msg.style.color = '#e53e3e'; msg.style.display = 'block'; return;
+    }
+    if (newPass !== confPass) {
+        msg.textContent = '⚠ Passwords do not match.';
+        msg.style.color = '#e53e3e'; msg.style.display = 'block'; return;
+    }
+
+    try {
+        // Fully lock down inputs so no concurrent requests can be made
+        btn.disabled = true;
+        btn.textContent = 'Updating...';
+        btn.style.cursor = 'not-allowed';
+        passEl.disabled = true;
+        confirmEl.disabled = true;
+        msg.style.display = 'none';
+
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError || !session) {
+            throw new Error('You must be logged in to change your password.');
+        }
+
+        // Run the race
+        const result = await Promise.race([
+            supabase.auth.updateUser({ password: newPass }),
+            new Promise(resolve =>
+                setTimeout(() => resolve({ 
+                    data: null, 
+                    error: { message: 'The database took too long to respond. This usually means your Supabase Email/SMTP provider is unconfigured or rate-limited. Check your Supabase Auth settings.' } 
+                }), 10000) // Bumped to 10 seconds to give the backend breathing room
+            )
+        ]);
+
+        const { data, error } = result;
+
+        msg.style.display = 'block';
+        if (error) {
+            msg.textContent = '⚠ ' + error.message;
+            msg.style.color = '#e53e3e';
+        } else {
+            msg.textContent = '✓ Password updated successfully!';
+            msg.style.color = '#38a169';
+            passEl.value = '';
+            confirmEl.value = '';
+            setTimeout(() => { msg.style.display = 'none'; }, 5000);
+        }
+    } catch (err) {
+        msg.style.display = 'block';
+        msg.textContent = '⚠ ' + (err.message || 'An unexpected error occurred.');
+        msg.style.color = '#e53e3e';
+        console.error('Password Update Diagnostics:', err);
+    } finally {
+        // Re-enable elements cleanly
+        btn.textContent = 'Update Password';
+        passEl.disabled = false;
+        confirmEl.disabled = false;
+        checkPasswordFields();
+    }
+});
+
+        // ── Sign out ─────────────────────────────────────────────────────────
+        document.getElementById('signout-btn').addEventListener('click', async () => {
+            if (supabase) {
+                await supabase.auth.signOut();
+            }
+            window.location.href = '../index.html';
+        });
+
+        // ── Tab navigation ───────────────────────────────────────────────────
+        document.querySelectorAll('.account-menu-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.account-menu-item').forEach(m => m.classList.remove('active'));
+                document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+                item.classList.add('active');
+                const target = item.getAttribute('href').slice(1);
+                document.getElementById(target).classList.add('active');
+            });
+        });
+
+        // ── Avatar upload ────────────────────────────────────────────────────
+        document.getElementById('avatar-edit-btn').addEventListener('click', () => {
+            document.getElementById('avatar-file-input').click();
+        });
+
+        document.getElementById('avatar-file-input').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Image must be under 5MB.'); return;
+            }
+
+            const btn = document.getElementById('avatar-edit-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            btn.disabled = true;
+
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) return;
+
+            const ext      = file.name.split('.').pop();
+            const fileName = `${session.user.id}/avatar.${ext}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('avatars')
+                .upload(fileName, file, { upsert: true });
+
+            if (uploadError) {
+                alert('Upload failed: ' + uploadError.message);
+                btn.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+                btn.disabled = false;
+                e.target.value = '';
+                return;
+            }
+
+            const { data: urlData } = supabase.storage
+                .from('avatars')
+                .getPublicUrl(fileName);
+
+            const newAvatarUrl = urlData.publicUrl + '?t=' + Date.now();
+
+            const { error: updateError } = await supabase
+                .from('profiles')
+                .update({ avatar_url: newAvatarUrl })
+                .eq('id', session.user.id);
+
+            if (updateError) {
+                alert('Could not save avatar: ' + updateError.message);
+            } else {
+                renderAvatar(newAvatarUrl);
+                updateNavbarAvatar(newAvatarUrl); 
+            }
+
+            btn.innerHTML = '<i class="fas fa-pencil-alt"></i>';
+            btn.disabled = false;
+            e.target.value = '';
+        });
+
+        // Fire loading sequence execution
+        loadProfile();
+    </script>
+
+    <style>
+        .profile-two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        @media (max-width: 768px) {
+            .profile-two-col { grid-template-columns: 1fr; }
+        }
+
+        .form-section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin: 0 0 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .account-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .account-container { grid-template-columns: 1fr; }
+        }
+
+        .account-sidebar {
+            background-color: var(--white-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .profile-card {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .profile-avatar-wrap {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .profile-avatar {
+            font-size: 80px;
+            color: var(--primary-color);
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-avatar img {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+            display: block;
+        }
+
+        .avatar-edit-btn {
+            position: absolute;
+            top: 2px;
+            right: -2px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: 2px solid white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            transition: filter 0.2s, transform 0.15s;
+            z-index: 2;
+        }
+
+        .avatar-edit-btn:hover {
+            filter: brightness(0.9);
+            transform: scale(1.1);
+        }
+
+        .profile-card h2 { margin: 8px 0 4px; font-size: 18px; }
+
+        .account-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .account-menu-item {
+            padding: 11px 15px;
+            border-radius: 8px;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .account-menu-item:hover { background-color: var(--light-color); }
+
+        .account-menu-item.active {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+        }
+
+        .account-content {
+            background-color: var(--white-color);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+
+        .profile-form .form-group { margin-bottom: 18px; }
+        .profile-form label { display: block; font-size: 13px; font-weight: 600; color: var(--dark-color); margin-bottom: 6px; }
+        .profile-form input,
+        .profile-form select,
+        .profile-form textarea {
+            width: 100%; padding: 9px 12px; border: 1px solid #ddd;
+            border-radius: 8px; font-size: 14px; outline: none;
+            transition: border-color 0.2s; box-sizing: border-box;
+        }
+        .profile-form input:focus,
+        .profile-form select:focus,
+        .profile-form textarea:focus { border-color: var(--primary-color); }
+        .profile-form select:disabled { background: #f9f9f9; color: #aaa; cursor: not-allowed; }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .form-row .form-group { margin-bottom: 0; }
+
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+        .settings-item { margin-bottom: 30px; }
+        .settings-item h3 { margin-bottom: 12px; }
+        .settings-item .form-group { margin-bottom: 0; }
+        .settings-item label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+        .settings-item input {
+            width: 100%; padding: 9px 12px; border: 1px solid #ddd;
+            border-radius: 8px; font-size: 14px; outline: none;
+            transition: border-color 0.2s; box-sizing: border-box;
+        }
+        .settings-item input:focus { border-color: var(--primary-color); }
+
+        hr { border: none; border-top: 1px solid var(--light-color); margin: 30px 0; }
+
+        button:disabled { opacity: 0.7; cursor: not-allowed; }
+    </style>
+</body>
+</html>
