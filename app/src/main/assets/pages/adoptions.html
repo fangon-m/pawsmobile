@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adoptions - Paws & Pals</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <nav id="navbar"></nav>
+
+    <main class="container" style="padding-top: 32px; padding-bottom: 60px;">
+
+        <div class="adoptions-page-header">
+            <h1><i class="fas fa-paw" style="color:var(--primary-color);"></i> Adoptions</h1>
+            <p>Track adoption applications you've submitted, and review requests for your pets.</p>
+        </div>
+
+        <!-- ── My Requests ─────────────────────────────────────────────── -->
+        <section class="adoptions-section" id="my-requests-section">
+            <div class="section-heading">
+                <h2>My Requests</h2>
+                <span class="section-sub">Applications you've submitted to adopt a pet</span>
+            </div>
+            <div id="my-requests-container">
+                <!-- Skeletons -->
+                <div class="requests-grid" id="my-requests-skeleton">
+                    <div class="request-card skeleton-card"></div>
+                    <div class="request-card skeleton-card"></div>
+                    <div class="request-card skeleton-card"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Adoption Requests ───────────────────────────────────────── -->
+        <section class="adoptions-section" id="adoption-requests-section">
+            <div class="section-heading">
+                <h2>Adoption Requests</h2>
+                <span class="section-sub">People who want to adopt your pets</span>
+            </div>
+            <div id="adoption-requests-container">
+                <div class="requests-grid" id="adoption-requests-skeleton">
+                    <div class="request-card skeleton-card"></div>
+                    <div class="request-card skeleton-card"></div>
+                    <div class="request-card skeleton-card"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ── Generic Alert Modal ────────────────────────────────────────── -->
+    <div id="alert-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card" style="max-width:400px; text-align:center;">
+            <div style="padding:32px 28px 28px;">
+                <div id="alert-modal-icon" style="font-size:44px; margin-bottom:16px;">ℹ️</div>
+                <h3 id="alert-modal-title" style="margin:0 0 10px; font-size:20px; color:var(--dark-color);"></h3>
+                <p id="alert-modal-message" style="color:#666; margin:0 0 24px; font-size:14px; line-height:1.5;"></p>
+                <div id="alert-modal-actions" style="display:flex; gap:10px; justify-content:center;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification Required Modal -->
+    <div id="verify-required-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card" style="max-width:420px; text-align:center;">
+            <div style="padding:40px 32px 32px;">
+                <div style="font-size:52px; margin-bottom:16px;">🔐</div>
+                <h3 style="margin:0 0 10px; font-size:20px; color:var(--dark-color);">Verification Required</h3>
+                <p style="color:#666; margin:0 0 8px; font-size:14px; line-height:1.6;">
+                    Your account is not yet verified. Please complete identity verification to access all features of Paws &amp; Pals.
+                </p>
+                <p style="color:#aaa; font-size:12px; margin:0 0 24px;">
+                    Verification helps keep our community safe for pets and adopters alike.
+                </p>
+                <div style="display:flex; gap:10px; justify-content:center;">
+                    <button id="go-to-verify-btn" class="btn btn-primary"
+                        style="background-color:var(--primary-color); color:white; padding:11px 28px; font-weight:600;">
+                        Get Verified
+                    </button>
+                    <button id="verify-modal-dismiss-btn" class="btn"
+                        style="background:#f0f0f0; color:#555; padding:11px 20px;">
+                        Maybe Later
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Request Detail Modal ───────────────────────────────────────── -->
+    <div id="request-detail-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card" style="max-width:680px;">
+            <div class="modal-header">
+                <h2 id="request-detail-title">Application Details</h2>
+                <button class="modal-close" id="request-detail-close">&times;</button>
+            </div>
+            <div class="modal-body" id="request-detail-body">
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Status Update Modal ────────────────────────────────────────── -->
+    <div id="status-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card" style="max-width:420px;">
+            <div class="modal-header">
+                <h2 id="status-modal-title">Update Request Status</h2>
+                <button class="modal-close" id="status-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="status-modal-desc" style="color:#555; font-size:14px; margin-bottom:20px; line-height:1.6;"></p>
+                <p id="status-modal-message" style="display:none; font-size:13px; margin-bottom:12px; padding:10px; border-radius:8px; text-align:center;"></p>
+                <div style="display:flex; gap:10px;">
+                    <button id="status-modal-cancel" class="btn" style="flex:1; background:#f0f0f0; color:#555; padding:12px; border-radius:8px; font-weight:700; border:none; cursor:pointer;">Cancel</button>
+                    <button id="status-modal-confirm" class="btn btn-primary" style="flex:1; padding:12px; border-radius:8px; font-weight:700; border:none; cursor:pointer;"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Pet Profile Modal (same as index.html) ─────────────────────── -->
+    <div id="pet-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Create Pet Profile</h2>
+                <button class="modal-close" id="close-pet-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="pet-modal-message" style="display:none; font-size:13px; margin-bottom:10px; text-align:center;"></p>
+                <div class="modal-form-grid">
+                    <div class="form-group">
+                        <label>Pet Name <span style="color:red;">*</span></label>
+                        <input type="text" id="pet-name" placeholder="e.g. Max">
+                    </div>
+                    <div class="form-group">
+                        <label>Species <span style="color:red;">*</span></label>
+                        <select id="pet-species">
+                            <option value="">Select species</option>
+                            <option value="dog">Dog</option>
+                            <option value="cat">Cat</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Breed <span style="color:red;">*</span></label>
+                        <input type="text" id="pet-breed" placeholder="e.g. Golden Retriever">
+                    </div>
+                    <div class="form-group">
+                        <label>Gender <span style="color:red;">*</span></label>
+                        <select id="pet-gender">
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Age (months) <span style="color:red;">*</span></label>
+                        <input type="number" id="pet-age" placeholder="e.g. 24" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Health Status <span style="color:red;">*</span></label>
+                        <select id="pet-health">
+                            <option value="">Select status</option>
+                            <option value="healthy">Healthy</option>
+                            <option value="needs_care">Needs Care</option>
+                            <option value="special_needs">Special Needs</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Pet Photos <span style="color:red;">*</span> <span style="color:#aaa; font-weight:normal;">(1–5 photos, max 25MB each)</span></label>
+                        <label for="pet-photo-file" class="photo-upload-area" id="photo-upload-area" style="cursor:pointer;">
+                            <i class="fas fa-camera" style="font-size:28px; color:#aaa;"></i>
+                            <p style="margin:8px 0 4px; color:#666; font-size:14px;">Click to upload photos</p>
+                            <p style="margin:0; color:#aaa; font-size:12px;">JPG, PNG, WEBP • Up to 5 photos • 25MB each</p>
+                            <input type="file" id="pet-photo-file" accept="image/*" multiple style="display:none;">
+                        </label>
+                        <div id="photo-previews" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;"></div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Description <span style="color:red;">*</span></label>
+                        <textarea id="pet-description" placeholder="Tell us about your pet..." rows="3"></textarea>
+                    </div>
+                    <div class="form-group full-width" id="use-profile-address-row" style="display:none;">
+                        <label style="flex-direction:row; align-items:center; gap:10px; cursor:pointer; font-weight:500;">
+                            <input type="checkbox" id="use-profile-address-checkbox" style="width:16px; height:16px; accent-color:var(--primary-color); cursor:pointer;">
+                            Use your current address as pet's address
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Province <span style="color:red;">*</span></label>
+                        <select id="pet-province">
+                            <option value="">Select Province</option>
+                            <option value="Bulacan">Bulacan</option>
+                            <option value="Metro Manila">Metro Manila (NCR)</option>
+                            <option value="Cavite">Cavite</option>
+                            <option value="Laguna">Laguna</option>
+                            <option value="Rizal">Rizal</option>
+                            <option value="Pampanga">Pampanga</option>
+                            <option value="Batangas">Batangas</option>
+                            <option value="Quezon">Quezon</option>
+                            <option value="Nueva Ecija">Nueva Ecija</option>
+                            <option value="Tarlac">Tarlac</option>
+                            <option value="Zambales">Zambales</option>
+                            <option value="Bataan">Bataan</option>
+                            <option value="Pangasinan">Pangasinan</option>
+                            <option value="Cebu">Cebu</option>
+                            <option value="Davao del Sur">Davao del Sur</option>
+                            <option value="Iloilo">Iloilo</option>
+                            <option value="Negros Occidental">Negros Occidental</option>
+                            <option value="Benguet">Benguet</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>City / Municipality <span style="color:red;">*</span></label>
+                        <select id="pet-city" disabled><option value="">Select Province first</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Barangay <span style="color:red;">*</span></label>
+                        <select id="pet-barangay" disabled><option value="">Select Municipality first</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Street / Building <span style="color:red;">*</span></label>
+                        <input type="text" id="pet-street" placeholder="e.g. 123 Rizal St.">
+                    </div>
+                    <div class="form-group">
+                        <label>ZIP Code <span style="color:#aaa; font-weight:normal;">(auto-filled)</span></label>
+                        <input type="text" id="pet-zip" placeholder="e.g. 3016" readonly style="background:#f5f5f5;">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Complete Address <span style="color:#aaa; font-weight:normal; font-size:11px;">(auto-filled)</span></label>
+                        <input type="text" id="pet-address" placeholder="Fill in the fields above" readonly style="background:#f5f5f5; color:#555;">
+                        <p id="location-status" style="font-size:12px; margin:4px 0 0; display:none;"></p>
+                    </div>
+                    <input type="hidden" id="pet-lat">
+                    <input type="hidden" id="pet-lng">
+                    <button class="btn btn-primary full-width" id="next-to-supporting-btn" style="width:100%; margin-top:20px; padding:14px; border-radius:10px; font-weight:bold; background-color:var(--primary-color); color:white;">
+                        Next: Supporting Details →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Supporting Details Modal ──────────────────────────────────── -->
+    <div id="supporting-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Supporting Details</h2>
+                <button class="modal-close" id="close-supporting-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-form-grid">
+                    <div class="form-group full-width">
+                        <label>Temperament <span style="color:#aaa; font-weight:normal;">(Optional)</span></label>
+                        <textarea id="pet-temperament" placeholder="e.g. Friendly, energetic, good with kids..." rows="3"></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label style="font-weight:600; margin-bottom:12px; display:block;">Health & Care</label>
+                        <div style="display:flex; flex-direction:column; gap:10px;">
+                            <label style="flex-direction:row; align-items:center; gap:10px; cursor:pointer; font-weight:500;">
+                                <input type="checkbox" class="health-checkbox" id="is-spayed" style="width:18px; height:18px; accent-color:var(--primary-color); cursor:pointer;">
+                                Spayed / Neutered
+                            </label>
+                            <label style="flex-direction:row; align-items:center; gap:10px; cursor:pointer; font-weight:500;">
+                                <input type="checkbox" class="health-checkbox" id="is-vaccinated" style="width:18px; height:18px; accent-color:var(--primary-color); cursor:pointer;">
+                                Vaccinated
+                            </label>
+                            <label style="flex-direction:row; align-items:center; gap:10px; cursor:pointer; font-weight:500;">
+                                <input type="checkbox" class="health-checkbox" id="has-microchip" style="width:18px; height:18px; accent-color:var(--primary-color); cursor:pointer;">
+                                Has Microchip
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group full-width" id="medical-records-section" style="display:none;">
+                        <label>Medical Records <span style="color:#aaa; font-weight:normal;">(up to 3 images)</span></label>
+                        <label for="medical-file" class="photo-upload-area" id="medical-upload-area" style="cursor:pointer;">
+                            <i class="fas fa-file-medical" style="font-size:28px; color:#aaa;"></i>
+                            <p style="margin:8px 0 4px; color:#666; font-size:14px;">Click to upload medical records</p>
+                            <p style="margin:0; color:#aaa; font-size:12px;">JPG, PNG, WEBP • Up to 3 images • 25MB each</p>
+                            <input type="file" id="medical-file" accept="image/*" multiple style="display:none;">
+                        </label>
+                        <div id="medical-previews" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;"></div>
+                    </div>
+                    <div style="grid-column:1/-1; display:flex; gap:12px; margin-top:20px;">
+                        <button class="btn" id="back-to-basic-btn" style="flex:1; background:#f0f0f0; color:#555; padding:12px; border-radius:8px; font-weight:bold; border:none; cursor:pointer;">← Back</button>
+                        <button class="btn btn-primary full-width" id="submit-pet-btn" style="flex:1; padding:12px; border-radius:8px; font-weight:bold; background-color:var(--primary-color); color:white; border:none; cursor:pointer;">Create Profile</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Success Modal ─────────────────────────────────────────────── -->
+    <div id="success-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card" style="max-width:400px; text-align:center;">
+            <div style="padding:40px 24px;">
+                <div style="font-size:60px; margin-bottom:20px;">✓</div>
+                <h2 style="margin:0 0 10px; color:#38a169; font-size:24px;">Success!</h2>
+                <p style="color:#666; margin:0;">Your pet profile has been created successfully!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Save Address Modal ─────────────────────────────────────────── -->
+    <div id="save-address-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card" style="max-width:440px;">
+            <div class="modal-header">
+                <h2 style="font-size:18px;">Save Address to Your Profile?</h2>
+            </div>
+            <div class="modal-body">
+                <p style="color:#555; font-size:14px; margin-bottom:16px;">Your profile doesn't have an address yet. Would you like to use this pet's address as your profile address?</p>
+                <div style="background:#f9f9f9; border:1px solid #eee; border-radius:8px; padding:12px 16px; margin-bottom:20px;">
+                    <p style="margin:0; font-size:13px; color:#444;" id="save-address-preview"></p>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-primary" id="save-address-yes" style="flex:1; background-color:var(--primary-color); color:white; padding:11px;">Yes, save it</button>
+                    <button class="btn" id="save-address-no" style="flex:1; background:#f0f0f0; color:#555; padding:11px;">No, skip</button>
+                </div>
+                <p id="save-address-status" style="display:none; font-size:12px; margin-top:10px; text-align:center;"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../scripts/navbar.js"></script>
+
+    <script type="module">
+        import { locationDataSimplified } from '../scripts/locationData.js';
+
+        await window.navbarReady;
+        const supabase = window._supabase;
+
+        // ── Helpers ──────────────────────────────────────────────────────
+        function formatAge(months) {
+            if (!months && months !== 0) return '—';
+            if (months >= 12) {
+                const yrs = Math.floor(months / 12);
+                const mos = months % 12;
+                return yrs + (yrs === 1 ? ' year' : ' years') + (mos ? ` ${mos} mo` : '');
+            }
+            return months + ' month' + (months !== 1 ? 's' : '');
+        }
+
+        function capitalize(s) {
+            return s ? s.charAt(0).toUpperCase() + s.slice(1) : '—';
+        }
+
+        function formatStatus(s) {
+            if (!s) return '—';
+            return s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        }
+
+        function timeAgo(dateStr) {
+            let date = new Date(dateStr);
+            if (typeof dateStr === 'string' && !dateStr.includes('Z') && !dateStr.includes('+')) {
+                date = new Date(dateStr.replace(' ', 'T') + 'Z');
+            }
+            if (isNaN(date.getTime())) return 'unknown';
+            const diff = Date.now() - date.getTime();
+            const mins  = Math.floor(diff / 60000);
+            const hours = Math.floor(mins / 60);
+            const days  = Math.floor(hours / 24);
+            if (days > 0)  return `${days}d ago`;
+            if (hours > 0) return `${hours}h ago`;
+            if (mins > 0)  return `${mins}m ago`;
+            return 'just now';
+        }
+
+        function statusBadge(status) {
+            const map = {
+                pending:  { bg: '#fefcbf', color: '#7b6002', label: 'Pending' },
+                approved: { bg: '#c6f6d5', color: '#276749', label: 'Approved' },
+                rejected: { bg: '#fed7d7', color: '#9b2c2c', label: 'Rejected' },
+                withdrawn:{ bg: '#e2e8f0', color: '#4a5568', label: 'Withdrawn' },
+            };
+            const s = map[status] || { bg: '#eee', color: '#666', label: capitalize(status) };
+            return `<span style="display:inline-block; background:${s.bg}; color:${s.color}; padding:3px 12px; border-radius:20px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px;">${s.label}</span>`;
+        }
+
+        // ── Calculate age from birthdate ─────────────────────────────────
+        function calcAge(birthdate) {
+            if (!birthdate) return null;
+            const today = new Date();
+            const dob   = new Date(birthdate);
+            let age = today.getFullYear() - dob.getFullYear();
+            const m = today.getMonth() - dob.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+            return age;
+        }
+
+        function showAlertModal({ icon = 'ℹ️', title = '', message = '', buttons = [] }) {
+            const overlay   = document.getElementById('alert-modal-overlay');
+            const iconEl    = document.getElementById('alert-modal-icon');
+            const titleEl   = document.getElementById('alert-modal-title');
+            const msgEl     = document.getElementById('alert-modal-message');
+            const actionsEl = document.getElementById('alert-modal-actions');
+            iconEl.textContent  = icon;
+            titleEl.textContent = title;
+            msgEl.textContent   = message;
+            actionsEl.innerHTML = '';
+            const btns = buttons.length ? buttons : [{ label: 'OK', primary: true }];
+            btns.forEach(btn => {
+                const el = document.createElement('button');
+                el.textContent = btn.label;
+                el.className   = 'btn' + (btn.primary ? ' btn-primary' : '');
+                el.style.cssText = btn.primary
+                    ? 'background-color:var(--primary-color); color:white; padding:10px 28px; min-width:100px;'
+                    : 'background:#f0f0f0; color:#555; padding:10px 28px; min-width:100px;';
+                el.addEventListener('click', () => {
+                    overlay.style.display = 'none';
+                    document.body.style.overflow = '';
+                    if (btn.onClick) btn.onClick();
+                });
+                actionsEl.appendChild(el);
+            });
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            overlay.onclick = e => {
+                if (e.target === overlay) { overlay.style.display = 'none'; document.body.style.overflow = ''; }
+            };
+        }
+
+        // ── Request Detail Modal ─────────────────────────────────────────
+        const detailOverlay = document.getElementById('request-detail-overlay');
+        const detailClose   = document.getElementById('request-detail-close');
+        detailClose.addEventListener('click', () => { detailOverlay.style.display = 'none'; document.body.style.overflow = ''; });
+        detailOverlay.addEventListener('click', e => { if (e.target === detailOverlay) { detailOverlay.style.display = 'none'; document.body.style.overflow = ''; } });
+
+        function openDetailModal(title, bodyHTML) {
+            document.getElementById('request-detail-title').textContent = title;
+            document.getElementById('request-detail-body').innerHTML = bodyHTML;
+            detailOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function buildDetailHTML(req, isOwnerView = false) {
+            const pet       = req.pet || {};
+            const applicant = req.requester_profile || {};
+            const owner     = req.owner_profile || {};
+
+            const householdList = Array.isArray(req.household_members)
+                ? req.household_members.map(m => m.replace(/_/g, ' ')).map(m => capitalize(m)).join(', ')
+                : '—';
+
+            const homePhotosHTML = Array.isArray(req.home_photos) && req.home_photos.length
+                ? `<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:8px; margin-top:8px;">
+                    ${req.home_photos.map((url, i) => `
+                        <div style="border-radius:8px; overflow:hidden; background:#f5f5f5; aspect-ratio:1;">
+                            <img src="${url}" alt="Home ${i+1}" style="width:100%; height:100%; object-fit:cover; cursor:pointer;" onclick="window.open('${url}','_blank')">
+                        </div>`).join('')}
+                   </div>`
+                : '<p style="color:#999; font-size:13px; margin:4px 0;">No photos uploaded.</p>';
+
+            let personSection = '';
+
+            if (isOwnerView) {
+                // ── Applicant section with bio, age, address ───────────────
+                const applicantAge = calcAge(applicant.birthdate);
+                const ageText      = applicantAge !== null ? `${applicantAge} years old` : null;
+
+                personSection = `
+                <div class="detail-section">
+                    <div class="detail-section-title"><i class="fas fa-user"></i> Applicant</div>
+                    <div style="display:flex; align-items:flex-start; gap:14px; margin-top:8px;">
+                        <img src="${applicant.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(applicant.full_name||applicant.username||'?')}&background=FBAD38&color=fff&size=52`}"
+                             style="width:56px; height:56px; border-radius:50%; object-fit:cover; border:2px solid #eee; flex-shrink:0;" alt="avatar">
+                        <div style="flex:1; min-width:0;">
+                            <p style="font-weight:700; margin:0 0 4px; font-size:15px;">${applicant.full_name || applicant.username || 'Anonymous'}</p>
+                            <div style="display:flex; flex-wrap:wrap; gap:6px 16px;">
+                                ${applicant.phone ? `<span style="font-size:13px; color:#666;"><i class="fas fa-phone" style="color:var(--primary-color); margin-right:4px;"></i>${applicant.phone}</span>` : ''}
+                                ${ageText ? `<span style="font-size:13px; color:#666;"><i class="fas fa-birthday-cake" style="color:var(--primary-color); margin-right:4px;"></i>${ageText}</span>` : ''}
+                            </div>
+                            ${applicant.address ? `<p style="margin:6px 0 0; font-size:13px; color:#666; display:flex; align-items:flex-start; gap:5px;"><i class="fas fa-map-marker-alt" style="color:var(--primary-color); margin-top:2px; flex-shrink:0;"></i><span>${applicant.address}</span></p>` : ''}
+                            ${applicant.bio ? `<p style="margin:8px 0 0; font-size:13px; color:#555; font-style:italic; line-height:1.5; padding:8px 10px; background:#fafafa; border-left:3px solid var(--primary-color); border-radius:0 6px 6px 0;">"${applicant.bio}"</p>` : ''}
+                        </div>
+                    </div>
+                </div>`;
+            } else {
+                personSection = `
+                <div class="detail-section">
+                    <div class="detail-section-title"><i class="fas fa-paw"></i> Pet</div>
+                    <div style="display:flex; align-items:center; gap:14px; margin-top:8px;">
+                        <img src="${pet.photo_url || 'https://via.placeholder.com/52x52?text=Pet'}"
+                             style="width:52px; height:52px; border-radius:10px; object-fit:cover; border:2px solid #eee;" alt="pet">
+                        <div>
+                            <p style="font-weight:700; margin:0; font-size:15px;">${pet.name || '—'}</p>
+                            <p style="margin:2px 0 0; font-size:13px; color:#666;">${capitalize(pet.species)} • ${capitalize(pet.breed)} • ${formatAge(pet.age_months)}</p>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            return `
+                ${personSection}
+
+                <div class="detail-section">
+                    <div class="detail-section-title"><i class="fas fa-home"></i> Household</div>
+                    <div class="detail-grid">
+                        <div class="detail-item"><span class="detail-label">Building type</span><span class="detail-value">${formatStatus(req.building_type)}</span></div>
+                        <div class="detail-item"><span class="detail-label">Rents</span><span class="detail-value">${req.rent_status === 'yes' ? 'Yes' : 'No'}</span></div>
+                        <div class="detail-item" style="grid-column:1/-1;"><span class="detail-label">Lives with</span><span class="detail-value">${householdList}</span></div>
+                        <div class="detail-item" style="grid-column:1/-1;"><span class="detail-label">Allergies in household</span><span class="detail-value">${req.household_allergies === 'yes' ? 'Yes' : 'No'}</span></div>
+                        <div class="detail-item" style="grid-column:1/-1;"><span class="detail-label">If/when they move</span><span class="detail-value">${req.pet_move_plan || '—'}</span></div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title"><i class="fas fa-heart"></i> Care Plan</div>
+                    <div class="detail-grid">
+                        <div class="detail-item" style="grid-column:1/-1;"><span class="detail-label">Primary caregiver</span><span class="detail-value">${req.primary_caregiver || '—'}</span></div>
+                        <div class="detail-item" style="grid-column:1/-1;"><span class="detail-label">Financial responsibility</span><span class="detail-value">${req.financial_responsibility || '—'}</span></div>
+                        <div class="detail-item" style="grid-column:1/-1;"><span class="detail-label">Emergency care</span><span class="detail-value">${req.emergency_care || '—'}</span></div>
+                        <div class="detail-item"><span class="detail-label">Hours alone/day</span><span class="detail-value">${req.alone_time_hours ?? '—'} hrs</span></div>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-section-title"><i class="fas fa-camera"></i> Home Photos</div>
+                    ${homePhotosHTML}
+                </div>
+
+                ${req.message ? `
+                <div class="detail-section">
+                    <div class="detail-section-title"><i class="fas fa-comment"></i> Message</div>
+                    <p style="font-size:14px; color:#444; line-height:1.6; margin:8px 0 0;">${req.message}</p>
+                </div>` : ''}
+            `;
+        }
+
+        // ── Status Update Modal ──────────────────────────────────────────
+        const statusOverlay    = document.getElementById('status-modal-overlay');
+        const statusClose      = document.getElementById('status-modal-close');
+        const statusCancel     = document.getElementById('status-modal-cancel');
+        const statusConfirm    = document.getElementById('status-modal-confirm');
+        const statusMsg        = document.getElementById('status-modal-message');
+        const verifyRequiredOverlay = document.getElementById('verify-required-modal-overlay');
+
+        function showVerifyRequiredModal() {
+            verifyRequiredOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideVerifyRequiredModal() {
+            verifyRequiredOverlay.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('go-to-verify-btn').addEventListener('click', () => {
+            hideVerifyRequiredModal();
+            window.location.href = 'account.html#verification';
+        });
+
+        document.getElementById('verify-modal-dismiss-btn').addEventListener('click', hideVerifyRequiredModal);
+
+        statusClose.addEventListener('click',  () => { statusOverlay.style.display = 'none'; document.body.style.overflow = ''; });
+        statusCancel.addEventListener('click', () => { statusOverlay.style.display = 'none'; document.body.style.overflow = ''; });
+        statusOverlay.addEventListener('click', e => { if (e.target === statusOverlay) { statusOverlay.style.display = 'none'; document.body.style.overflow = ''; } });
+
+        function openStatusModal({ title, desc, confirmLabel, confirmStyle, onConfirm }) {
+            document.getElementById('status-modal-title').textContent = title;
+            document.getElementById('status-modal-desc').textContent  = desc;
+            statusConfirm.textContent  = confirmLabel;
+            statusConfirm.style.cssText = confirmStyle;
+            statusMsg.style.display    = 'none';
+            statusConfirm.disabled     = false;
+            statusOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            // Replace listener
+            const newBtn = statusConfirm.cloneNode(true);
+            statusConfirm.parentNode.replaceChild(newBtn, statusConfirm);
+            newBtn.addEventListener('click', onConfirm);
+        }
+
+        // ── Load My Requests ─────────────────────────────────────────────
+        async function loadMyRequests(userId) {
+            const container = document.getElementById('my-requests-container');
+            const skeleton  = document.getElementById('my-requests-skeleton');
+
+            const { data: requests, error } = await supabase
+                .from('adoption_requests')
+                .select(`
+                    *,
+                    pet:pet_id ( id, name, photo_url, species, breed, age_months, owner_id ),
+                    owner_profile:owner_id ( full_name, username, avatar_url, phone )
+                `)
+                .eq('requester_id', userId)
+                .order('created_at', { ascending: false });
+
+            skeleton && skeleton.remove();
+
+            if (error || !requests?.length) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🐾</div>
+                        <h3>No requests yet</h3>
+                        <p>You haven't applied to adopt any pets yet.</p>
+                        <a href="maps.html" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:8px; margin-top:4px; background:var(--primary-color); color:white; padding:12px 28px; border-radius:10px; font-weight:700; text-decoration:none;">
+                            <i class="fas fa-map-marker-alt"></i> Browse Pets
+                        </a>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = `<div class="requests-grid" id="my-requests-grid"></div>`;
+            const grid = document.getElementById('my-requests-grid');
+
+            requests.forEach(req => {
+                const pet   = req.pet   || {};
+                const owner = req.owner_profile || {};
+                const card  = document.createElement('div');
+                card.className = 'request-card';
+                card.innerHTML = `
+                    <div class="rc-photo-wrap">
+                        <img src="${pet.photo_url || 'https://via.placeholder.com/200x140?text=Pet'}" alt="${pet.name || 'Pet'}"
+                             onerror="this.src='https://via.placeholder.com/200x140?text=Pet'">
+                    </div>
+                    <div class="rc-body">
+                        <div class="rc-top">
+                            <div>
+                                <h3 class="rc-pet-name">${pet.name || 'Unknown Pet'}</h3>
+                                <p class="rc-meta">${capitalize(pet.species)} • ${capitalize(pet.breed)} • ${formatAge(pet.age_months)}</p>
+                            </div>
+                            ${statusBadge(req.status)}
+                        </div>
+                        <p class="rc-owner"><i class="fas fa-user" style="color:var(--primary-color);"></i> ${owner.full_name || owner.username || 'Owner'}</p>
+                        <p class="rc-date"><i class="fas fa-clock" style="color:#aaa;"></i> Submitted ${timeAgo(req.created_at)}</p>
+                        <div class="rc-actions">
+                            <button class="btn btn-small rc-view-btn" data-id="${req.id}"><i class="fas fa-eye"></i> View Details</button>
+                            ${req.status === 'pending' ? `<button class="btn btn-small rc-withdraw-btn" data-id="${req.id}" style="background:#fff; color:#e53e3e; border:1px solid #e53e3e;"><i class="fas fa-times"></i> Withdraw</button>` : ''}
+                            <a href="pet.html?id=${pet.id}" class="btn btn-small" style="background:#f0f0f0; color:#555;"><i class="fas fa-paw"></i> View Pet</a>
+                        </div>
+                    </div>`;
+
+                card.querySelector('.rc-view-btn')?.addEventListener('click', () => {
+                    openDetailModal(`Application for ${pet.name || 'Pet'}`, buildDetailHTML(req, false));
+                });
+
+                card.querySelector('.rc-withdraw-btn')?.addEventListener('click', () => {
+                    openStatusModal({
+                        title: 'Withdraw Application',
+                        desc: `Are you sure you want to withdraw your adoption application for ${pet.name || 'this pet'}? You can re-apply later.`,
+                        confirmLabel: 'Withdraw',
+                        confirmStyle: 'flex:1; padding:12px; border-radius:8px; font-weight:700; border:none; cursor:pointer; background:#e53e3e; color:white;',
+                        onConfirm: async (e) => {
+                            e.target.disabled = true;
+                            e.target.textContent = 'Withdrawing...';
+                            const { error } = await supabase
+                                .from('adoption_requests')
+                                .update({ status: 'withdrawn' })
+                                .eq('id', req.id);
+                            const msgEl = document.getElementById('status-modal-message');
+                            msgEl.style.display = 'block';
+                            if (error) {
+                                msgEl.textContent = 'Failed: ' + error.message;
+                                msgEl.style.color = '#e53e3e'; msgEl.style.background = '#fff5f5';
+                                e.target.disabled = false; e.target.textContent = 'Withdraw';
+                            } else {
+                                msgEl.textContent = 'Application withdrawn.';
+                                msgEl.style.color = '#276749'; msgEl.style.background = '#c6f6d5';
+                                setTimeout(() => { statusOverlay.style.display = 'none'; document.body.style.overflow = ''; loadMyRequests(userId); }, 1200);
+                            }
+                        }
+                    });
+                });
+
+                grid.appendChild(card);
+            });
+        }
+
+        // ── Load Adoption Requests (owner view) ──────────────────────────
+        async function loadAdoptionRequests(userId) {
+            const container = document.getElementById('adoption-requests-container');
+            const skeleton  = document.getElementById('adoption-requests-skeleton');
+
+            // Check if user has any pets
+            const { data: myPets } = await supabase
+                .from('pets')
+                .select('id')
+                .eq('owner_id', userId)
+                .limit(1);
+
+            const hasPets = myPets && myPets.length > 0;
+
+            const { data: requests, error } = await supabase
+                .from('adoption_requests')
+                .select(`
+                    *,
+                    pet:pet_id ( id, name, photo_url, species, breed, age_months ),
+                    requester_profile:requester_id ( full_name, username, avatar_url, phone, bio, address, birthdate )
+                `)
+                .eq('owner_id', userId)
+                .order('created_at', { ascending: false });
+
+            skeleton && skeleton.remove();
+
+            if (error || !requests?.length) {
+                if (!hasPets) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🏠</div>
+                            <h3>No adoption requests</h3>
+                            <p>Create a pet profile to start receiving adoption requests.</p>
+                            <button id="empty-create-pet-btn" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:8px; margin-top:4px; background:var(--primary-color); color:white; padding:12px 28px; border-radius:10px; font-weight:700; border:none; cursor:pointer;">
+                                <i class="fas fa-plus"></i> Create Pet Profile
+                            </button>
+                        </div>`;
+                    document.getElementById('empty-create-pet-btn').addEventListener('click', openPetModal);
+                } else {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">📭</div>
+                            <h3>No adoption requests yet</h3>
+                            <p>You haven't received any adoption requests for your pets yet.</p>
+                        </div>`;
+                }
+                return;
+            }
+
+            // Group by pet
+            const byPet = {};
+            requests.forEach(req => {
+                const pid = req.pet_id;
+                if (!byPet[pid]) byPet[pid] = { pet: req.pet, requests: [] };
+                byPet[pid].requests.push(req);
+            });
+
+            container.innerHTML = '';
+
+            Object.values(byPet).forEach(group => {
+                const pet = group.pet || {};
+                const section = document.createElement('div');
+                section.className = 'pet-request-group';
+                section.innerHTML = `
+                    <div class="pet-group-header">
+                        <img src="${pet.photo_url || 'https://via.placeholder.com/44?text=Pet'}" alt="${pet.name}" style="width:44px; height:44px; border-radius:10px; object-fit:cover; border:2px solid #eee;">
+                        <div>
+                            <h3 style="margin:0; font-size:16px;">${pet.name || 'Unknown Pet'}</h3>
+                            <p style="margin:2px 0 0; font-size:13px; color:#888;">${capitalize(pet.species)} • ${group.requests.length} request${group.requests.length !== 1 ? 's' : ''}</p>
+                        </div>
+                        <a href="pet.html?id=${pet.id}" class="btn btn-small" style="margin-left:auto; background:#f0f0f0; color:#555;"><i class="fas fa-external-link-alt"></i> View Pet</a>
+                    </div>`;
+
+                const grid = document.createElement('div');
+                grid.className = 'requests-grid';
+
+                group.requests.forEach(req => {
+                    const applicant = req.requester_profile || {};
+                    const applicantAge = calcAge(applicant.birthdate);
+                    const card = document.createElement('div');
+                    card.className = 'request-card';
+                    card.innerHTML = `
+                        <div class="rc-applicant-wrap">
+                            <img src="${applicant.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(applicant.full_name||applicant.username||'?')}&background=FBAD38&color=fff&size=64`}"
+                                 alt="Applicant" style="width:64px; height:64px; border-radius:50%; object-fit:cover; border:2px solid #eee; flex-shrink:0;">
+                            <div style="flex:1; min-width:0;">
+                                <h3 class="rc-pet-name" style="margin:0 0 2px;">${applicant.full_name || applicant.username || 'Anonymous'}</h3>
+                                ${applicant.phone ? `<p class="rc-meta"><i class="fas fa-phone" style="color:var(--primary-color); margin-right:4px;"></i>${applicant.phone}</p>` : ''}
+                                ${applicantAge !== null ? `<p class="rc-meta"><i class="fas fa-birthday-cake" style="color:var(--primary-color); margin-right:4px;"></i>${applicantAge} years old</p>` : ''}
+                                <p class="rc-date"><i class="fas fa-clock" style="color:#aaa;"></i> ${timeAgo(req.created_at)}</p>
+                            </div>
+                            ${statusBadge(req.status)}
+                        </div>
+                        ${applicant.bio ? `<p class="rc-message" style="margin:0 12px; padding:8px 10px; background:#fafafa; border-left:3px solid var(--primary-color); border-radius:0 6px 6px 0; font-style:italic;">"${applicant.bio}"</p>` : ''}
+                        ${applicant.address ? `<p style="margin:6px 12px 0; font-size:12px; color:#888; display:flex; align-items:flex-start; gap:4px;"><i class="fas fa-map-marker-alt" style="color:var(--primary-color); margin-top:2px; flex-shrink:0;"></i><span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${applicant.address}</span></p>` : ''}
+                        ${req.message ? `<p class="rc-message" style="margin:8px 12px 0; padding:8px;">"${req.message}"</p>` : ''}
+                        <div class="rc-actions" style="margin:10px 0 14px; align-items:center; justify-content:center; gap:10px;">
+                            <button class="btn btn-small rc-view-btn" data-id="${req.id}"><i class="fas fa-eye"></i> View Details</button>
+                            ${req.status === 'approved' ? `
+                                <button class="btn btn-small rc-message-owner-btn" data-user-id="${req.requester_id}" style="background:#2b6cb0; color:white; border:none;"><i class="fas fa-comment"></i> Message Owner</button>
+                            ` : ''}
+                            ${req.status === 'pending' ? `
+                                <button class="btn btn-small rc-approve-btn" data-id="${req.id}" style="background:#c6f6d5; color:#276749; border:1px solid #9ae6b4;"><i class="fas fa-check"></i> Approve</button>
+                                <button class="btn btn-small rc-reject-btn"  data-id="${req.id}" style="background:#fff; color:#e53e3e; border:1px solid #e53e3e;"><i class="fas fa-times"></i> Reject</button>
+                            ` : ''}
+                        </div>`;
+
+                    card.querySelector('.rc-view-btn')?.addEventListener('click', () => {
+                        openDetailModal(`Application from ${applicant.full_name || applicant.username || 'Applicant'}`, buildDetailHTML(req, true));
+                    });
+
+                    if (req.status === 'approved') {
+                        card.querySelector('.rc-message-owner-btn')?.addEventListener('click', () => {
+                            const userId = req.requester_id;
+                            window.location.href = `messages.html?to=${userId}`;
+                        });
+                    }
+
+                    card.querySelector('.rc-approve-btn')?.addEventListener('click', () => {
+                        openStatusModal({
+                            title: 'Approve Application',
+                            desc: `Approve ${applicant.full_name || 'this applicant'}'s request to adopt ${pet.name}? They will be notified.`,
+                            confirmLabel: 'Approve',
+                            confirmStyle: 'flex:1; padding:12px; border-radius:8px; font-weight:700; border:none; cursor:pointer; background:#38a169; color:white;',
+                            onConfirm: async (e) => {
+                                e.target.disabled = true;
+                                e.target.textContent = 'Approving...';  
+                                const { error: reqError } = await supabase
+                                    .from('adoption_requests')
+                                    .update({ status: 'approved' })
+                                    .eq('id', req.id);
+                                
+                                let petError = null;
+                                if (!reqError) {
+                                    const { error: updateError } = await supabase
+                                        .from('pets')
+                                        .update({ adoption_status: 'adopted' })
+                                        .eq('id', pet.id);
+                                    petError = updateError;
+                                }
+                                
+                                const msgEl = document.getElementById('status-modal-message');
+                                msgEl.style.display = 'block';
+                                if (reqError || petError) {
+                                    msgEl.textContent = 'Failed: ' + (reqError?.message || petError?.message);
+                                    msgEl.style.color = '#e53e3e'; msgEl.style.background = '#fff5f5';
+                                    e.target.disabled = false; e.target.textContent = 'Approve';
+                                } else {
+                                    msgEl.textContent = 'Application approved!';
+                                    msgEl.style.color = '#276749'; msgEl.style.background = '#c6f6d5';
+                                    setTimeout(() => { statusOverlay.style.display = 'none'; document.body.style.overflow = ''; loadAdoptionRequests(userId); }, 1200);
+                                }
+                            }
+                        });
+                    });
+
+                    card.querySelector('.rc-reject-btn')?.addEventListener('click', () => {
+                        openStatusModal({
+                            title: 'Reject Application',
+                            desc: `Reject ${applicant.full_name || 'this applicant'}'s request to adopt ${pet.name}? They will be notified.`,
+                            confirmLabel: 'Reject',
+                            confirmStyle: 'flex:1; padding:12px; border-radius:8px; font-weight:700; border:none; cursor:pointer; background:#e53e3e; color:white;',
+                            onConfirm: async (e) => {
+                                e.target.disabled = true;
+                                e.target.textContent = 'Rejecting...';
+                                const { error } = await supabase
+                                    .from('adoption_requests')
+                                    .update({ status: 'rejected' })
+                                    .eq('id', req.id);
+                                const msgEl = document.getElementById('status-modal-message');
+                                msgEl.style.display = 'block';
+                                if (error) {
+                                    msgEl.textContent = 'Failed: ' + error.message;
+                                    msgEl.style.color = '#e53e3e'; msgEl.style.background = '#fff5f5';
+                                    e.target.disabled = false; e.target.textContent = 'Reject';
+                                } else {
+                                    msgEl.textContent = 'Application rejected.';
+                                    msgEl.style.color = '#276749'; msgEl.style.background = '#c6f6d5';
+                                    setTimeout(() => { statusOverlay.style.display = 'none'; document.body.style.overflow = ''; loadAdoptionRequests(userId); }, 1200);
+                                }
+                            }
+                        });
+                    });
+
+                    grid.appendChild(card);
+                });
+
+                section.appendChild(grid);
+                container.appendChild(section);
+
+                // Event delegation for message owner button
+                section.addEventListener('click', (e) => {
+                    if (e.target.closest('.rc-message-owner-btn')) {
+                        const btn = e.target.closest('.rc-message-owner-btn');
+                        const userId = btn.dataset.userId;
+                        if (userId) {
+                            window.location.href = `messages.html?to=${userId}`;
+                        }
+                    }
+                });
+            });
+        }
+
+        // ── Pet Creation Modal (mirrored from index.html) ─────────────────
+        const petOverlay        = document.getElementById('pet-modal-overlay');
+        const supportingOverlay = document.getElementById('supporting-modal-overlay');
+        const closeBtn          = document.getElementById('close-pet-modal');
+        const closeSupportingBtn = document.getElementById('close-supporting-modal');
+        const nextBtn           = document.getElementById('next-to-supporting-btn');
+        const backBtn           = document.getElementById('back-to-basic-btn');
+        const submitBtn         = document.getElementById('submit-pet-btn');
+        const petMessage        = document.getElementById('pet-modal-message');
+        const locationStatus    = document.getElementById('location-status');
+        const provinceSelect    = document.getElementById('pet-province');
+        const zipInput          = document.getElementById('pet-zip');
+        const addressInput      = document.getElementById('pet-address');
+        const saveAddressOverlay = document.getElementById('save-address-modal-overlay');
+
+        const medicalSection   = document.getElementById('medical-records-section');
+        const medicalFileInput = document.getElementById('medical-file');
+        const medicalPreviews  = document.getElementById('medical-previews');
+        const healthCheckboxes = document.querySelectorAll('.health-checkbox');
+        let selectedMedicalFiles = [];
+        let selectedPhotos = [];
+        let petFormData = {};
+
+        const photoFileInput = document.getElementById('pet-photo-file');
+        const photoPreviews  = document.getElementById('photo-previews');
+
+        function showPetMessage(text, isError = true) {
+            petMessage.textContent = text;
+            petMessage.style.display = 'block';
+            petMessage.style.color = isError ? '#e53e3e' : '#38a169';
+        }
+
+        healthCheckboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const any = Array.from(healthCheckboxes).some(c => c.checked);
+                medicalSection.style.display = any ? 'block' : 'none';
+                if (!any) { selectedMedicalFiles = []; medicalPreviews.innerHTML = ''; medicalFileInput.value = ''; }
+            });
+        });
+
+        medicalFileInput.addEventListener('change', e => {
+            const files = Array.from(e.target.files);
+            const remaining = 3 - selectedMedicalFiles.length;
+            files.slice(0, remaining).filter(f => f.size <= 25*1024*1024).forEach(file => {
+                selectedMedicalFiles.push(file);
+                const reader = new FileReader();
+                reader.onload = ev => addMedPreview(ev.target.result, selectedMedicalFiles.length - 1);
+                reader.readAsDataURL(file);
+            });
+            medicalFileInput.value = '';
+        });
+
+        function addMedPreview(src, index) {
+            const w = document.createElement('div'); w.className = 'photo-thumb';
+            w.innerHTML = `<img src="${src}" alt="Medical"><button type="button" class="photo-remove-btn" data-index="${index}"><i class="fas fa-times"></i></button>`;
+            w.querySelector('.photo-remove-btn').addEventListener('click', e => {
+                e.stopPropagation();
+                selectedMedicalFiles.splice(parseInt(e.currentTarget.dataset.index), 1);
+                renderMedPreviews();
+            });
+            medicalPreviews.appendChild(w);
+        }
+
+        function renderMedPreviews() {
+            medicalPreviews.innerHTML = '';
+            selectedMedicalFiles.forEach((f, i) => { const r = new FileReader(); r.onload = ev => addMedPreview(ev.target.result, i); r.readAsDataURL(f); });
+        }
+
+        photoFileInput.addEventListener('change', e => {
+            const files = Array.from(e.target.files);
+            const remaining = 5 - selectedPhotos.length;
+            files.slice(0, remaining).filter(f => f.size <= 25*1024*1024).forEach(file => {
+                selectedPhotos.push(file);
+                const reader = new FileReader();
+                reader.onload = ev => addPhotoPreview(ev.target.result, selectedPhotos.length - 1);
+                reader.readAsDataURL(file);
+            });
+            photoFileInput.value = '';
+        });
+
+        function addPhotoPreview(src, index) {
+            const w = document.createElement('div'); w.className = 'photo-thumb';
+            w.innerHTML = `<img src="${src}" alt="Pet"><button type="button" class="photo-remove-btn" data-index="${index}"><i class="fas fa-times"></i></button>${index === 0 ? '<span class="photo-main-badge">Main</span>' : ''}`;
+            w.querySelector('.photo-remove-btn').addEventListener('click', e => {
+                e.stopPropagation();
+                selectedPhotos.splice(parseInt(e.currentTarget.dataset.index), 1);
+                renderPhotoPreviews();
+            });
+            photoPreviews.appendChild(w);
+        }
+
+        function renderPhotoPreviews() {
+            photoPreviews.innerHTML = '';
+            selectedPhotos.forEach((f, i) => { const r = new FileReader(); r.onload = ev => addPhotoPreview(ev.target.result, i); r.readAsDataURL(f); });
+        }
+
+        provinceSelect.addEventListener('change', () => {
+            const province = provinceSelect.value;
+            let cityEl = document.getElementById('pet-city');
+            let brgyEl = document.getElementById('pet-barangay');
+
+            if (cityEl.tagName === 'INPUT') {
+                const sel = document.createElement('select'); sel.id = 'pet-city'; sel.disabled = true;
+                sel.innerHTML = '<option value="">Select City/Municipality</option>'; cityEl.replaceWith(sel); cityEl = document.getElementById('pet-city');
+            } else { cityEl.innerHTML = '<option value="">Select City/Municipality</option>'; cityEl.disabled = true; }
+
+            if (brgyEl.tagName === 'INPUT') {
+                const sel = document.createElement('select'); sel.id = 'pet-barangay'; sel.disabled = true;
+                sel.innerHTML = '<option value="">Select Municipality first</option>'; brgyEl.replaceWith(sel); brgyEl = document.getElementById('pet-barangay');
+            } else { brgyEl.innerHTML = '<option value="">Select Municipality first</option>'; brgyEl.disabled = true; }
+
+            zipInput.value = '';
+
+            if (province === 'Bulacan' && locationDataSimplified['Bulacan']) {
+                locationDataSimplified['Bulacan'].municipalities.forEach(mun => {
+                    const opt = document.createElement('option'); opt.value = mun.name; opt.textContent = mun.name; opt.dataset.zip = mun.zipCode; cityEl.appendChild(opt);
+                });
+                cityEl.disabled = false;
+                cityEl.addEventListener('change', onCityChange);
+            } else if (province) {
+                const ci = document.createElement('input'); ci.type='text'; ci.id='pet-city'; ci.placeholder='e.g. Quezon City';
+                ci.addEventListener('input', updateAddress); cityEl.replaceWith(ci);
+                const bi = document.createElement('input'); bi.type='text'; bi.id='pet-barangay'; bi.placeholder='e.g. Brgy. San Antonio';
+                bi.addEventListener('input', updateAddress); brgyEl.replaceWith(bi);
+            }
+            updateAddress();
+        });
+
+        function onCityChange() {
+            const cityEl = document.getElementById('pet-city');
+            const brgyEl = document.getElementById('pet-barangay');
+            brgyEl.innerHTML = '<option value="">Select Barangay</option>'; brgyEl.disabled = true; zipInput.value = '';
+            const sel = cityEl.options[cityEl.selectedIndex];
+            if (sel?.dataset.zip) zipInput.value = sel.dataset.zip;
+            if (cityEl.value && locationDataSimplified[cityEl.value]) {
+                locationDataSimplified[cityEl.value].barangays.forEach(b => { const o=document.createElement('option'); o.value=b; o.textContent=b; brgyEl.appendChild(o); });
+                brgyEl.disabled = false;
+                brgyEl.addEventListener('change', onBarangayChange);
+            }
+            updateAddress();
+        }
+
+        async function onBarangayChange() {
+            updateAddress();
+            const barangay = document.getElementById('pet-barangay').value;
+            const city     = document.getElementById('pet-city').value;
+            const province = provinceSelect.value;
+            if (!barangay || !city) return;
+            locationStatus.style.display = 'block'; locationStatus.textContent = '⏳ Finding coordinates...'; locationStatus.style.color = '#888';
+            try {
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(`${barangay}, ${city}, ${province}, Philippines`)}`, { headers: { 'Accept-Language': 'en' } });
+                const results = await res.json();
+                if (results.length) {
+                    document.getElementById('pet-lat').value = parseFloat(results[0].lat).toFixed(6);
+                    document.getElementById('pet-lng').value = parseFloat(results[0].lon).toFixed(6);
+                    locationStatus.textContent = '✓ Location found'; locationStatus.style.color = '#38a169';
+                } else { locationStatus.textContent = '⚠ Coordinates not found — address will still be saved'; locationStatus.style.color = '#dd6b20'; }
+            } catch { locationStatus.textContent = '⚠ Geocoding failed'; locationStatus.style.color = '#e53e3e'; }
+        }
+
+        document.getElementById('pet-street').addEventListener('input', updateAddress);
+
+        function updateAddress() {
+            const street   = document.getElementById('pet-street').value.trim();
+            const barangay = document.getElementById('pet-barangay').value.trim();
+            const city     = document.getElementById('pet-city').value.trim();
+            const province = provinceSelect.value;
+            const zip      = zipInput.value.trim();
+            const parts    = [street, barangay ? `Brgy. ${barangay}` : '', city, province, zip, 'Philippines'].filter(Boolean);
+            addressInput.value = parts.length > 2 ? parts.join(', ') : '';
+        }
+
+        function resetPetModal() {
+            ['pet-name','pet-breed','pet-age','pet-description','pet-street','pet-lat','pet-lng','pet-address','pet-zip']
+                .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+            ['pet-species','pet-gender','pet-health','pet-province']
+                .forEach(id => { const el = document.getElementById(id); if (el) el.selectedIndex = 0; });
+            const cityEl = document.getElementById('pet-city');
+            if (cityEl.tagName === 'INPUT') { const s=document.createElement('select'); s.id='pet-city'; s.disabled=true; s.innerHTML='<option value="">Select Province first</option>'; cityEl.replaceWith(s); }
+            else { cityEl.innerHTML='<option value="">Select Province first</option>'; cityEl.disabled=true; }
+            const brgyEl = document.getElementById('pet-barangay');
+            if (brgyEl.tagName === 'INPUT') { const s=document.createElement('select'); s.id='pet-barangay'; s.disabled=true; s.innerHTML='<option value="">Select Municipality first</option>'; brgyEl.replaceWith(s); }
+            else { brgyEl.innerHTML='<option value="">Select Municipality first</option>'; brgyEl.disabled=true; }
+            selectedPhotos=[]; photoPreviews.innerHTML=''; photoFileInput.value='';
+            selectedMedicalFiles=[]; medicalPreviews.innerHTML=''; medicalFileInput.value='';
+            document.getElementById('pet-temperament').value='';
+            healthCheckboxes.forEach(cb => cb.checked=false);
+            medicalSection.style.display='none';
+            petMessage.style.display='none'; locationStatus.style.display='none';
+            submitBtn.disabled=false; submitBtn.textContent='Create Profile';
+            petFormData={};
+        }
+
+        async function openPetModal() {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { showAlertModal({ icon:'🔒', title:'Sign In Required', message:'Please sign in to create a pet profile.', buttons:[{ label:'Sign In', primary:true, onClick:()=>window.location.href='login.html' },{ label:'Cancel', primary:false }] }); return; }
+
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('isVerified, address, city, province, barangay, latitude, longitude')
+                .eq('id', session.user.id)
+                .maybeSingle();
+
+            if (profile?.isVerified === false) {
+                showVerifyRequiredModal();
+                return;
+            }
+
+            resetPetModal();
+            petOverlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            const addressRow = document.getElementById('use-profile-address-row');
+            const checkbox   = document.getElementById('use-profile-address-checkbox');
+            if (checkbox) checkbox.checked = false;
+            setAddressFieldsDisabled(false);
+            const hasAddress = profile && (profile.address || profile.city || profile.province || profile.barangay);
+            if (hasAddress) {
+                addressRow.dataset.address   = profile.address   || '';
+                addressRow.dataset.city      = profile.city      || '';
+                addressRow.dataset.province  = profile.province  || '';
+                addressRow.dataset.barangay  = profile.barangay  || '';
+                addressRow.dataset.latitude  = profile.latitude  || '';
+                addressRow.dataset.longitude = profile.longitude || '';
+                addressRow.style.display = 'block';
+            } else { addressRow.style.display = 'none'; }
+        }
+
+        function setAddressFieldsDisabled(disabled) {
+            ['pet-province','pet-city','pet-barangay','pet-street'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.disabled=disabled; el.style.opacity=disabled?'0.6':'1'; el.style.cursor=disabled?'not-allowed':''; }
+            });
+        }
+
+        document.getElementById('use-profile-address-checkbox').addEventListener('change', async function () {
+            const addressRow = document.getElementById('use-profile-address-row');
+            if (this.checked) {
+                const prov=addressRow.dataset.province, city=addressRow.dataset.city, brgy=addressRow.dataset.barangay;
+                const provinceEl = document.getElementById('pet-province');
+                provinceEl.value = prov || ''; provinceEl.dispatchEvent(new Event('change'));
+                await new Promise(r => setTimeout(r, 0));
+                const cityEl = document.getElementById('pet-city');
+                let brgyEl   = document.getElementById('pet-barangay');
+                if (cityEl.tagName === 'INPUT') { cityEl.value=city||''; brgyEl.value=brgy||''; }
+                else { const m=[...cityEl.options].find(o=>o.value===city); if(m){cityEl.value=city; cityEl.dispatchEvent(new Event('change'));} await new Promise(r=>setTimeout(r,0)); brgyEl=document.getElementById('pet-barangay'); if(brgy) brgyEl.value=brgy; }
+                const street = (addressRow.dataset.address||'').replace(`, ${city}`,'').replace(`, ${prov}`,'').replace(', Philippines','').replace(/,?\s*\d{4}/,'').trim();
+                document.getElementById('pet-street').value = street;
+                document.getElementById('pet-lat').value   = addressRow.dataset.latitude;
+                document.getElementById('pet-lng').value   = addressRow.dataset.longitude;
+                addressInput.value = addressRow.dataset.address || '';
+                if (addressRow.dataset.latitude && addressRow.dataset.longitude) { locationStatus.style.display='block'; locationStatus.textContent='✓ Location from your profile'; locationStatus.style.color='#38a169'; }
+                setAddressFieldsDisabled(true);
+            } else {
+                ['pet-province','pet-city','pet-barangay','pet-street'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+                document.getElementById('pet-lat').value=''; document.getElementById('pet-lng').value='';
+                addressInput.value=''; zipInput.value=''; locationStatus.style.display='none';
+                provinceSelect.dispatchEvent(new Event('change'));
+                setAddressFieldsDisabled(false);
+            }
+        });
+
+        closeBtn.addEventListener('click', () => { petOverlay.style.display='none'; document.body.style.overflow=''; });
+        closeSupportingBtn.addEventListener('click', () => { supportingOverlay.style.display='none'; document.body.style.overflow=''; });
+        petOverlay.addEventListener('click', e => { if(e.target===petOverlay){petOverlay.style.display='none'; document.body.style.overflow='';} });
+        supportingOverlay.addEventListener('click', e => { if(e.target===supportingOverlay){supportingOverlay.style.display='none'; document.body.style.overflow='';} });
+
+        nextBtn.addEventListener('click', () => {
+            const name=document.getElementById('pet-name').value.trim(), species=document.getElementById('pet-species').value, breed=document.getElementById('pet-breed').value.trim(),
+                  gender=document.getElementById('pet-gender').value, age=document.getElementById('pet-age').value, health=document.getElementById('pet-health').value,
+                  desc=document.getElementById('pet-description').value.trim(), province=provinceSelect.value,
+                  city=document.getElementById('pet-city').value.trim(), barangay=document.getElementById('pet-barangay').value.trim(),
+                  street=document.getElementById('pet-street').value.trim();
+            if (!name||!species||!breed||!gender||!age||!health||!desc) { showPetMessage('Please fill in all required pet details.'); return; }
+            if (!province||!city||!barangay||!street) { showPetMessage('Please fill in all address fields.'); return; }
+            if (selectedPhotos.length===0) { showPetMessage('Please upload at least one photo.'); return; }
+            petFormData = { name, species, breed, gender, age: parseInt(age), health, desc, province, city, barangay, street };
+            petOverlay.style.display='none'; supportingOverlay.style.display='flex';
+        });
+
+        backBtn.addEventListener('click', () => { supportingOverlay.style.display='none'; petOverlay.style.display='flex'; });
+
+        submitBtn.addEventListener('click', async () => {
+            if (!petFormData?.name) return;
+            const temperament = document.getElementById('pet-temperament').value.trim() || null;
+            const isSpayed    = document.getElementById('is-spayed').checked;
+            const isVacc      = document.getElementById('is-vaccinated').checked;
+            const hasChip     = document.getElementById('has-microchip').checked;
+            submitBtn.disabled=true; submitBtn.textContent='Creating...';
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { showPetMessage('Session expired.'); submitBtn.disabled=false; submitBtn.textContent='Create Profile'; return; }
+            const photoUrls = [];
+            for (let i=0; i<selectedPhotos.length; i++) {
+                const file=selectedPhotos[i], ext=file.name.split('.').pop(), fileName=`${session.user.id}_${Date.now()}_${i}.${ext}`;
+                const { error: ue } = await supabase.storage.from('pet-photos').upload(fileName, file);
+                if (ue) { showPetMessage(`Photo ${i+1} upload failed: ${ue.message}`); submitBtn.disabled=false; submitBtn.textContent='Create Profile'; return; }
+                const { data: ud } = supabase.storage.from('pet-photos').getPublicUrl(fileName);
+                photoUrls.push(ud.publicUrl);
+            }
+            const medUrls = [];
+            for (let i=0; i<selectedMedicalFiles.length; i++) {
+                const file=selectedMedicalFiles[i], ext=file.name.split('.').pop(), fileName=`medical_${session.user.id}_${Date.now()}_${i}.${ext}`;
+                const { error: ue } = await supabase.storage.from('pet-photos').upload(fileName, file);
+                if (ue) { showPetMessage(`Medical record ${i+1} upload failed: ${ue.message}`); submitBtn.disabled=false; submitBtn.textContent='Create Profile'; return; }
+                const { data: ud } = supabase.storage.from('pet-photos').getPublicUrl(fileName);
+                medUrls.push(ud.publicUrl);
+            }
+            const petAddress = addressInput.value.trim() || null;
+            const petLat     = parseFloat(document.getElementById('pet-lat').value) || null;
+            const petLng     = parseFloat(document.getElementById('pet-lng').value) || null;
+            const { error: petError } = await supabase.from('pets').insert({
+                owner_id:petFormData.name&&session.user.id, name:petFormData.name, species:petFormData.species,
+                breed:petFormData.breed, gender:petFormData.gender, age_months:petFormData.age,
+                health_status:petFormData.health, adoption_status:'available', photo_url:photoUrls[0],
+                description:petFormData.desc, address:petAddress, latitude:petLat, longitude:petLng,
+                temperament, is_spayed_neutered:isSpayed, is_vaccinated:isVacc, has_microchip:hasChip,
+                medical_records:medUrls.length>0?medUrls:null,
+            });
+            if (petError) { showPetMessage('Error: '+petError.message); submitBtn.disabled=false; submitBtn.textContent='Create Profile'; return; }
+            document.getElementById('success-modal-overlay').style.display='flex';
+            setTimeout(async () => {
+                document.getElementById('success-modal-overlay').style.display='none';
+                petOverlay.style.display='none'; supportingOverlay.style.display='none';
+                document.body.style.overflow='';
+                resetPetModal();
+                loadAdoptionRequests(session.user.id);
+            }, 2500);
+        });
+
+        document.getElementById('save-address-yes').addEventListener('click', async () => {
+            const btn = document.getElementById('save-address-yes');
+            btn.disabled=true; btn.textContent='Saving...';
+            const { error } = await supabase.from('profiles').update({
+                address:   saveAddressOverlay.dataset.address,
+                city:      saveAddressOverlay.dataset.city,
+                province:  saveAddressOverlay.dataset.province,
+                barangay:  saveAddressOverlay.dataset.barangay,
+                latitude:  parseFloat(saveAddressOverlay.dataset.latitude)||null,
+                longitude: parseFloat(saveAddressOverlay.dataset.longitude)||null,
+            }).eq('id', saveAddressOverlay.dataset.userId);
+            const s = document.getElementById('save-address-status');
+            s.style.display='block';
+            if (error) { s.textContent='⚠ Could not save.'; s.style.color='#e53e3e'; btn.disabled=false; btn.textContent='Yes, save it'; }
+            else { s.textContent='✓ Saved!'; s.style.color='#38a169'; setTimeout(()=>{ saveAddressOverlay.style.display='none'; }, 1500); }
+        });
+        document.getElementById('save-address-no').addEventListener('click', () => { saveAddressOverlay.style.display='none'; });
+
+        // ── Init ─────────────────────────────────────────────────────────
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (!session) {
+            document.getElementById('my-requests-skeleton')?.remove();
+            document.getElementById('adoption-requests-skeleton')?.remove();
+            document.getElementById('my-requests-container').innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">🔒</div>
+                    <h3>Sign in to view your adoptions</h3>
+                    <p>Track your applications and manage requests for your pets.</p>
+                    <a href="login.html" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:8px; margin-top:4px; background:var(--primary-color); color:white; padding:12px 28px; border-radius:10px; font-weight:700; text-decoration:none;">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </a>
+                </div>`;
+            document.getElementById('adoption-requests-container').innerHTML = '';
+        } else {
+            await Promise.all([
+                loadMyRequests(session.user.id),
+                loadAdoptionRequests(session.user.id),
+            ]);
+        }
+    </script>
+
+    <style>
+        /* ── Page header ── */
+        .adoptions-page-header {
+            margin-bottom: 36px;
+        }
+        .adoptions-page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--dark-color);
+            margin: 0 0 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .adoptions-page-header p {
+            color: var(--gray-color);
+            font-size: 15px;
+            margin: 0;
+        }
+
+        /* ── Section ── */
+        .adoptions-section {
+            margin-bottom: 52px;
+        }
+        .section-heading {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .section-heading h2 {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--dark-color);
+            margin: 0;
+        }
+        .section-sub {
+            font-size: 13px;
+            color: var(--gray-color);
+        }
+
+        /* ── Requests grid ── */
+        .requests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        /* ── Request card ── */
+        .request-card {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: box-shadow 0.2s, transform 0.15s;
+            display: flex;
+            flex-direction: column;
+        }
+        .request-card:hover {
+            box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+            transform: translateY(-2px);
+        }
+
+        /* My Requests card — photo on top */
+        .rc-photo-wrap {
+            width: 100%;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+            background: #f5f5f5;
+            flex-shrink: 0;
+        }
+        .rc-photo-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .rc-body {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex: 1;
+        }
+        .rc-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .rc-pet-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin: 0 0 2px;
+        }
+        .rc-meta {
+            font-size: 13px;
+            color: var(--gray-color);
+            margin: 0;
+        }
+        .rc-owner, .rc-date {
+            font-size: 13px;
+            color: var(--gray-color);
+            margin: 0;
+        }
+        .rc-owner i, .rc-date i { margin-right: 5px; }
+        .rc-message {
+            font-size: 13px;
+            color: #555;
+            font-style: italic;
+            margin: 4px 0 0;
+            line-height: 1.5;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .rc-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .rc-actions .btn-small {
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: opacity 0.15s;
+            text-decoration: none;
+        }
+        .rc-actions .btn-small:hover { opacity: 0.85; }
+        .rc-view-btn { background: var(--primary-color); color: white; }
+
+        /* Adoption Requests — applicant card */
+        .rc-applicant-wrap {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        /* Pet group header */
+        .pet-request-group {
+            margin-bottom: 28px;
+        }
+        .pet-group-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+        }
+
+        /* ── Skeleton ── */
+        .skeleton-card {
+            height: 240px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.4s infinite;
+            border-radius: 14px;
+        }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        /* ── Empty state ── */
+        .empty-state {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 60px 20px;
+            background: #fafafa;
+            border: 2px dashed #eee;
+            border-radius: 16px;
+        }
+        .empty-icon {
+            font-size: 52px;
+            margin-bottom: 16px;
+        }
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin: 0 0 8px;
+        }
+        .empty-state p {
+            font-size: 14px;
+            color: var(--gray-color);
+            margin: 0 0 20px;
+        }
+
+        /* ── Detail modal ── */
+        .detail-section {
+            padding: 16px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .detail-section:last-child { border-bottom: none; }
+        .detail-section-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray-color);
+            margin-bottom: 10px;
+        }
+        .detail-section-title i { margin-right: 6px; color: var(--primary-color); }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .detail-item {
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .detail-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--gray-color);
+        }
+        .detail-value {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        /* ── Modals (shared) ── */
+        .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:2000; display:flex; align-items:center; justify-content:center; padding:20px; }
+        .modal-card { background:var(--white-color, #fff); border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,0.3); width:100%; max-width:620px; max-height:90vh; overflow-y:auto; }
+        .modal-header { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; border-bottom:1px solid #eee; position:sticky; top:0; background:var(--white-color, #fff); z-index:1; }
+        .modal-header h2 { margin:0; font-size:20px; color:var(--dark-color, #222); }
+        .modal-close { background:none; border:none; font-size:24px; cursor:pointer; color:var(--gray-color, #888); line-height:1; }
+        .modal-close:hover { color:var(--dark-color); }
+        .modal-body { padding:24px; }
+        .modal-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+        .modal-form-grid .full-width { grid-column:1/-1; }
+        .modal-form-grid .form-group { display:flex; flex-direction:column; gap:5px; }
+        .modal-form-grid label { font-size:13px; font-weight:600; color:var(--dark-color); }
+        .modal-form-grid input, .modal-form-grid select, .modal-form-grid textarea { padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; outline:none; transition:border-color 0.2s; }
+        .modal-form-grid input:focus, .modal-form-grid select:focus, .modal-form-grid textarea:focus { border-color:var(--primary-color); }
+        .modal-form-grid textarea { resize:vertical; }
+        .photo-upload-area { display:flex; flex-direction:column; align-items:center; gap:8px; border:2px dashed #ddd; border-radius:12px; padding:32px 20px; text-align:center; transition:border-color 0.2s; }
+        .photo-upload-area:hover { border-color:var(--primary-color); }
+        .photo-thumb { position:relative; width:80px; height:80px; border-radius:10px; overflow:hidden; background:#f5f5f5; flex-shrink:0; }
+        .photo-thumb img { width:100%; height:100%; object-fit:cover; }
+        .photo-remove-btn { position:absolute; top:4px; right:4px; background:#e53e3e; color:white; border:none; width:22px; height:22px; border-radius:4px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:12px; }
+        .photo-main-badge { position:absolute; bottom:4px; left:4px; background:var(--primary-color); color:white; font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; }
+        button:disabled { opacity:0.7; cursor:not-allowed; }
+
+        @media (max-width:600px) {
+            .requests-grid { grid-template-columns: 1fr; }
+            .detail-grid    { grid-template-columns: 1fr; }
+            .modal-form-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</body>
+</html>
