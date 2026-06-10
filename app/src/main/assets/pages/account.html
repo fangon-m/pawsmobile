@@ -10,6 +10,32 @@
 <body>
     <nav id="navbar"></nav>
 
+    <!-- ── Verification Required Modal ─────────────────────────────────── -->
+    <div id="verify-required-modal-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card" style="max-width:420px; text-align:center;">
+            <div style="padding:40px 32px 32px;">
+                <div style="font-size:52px; margin-bottom:16px;">🔐</div>
+                <h3 style="margin:0 0 10px; font-size:20px; color:var(--dark-color);">Verification Required</h3>
+                <p style="color:#666; margin:0 0 8px; font-size:14px; line-height:1.6;">
+                    Your account is not yet verified. Please complete identity verification to access all features of Paws &amp; Pals.
+                </p>
+                <p style="color:#aaa; font-size:12px; margin:0 0 24px;">
+                    Verification helps keep our community safe for pets and adopters alike.
+                </p>
+                <div style="display:flex; gap:10px; justify-content:center;">
+                    <button id="go-to-verify-btn" class="btn btn-primary"
+                        style="background-color:var(--primary-color); color:white; padding:11px 28px; font-weight:600;">
+                        Get Verified
+                    </button>
+                    <button id="verify-modal-dismiss-btn" class="btn"
+                        style="background:#f0f0f0; color:#555; padding:11px 20px;">
+                        Maybe Later
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <main class="container">
         <section>
             <div class="account-container">
@@ -31,6 +57,10 @@
 
                     <nav class="account-menu">
                         <a href="#profile" class="account-menu-item active">My Profile</a>
+                        <a href="#verification" class="account-menu-item" id="nav-verification">
+                            My Verification
+                            <span id="verification-badge" style="display:none; margin-left:6px; font-size:10px; background:#e53e3e; color:white; padding:2px 6px; border-radius:10px; font-weight:600; vertical-align:middle;">!</span>
+                        </a>
                         <a href="#preferences" class="account-menu-item">My Pet Preferences</a>
                         <a href="#settings" class="account-menu-item">Settings</a>
                     </nav>
@@ -41,6 +71,7 @@
                 </div>
 
                 <div class="account-content">
+                    <!-- ── My Profile ────────────────────────────────────── -->
                     <div id="profile" class="content-section active">
                         <h1>My Profile</h1>
                         <p id="profile-save-msg" style="display:none; font-size:13px; margin-bottom:12px;"></p>
@@ -154,6 +185,237 @@
                             disabled style="opacity:0.5; cursor:not-allowed; margin-top:10px;">Save Changes</button>
                     </div>
 
+                    <!-- ── My Verification ───────────────────────────────── -->
+                    <div id="verification" class="content-section">
+                        <div style="display:flex; align-items:center; gap:12px; margin-bottom:6px;">
+                            <h1 style="margin:0;">My Verification</h1>
+                            <span id="verify-status-badge" style="display:none;"></span>
+                        </div>
+                        <p id="verification-save-msg" style="display:none; font-size:13px; margin-bottom:12px;"></p>
+
+                        <!-- Verified banner -->
+                        <div id="verified-banner" style="display:none; background:#f0fff4; border:1px solid #9ae6b4; border-radius:10px; padding:14px 18px; margin-bottom:22px; display:flex; align-items:center; gap:12px;">
+                            <span style="font-size:26px;">✅</span>
+                            <div>
+                                <p style="margin:0; font-weight:700; color:#276749; font-size:14px;">Your identity is verified</p>
+                                <p style="margin:2px 0 0; color:#38a169; font-size:13px;">You have full access to all Paws &amp; Pals features.</p>
+                            </div>
+                        </div>
+
+                        <!-- Pending banner -->
+                        <div id="pending-banner" style="display:none; background:#fffbeb; border:1px solid #f6e05e; border-radius:10px; padding:14px 18px; margin-bottom:22px; display:flex; align-items:center; gap:12px;">
+                            <span style="font-size:26px;">⏳</span>
+                            <div>
+                                <p style="margin:0; font-weight:700; color:#744210; font-size:14px;">Verification pending review</p>
+                                <p style="margin:2px 0 0; color:#b7791f; font-size:13px;">Your submission is being reviewed. This usually takes 1–2 business days.</p>
+                            </div>
+                        </div>
+
+                        <div class="profile-two-col">
+                            <div class="profile-form">
+                                <h3 class="form-section-title">Personal Information</h3>
+
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="verify-first-name">First Name <span style="color:red;">*</span></label>
+                                        <input type="text" id="verify-first-name" placeholder="First name" disabled>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="verify-last-name">Last Name <span style="color:red;">*</span></label>
+                                        <input type="text" id="verify-last-name" placeholder="Last name" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="verify-birthdate">Date of Birth <span style="color:red;">*</span></label>
+                                    <input type="date" id="verify-birthdate" disabled
+                                        style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; outline:none; transition:border-color 0.2s; width:100%; box-sizing:border-box;">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="verify-nationality">Nationality <span style="color:red;">*</span></label>
+                                    <select id="verify-nationality">
+                                        <option value="">Select Nationality</option>
+                                        <option value="Filipino">Filipino</option>
+                                        <option value="American">American</option>
+                                        <option value="British">British</option>
+                                        <option value="Australian">Australian</option>
+                                        <option value="Canadian">Canadian</option>
+                                        <option value="Chinese">Chinese</option>
+                                        <option value="Japanese">Japanese</option>
+                                        <option value="Korean">Korean</option>
+                                        <option value="Indian">Indian</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="verify-email">Email Address <span style="color:red;">*</span></label>
+                                    <input type="email" id="verify-email" placeholder="your@email.com" readonly
+                                        disabled
+                                        style="background:#f9f9f9; color:#888; cursor:not-allowed;"
+                                        title="Email is taken from your account">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="verify-phone">Phone Number <span style="color:red;">*</span></label>
+                                    <input type="tel" id="verify-phone" placeholder="e.g. 09171234567" maxlength="12" minlength="11" disabled>
+                                </div>
+                            </div>
+
+                            <div class="profile-form">
+                                <h3 class="form-section-title">Address</h3>
+
+                                <div class="form-group">
+                                    <label for="verify-province">Province <span style="color:red;">*</span></label>
+                                    <select id="verify-province" disabled>
+                                        <option value="">Select Province</option>
+                                        <option value="Bulacan">Bulacan</option>
+                                        <option value="Metro Manila">Metro Manila (NCR)</option>
+                                        <option value="Cavite">Cavite</option>
+                                        <option value="Laguna">Laguna</option>
+                                        <option value="Rizal">Rizal</option>
+                                        <option value="Pampanga">Pampanga</option>
+                                        <option value="Batangas">Batangas</option>
+                                        <option value="Quezon">Quezon</option>
+                                        <option value="Nueva Ecija">Nueva Ecija</option>
+                                        <option value="Tarlac">Tarlac</option>
+                                        <option value="Zambales">Zambales</option>
+                                        <option value="Bataan">Bataan</option>
+                                        <option value="Pangasinan">Pangasinan</option>
+                                        <option value="Cebu">Cebu</option>
+                                        <option value="Davao del Sur">Davao del Sur</option>
+                                        <option value="Iloilo">Iloilo</option>
+                                        <option value="Negros Occidental">Negros Occidental</option>
+                                        <option value="Benguet">Benguet</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="verify-city">City / Municipality <span style="color:red;">*</span></label>
+                                    <select id="verify-city" disabled>
+                                        <option value="">Select Province first</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="verify-barangay">Barangay <span style="color:red;">*</span></label>
+                                    <select id="verify-barangay" disabled>
+                                        <option value="">Select Municipality first</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="verify-street">Street / Building <span style="color:red;">*</span></label>
+                                    <input type="text" id="verify-street" placeholder="e.g. 123 Rizal St." disabled>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="verify-zip">ZIP Code <span style="color:#aaa; font-weight:normal; font-size:11px;">(auto-filled)</span></label>
+                                    <input type="text" id="verify-zip" readonly disabled style="background:#f9f9f9; color:#888;">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="verify-address">Complete Address <span style="color:#aaa; font-weight:normal; font-size:11px;">(auto-filled)</span></label>
+                                    <input type="text" id="verify-address" readonly disabled style="background:#f9f9f9; color:#555;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ── ID Upload + Accepted IDs Guide ────────────── -->
+                        <div style="margin-top:28px;">
+                            <h3 class="form-section-title" style="margin-bottom:16px;">Government-Issued ID</h3>
+
+                            <!-- Accepted IDs guide -->
+                            <div id="accepted-ids-guide" style="background:#f0f7ff; border:1px solid #bee3f8; border-radius:10px; padding:16px 20px; margin-bottom:22px;">
+                                <div style="display:flex; align-items:center; justify-content:space-between; cursor:pointer;" id="accepted-ids-toggle">
+                                    <div style="display:flex; align-items:center; gap:10px;">
+                                        <span style="font-size:20px;">📋</span>
+                                        <span style="font-weight:600; font-size:14px; color:#2b6cb0;">Accepted Valid IDs</span>
+                                    </div>
+                                    <i class="fas fa-chevron-down" id="accepted-ids-chevron" style="color:#2b6cb0; font-size:13px; transition:transform 0.2s;"></i>
+                                </div>
+                                <div id="accepted-ids-list" style="display:none; margin-top:14px;">
+                                    <p style="font-size:12px; color:#2c5282; margin:0 0 10px;">Please upload a <strong>clear, unedited photo or scan</strong> of any one of the following:</p>
+                                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px 20px;">
+                                        <div style="font-size:13px; color:#2d3748; display:flex; align-items:center; gap:6px;"><span style="color:var(--primary-color);">✓</span> Philippine Passport</div>
+                                        <div style="font-size:13px; color:#2d3748; display:flex; align-items:center; gap:6px;"><span style="color:var(--primary-color);">✓</span> Driver's License</div>
+                                        <div style="font-size:13px; color:#2d3748; display:flex; align-items:center; gap:6px;"><span style="color:var(--primary-color);">✓</span> SSS / GSIS ID</div>
+                                        <div style="font-size:13px; color:#2d3748; display:flex; align-items:center; gap:6px;"><span style="color:var(--primary-color);">✓</span> PhilHealth ID</div>
+                                        <div style="font-size:13px; color:#2d3748; display:flex; align-items:center; gap:6px;"><span style="color:var(--primary-color);">✓</span> Postal ID</div>
+                                        <div style="font-size:13px; color:#2d3748; display:flex; align-items:center; gap:6px;"><span style="color:var(--primary-color);">✓</span> Voter's ID / COMELEC</div>
+                                        <div style="font-size:13px; color:#2d3748; display:flex; align-items:center; gap:6px;"><span style="color:var(--primary-color);">✓</span> PRC ID</div>
+                                        <div style="font-size:13px; color:#2d3748; display:flex; align-items:center; gap:6px;"><span style="color:var(--primary-color);">✓</span> NBI Clearance</div>
+                                        <div style="font-size:13px; color:#2d3748; display:flex; align-items:center; gap:6px;"><span style="color:var(--primary-color);">✓</span> Senior Citizen ID</div>
+                                        <div style="font-size:13px; color:#2d3748; display:flex; align-items:center; gap:6px;"><span style="color:var(--primary-color);">✓</span> PWD ID</div>
+                                        <div style="font-size:13px; color:#2d3748; display:flex; align-items:center; gap:6px;"><span style="color:var(--primary-color);">✓</span> TIN ID</div>
+                                        <div style="font-size:13px; color:#2d3748; display:flex; align-items:center; gap:6px;"><span style="color:var(--primary-color);">✓</span> PhilSys / National ID</div>
+                                    </div>
+                                    <div style="margin-top:12px; padding:10px 12px; background:#fff3cd; border-radius:6px; border:1px solid #ffd166;">
+                                        <p style="margin:0; font-size:12px; color:#856404;">
+                                            <strong>⚠ Requirements:</strong> ID must be valid (not expired), government-issued, and show your full name and photo. Cropped, blurry, or edited images will be rejected.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Front & Back ID upload -->
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+
+                                <!-- Front ID -->
+                                <div class="profile-form">
+                                    <div class="form-group">
+                                        <label>Front of ID <span style="color:red;">*</span></label>
+                                        <label for="id-front-file" class="id-upload-area" id="id-front-area">
+                                            <i class="fas fa-id-card" style="font-size:28px; color:#aaa;"></i>
+                                            <p style="margin:8px 0 4px; color:#666; font-size:13px; font-weight:500;">Click to upload front</p>
+                                            <p style="margin:0; color:#aaa; font-size:11px;">JPG, PNG, PDF • Max 10MB</p>
+                                            <input type="file" id="id-front-file" accept="image/*,.pdf" style="display:none;">
+                                        </label>
+                                        <div id="id-front-preview" style="display:none; margin-top:10px; position:relative;">
+                                            <img id="id-front-img" src="" alt="Front ID preview"
+                                                style="width:100%; border-radius:8px; border:2px solid #c6f6d5; object-fit:cover; max-height:160px;">
+                                            <button type="button" id="id-front-remove"
+                                                style="position:absolute; top:6px; right:6px; background:#e53e3e; color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center; box-shadow:0 1px 4px rgba(0,0,0,0.2);">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                            <p id="id-front-name" style="margin:6px 0 0; font-size:11px; color:#666; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Back ID -->
+                                <div class="profile-form">
+                                    <div class="form-group">
+                                        <label>Back of ID <span style="color:red;">*</span></label>
+                                        <label for="id-back-file" class="id-upload-area" id="id-back-area">
+                                            <i class="fas fa-id-card" style="font-size:28px; color:#aaa;"></i>
+                                            <p style="margin:8px 0 4px; color:#666; font-size:13px; font-weight:500;">Click to upload back</p>
+                                            <p style="margin:0; color:#aaa; font-size:11px;">JPG, PNG, PDF • Max 10MB</p>
+                                            <input type="file" id="id-back-file" accept="image/*,.pdf" style="display:none;">
+                                        </label>
+                                        <div id="id-back-preview" style="display:none; margin-top:10px; position:relative;">
+                                            <img id="id-back-img" src="" alt="Back ID preview"
+                                                style="width:100%; border-radius:8px; border:2px solid #c6f6d5; object-fit:cover; max-height:160px;">
+                                            <button type="button" id="id-back-remove"
+                                                style="position:absolute; top:6px; right:6px; background:#e53e3e; color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center; box-shadow:0 1px 4px rgba(0,0,0,0.2);">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                            <p id="id-back-name" style="margin:6px 0 0; font-size:11px; color:#666; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" id="send-verification-btn"
+                            style="margin-top:24px; background-color:var(--primary-color); color:white; padding:12px 32px; font-weight:600;">
+                            <i class="fas fa-paper-plane" style="margin-right:8px;"></i>Send Verification
+                        </button>
+                    </div>
+
+                    <!-- ── My Pet Preferences ────────────────────────────── -->
                     <div id="preferences" class="content-section">
                         <h1>My Pet Preferences</h1>
                         <p id="preferences-save-msg" style="display:none; font-size:13px; margin-bottom:12px;"></p>
@@ -185,6 +447,7 @@
                         </div>
                     </div>
 
+                    <!-- ── Settings ──────────────────────────────────────── -->
                     <div id="settings" class="content-section">
                         <h1>Account Settings</h1>
                         <div class="settings-item" style="margin-top:20px;">
@@ -214,7 +477,6 @@
 
         console.log("🚀 Account module initialization sequence activated.");
 
-        // Defensive Circuit Breaker for Navbar loading lock
         try {
             await Promise.race([
                 window.navbarReady,
@@ -222,19 +484,37 @@
             ]);
             console.log("✅ window.navbarReady promise tracking completed.");
         } catch (e) {
-            console.warn("⚠️ Circuit breaker triggered: Navbar connection blocked or timed out. Bypassing lock to force profile parsing.");
+            console.warn("⚠️ Circuit breaker triggered: Navbar connection blocked or timed out.");
         }
 
-        // Expanded Global context resolution mapping 
         const supabase = window._supabase || window.supabase;
 
-        // Diagnostic validation checkpoint
         if (!supabase) {
             console.error("❌ CRITICAL FAULT: Supabase context instance is completely undefined.");
             document.getElementById('account-name').textContent = "Error: Database Connection Offline";
         } else {
             console.log("⚡ Supabase service verified and targeted successfully:", supabase);
         }
+
+        // ── Verification Required Modal ───────────────────────────────────────
+        function showVerifyRequiredModal() {
+            document.getElementById('verify-required-modal-overlay').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        document.getElementById('go-to-verify-btn').addEventListener('click', () => {
+            document.getElementById('verify-required-modal-overlay').style.display = 'none';
+            document.body.style.overflow = '';
+            document.querySelectorAll('.account-menu-item').forEach(m => m.classList.remove('active'));
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelector('a[href="#verification"]').classList.add('active');
+            document.getElementById('verification').classList.add('active');
+        });
+
+        document.getElementById('verify-modal-dismiss-btn').addEventListener('click', () => {
+            document.getElementById('verify-required-modal-overlay').style.display = 'none';
+            document.body.style.overflow = '';
+        });
 
         // ── Snapshot for dirty-checking ──────────────────────────────────────
         let originalSnapshot = null;
@@ -274,19 +554,14 @@
             });
         }
 
-        // ── Live Password Form Validation Listener ────────────────────────────
+        // ── Password validation ───────────────────────────────────────────────
         function checkPasswordFields() {
-            const passEl = document.getElementById('new-password');
+            const passEl    = document.getElementById('new-password');
             const confirmEl = document.getElementById('confirm-password');
-            const btn = document.getElementById('update-password-btn');
-            
+            const btn       = document.getElementById('update-password-btn');
             if (!passEl || !confirmEl || !btn) return;
-            
-            const pass = passEl.value;
-            const confirm = confirmEl.value;
-            const isNotEmpty = pass.trim().length > 0 && confirm.trim().length > 0;
-            
-            btn.disabled = !isNotEmpty;
+            const isNotEmpty = passEl.value.trim().length > 0 && confirmEl.value.trim().length > 0;
+            btn.disabled      = !isNotEmpty;
             btn.style.opacity = isNotEmpty ? '1' : '0.5';
             btn.style.cursor  = isNotEmpty ? 'pointer' : 'not-allowed';
         }
@@ -305,44 +580,34 @@
             }
         }
 
-        // Updates the navbar avatar in-place without a page reload
         function updateNavbarAvatar(url) {
             const toggle = document.getElementById('user-menu-toggle');
             if (!toggle) return;
             const existingImg  = toggle.querySelector('img.nav-avatar');
             const existingIcon = toggle.querySelector('i.fa-user-circle');
             if (url) {
-                if (existingImg) {
-                    existingImg.src = url;
-                } else {
+                if (existingImg) { existingImg.src = url; }
+                else {
                     const img = document.createElement('img');
-                    img.src = url;
-                    img.alt = 'avatar';
-                    img.className = 'nav-avatar';
-                    if (existingIcon) existingIcon.replaceWith(img);
-                    else toggle.prepend(img);
+                    img.src = url; img.alt = 'avatar'; img.className = 'nav-avatar';
+                    if (existingIcon) existingIcon.replaceWith(img); else toggle.prepend(img);
                 }
             } else {
-                if (existingImg) {
-                    const i = document.createElement('i');
-                    i.className = 'fas fa-user-circle';
-                    existingImg.replaceWith(i);
-                }
+                if (existingImg) { const i = document.createElement('i'); i.className = 'fas fa-user-circle'; existingImg.replaceWith(i); }
             }
         }
 
-        // ── Profile location dropdowns ───────────────────────────────────────
+        // ── Profile address dropdowns ────────────────────────────────────────
         const profileProvinceSelect = document.getElementById('profile-province');
         const profileZipInput       = document.getElementById('profile-zip');
         const profileAddressInput   = document.getElementById('profile-address');
         const profileLocationStatus = document.getElementById('profile-location-status');
 
         function updateProfileAddress() {
-            const street = document.getElementById('profile-street').value.trim();
-            const cityEl = document.getElementById('profile-city');
-            const brgyEl = document.getElementById('profile-barangay');
-            
-            const city = cityEl ? cityEl.value.trim() : '';
+            const street   = document.getElementById('profile-street').value.trim();
+            const cityEl   = document.getElementById('profile-city');
+            const brgyEl   = document.getElementById('profile-barangay');
+            const city     = cityEl ? cityEl.value.trim() : '';
             const barangay = brgyEl ? brgyEl.value.trim() : '';
             const province = profileProvinceSelect.value;
             const zip      = profileZipInput.value.trim();
@@ -354,19 +619,15 @@
             const cityEl   = document.getElementById('profile-city');
             const brgyEl   = document.getElementById('profile-barangay');
             const cityName = cityEl.value;
-
             if (!brgyEl) return;
-
             brgyEl.innerHTML = '<option value="">Select Barangay</option>';
             brgyEl.disabled  = true;
             profileZipInput.value = '';
             document.getElementById('profile-lat').value = '';
             document.getElementById('profile-lng').value = '';
             profileLocationStatus.style.display = 'none';
-
             const selectedOpt = cityEl.options[cityEl.selectedIndex];
             if (selectedOpt?.dataset.zip) profileZipInput.value = selectedOpt.dataset.zip;
-
             if (cityName && locationDataSimplified[cityName]) {
                 locationDataSimplified[cityName].barangays.forEach(brgy => {
                     const opt = document.createElement('option');
@@ -386,11 +647,9 @@
             const city     = document.getElementById('profile-city').value;
             const province = profileProvinceSelect.value;
             if (!barangay || !city) return;
-
             profileLocationStatus.style.display = 'block';
             profileLocationStatus.textContent   = '⏳ Finding coordinates...';
             profileLocationStatus.style.color   = '#888';
-
             try {
                 const res = await fetch(
                     `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(`${barangay}, ${city}, ${province}, Philippines`)}`,
@@ -423,20 +682,14 @@
                 sel.id = 'profile-city'; sel.disabled = true;
                 sel.innerHTML = '<option value="">Select City/Municipality</option>';
                 cityEl.replaceWith(sel); cityEl = document.getElementById('profile-city');
-            } else {
-                cityEl.innerHTML = '<option value="">Select City/Municipality</option>';
-                cityEl.disabled = true;
-            }
+            } else { cityEl.innerHTML = '<option value="">Select City/Municipality</option>'; cityEl.disabled = true; }
 
             if (brgyEl.tagName === 'INPUT') {
                 const sel = document.createElement('select');
                 sel.id = 'profile-barangay'; sel.disabled = true;
                 sel.innerHTML = '<option value="">Select Municipality first</option>';
                 brgyEl.replaceWith(sel); brgyEl = document.getElementById('profile-barangay');
-            } else {
-                brgyEl.innerHTML = '<option value="">Select Municipality first</option>';
-                brgyEl.disabled = true;
-            }
+            } else { brgyEl.innerHTML = '<option value="">Select Municipality first</option>'; brgyEl.disabled = true; }
 
             profileZipInput.value = '';
             profileLocationStatus.style.display = 'none';
@@ -453,30 +706,106 @@
                 cityEl.addEventListener('change', profileOnCityChange);
             } else if (province) {
                 const cityInput = document.createElement('input');
-                cityInput.type = 'text'; cityInput.id = 'profile-city';
-                cityInput.placeholder = 'e.g. Quezon City';
+                cityInput.type = 'text'; cityInput.id = 'profile-city'; cityInput.placeholder = 'e.g. Quezon City';
                 cityInput.addEventListener('input', () => { updateProfileAddress(); checkDirty(); });
                 cityEl.replaceWith(cityInput);
-
                 const brgyInput = document.createElement('input');
-                brgyInput.type = 'text'; brgyInput.id = 'profile-barangay';
-                brgyInput.placeholder = 'e.g. Brgy. San Antonio';
+                brgyInput.type = 'text'; brgyInput.id = 'profile-barangay'; brgyInput.placeholder = 'e.g. Brgy. San Antonio';
                 brgyInput.addEventListener('input', () => { updateProfileAddress(); checkDirty(); });
                 brgyEl.replaceWith(brgyInput);
             }
-
             updateProfileAddress();
             checkDirty();
         });
 
         document.getElementById('profile-street').addEventListener('input', updateProfileAddress);
 
+        // ── Verification address dropdowns ───────────────────────────────────
+        const verifyProvinceSelect = document.getElementById('verify-province');
+        const verifyZipInput       = document.getElementById('verify-zip');
+        const verifyAddressInput   = document.getElementById('verify-address');
+
+        function updateVerifyAddress() {
+            const street   = document.getElementById('verify-street').value.trim();
+            const cityEl   = document.getElementById('verify-city');
+            const brgyEl   = document.getElementById('verify-barangay');
+            const city     = cityEl ? cityEl.value.trim() : '';
+            const barangay = brgyEl ? brgyEl.value.trim() : '';
+            const province = verifyProvinceSelect.value;
+            const zip      = verifyZipInput.value.trim();
+            const parts    = [street, barangay ? `Brgy. ${barangay}` : '', city, province, zip, 'Philippines'].filter(Boolean);
+            verifyAddressInput.value = parts.length > 2 ? parts.join(', ') : '';
+        }
+
+        function verifyOnCityChange() {
+            const cityEl   = document.getElementById('verify-city');
+            const brgyEl   = document.getElementById('verify-barangay');
+            const cityName = cityEl.value;
+            if (!brgyEl) return;
+            brgyEl.innerHTML = '<option value="">Select Barangay</option>';
+            brgyEl.disabled  = true;
+            verifyZipInput.value = '';
+            const selectedOpt = cityEl.options[cityEl.selectedIndex];
+            if (selectedOpt?.dataset.zip) verifyZipInput.value = selectedOpt.dataset.zip;
+            if (cityName && locationDataSimplified[cityName]) {
+                locationDataSimplified[cityName].barangays.forEach(brgy => {
+                    const opt = document.createElement('option');
+                    opt.value = brgy; opt.textContent = brgy;
+                    brgyEl.appendChild(opt);
+                });
+                brgyEl.disabled = true;
+                brgyEl.addEventListener('change', updateVerifyAddress);
+            }
+            updateVerifyAddress();
+        }
+
+        verifyProvinceSelect.addEventListener('change', () => {
+            const province = verifyProvinceSelect.value;
+            let cityEl = document.getElementById('verify-city');
+            let brgyEl = document.getElementById('verify-barangay');
+
+            if (cityEl.tagName === 'INPUT') {
+                const sel = document.createElement('select');
+                sel.id = 'verify-city'; sel.disabled = true;
+                sel.innerHTML = '<option value="">Select City/Municipality</option>';
+                cityEl.replaceWith(sel); cityEl = document.getElementById('verify-city');
+            } else { cityEl.innerHTML = '<option value="">Select City/Municipality</option>'; cityEl.disabled = true; }
+
+            if (brgyEl.tagName === 'INPUT') {
+                const sel = document.createElement('select');
+                sel.id = 'verify-barangay'; sel.disabled = true;
+                sel.innerHTML = '<option value="">Select Municipality first</option>';
+                brgyEl.replaceWith(sel); brgyEl = document.getElementById('verify-barangay');
+            } else { brgyEl.innerHTML = '<option value="">Select Municipality first</option>'; brgyEl.disabled = true; }
+
+            verifyZipInput.value = '';
+
+            if (province === 'Bulacan' && locationDataSimplified['Bulacan']) {
+                locationDataSimplified['Bulacan'].municipalities.forEach(mun => {
+                    const opt = document.createElement('option');
+                    opt.value = mun.name; opt.textContent = mun.name; opt.dataset.zip = mun.zipCode;
+                    cityEl.appendChild(opt);
+                });
+                cityEl.disabled = true;
+                cityEl.addEventListener('change', verifyOnCityChange);
+            } else if (province) {
+                const cityInput = document.createElement('input');
+                cityInput.type = 'text'; cityInput.id = 'verify-city'; cityInput.placeholder = 'e.g. Quezon City'; cityInput.disabled = true;
+                cityInput.addEventListener('input', updateVerifyAddress);
+                cityEl.replaceWith(cityInput);
+                const brgyInput = document.createElement('input');
+                brgyInput.type = 'text'; brgyInput.id = 'verify-barangay'; brgyInput.placeholder = 'e.g. Brgy. San Antonio'; brgyInput.disabled = true;
+                brgyInput.addEventListener('input', updateVerifyAddress);
+                brgyEl.replaceWith(brgyInput);
+            }
+            updateVerifyAddress();
+        });
+
+        document.getElementById('verify-street').addEventListener('input', updateVerifyAddress);
+
         // ── Load profile data ────────────────────────────────────────────────
         async function loadProfile() {
-            if (!supabase) {
-                console.error("❌ Profile fetch aborted: Supabase initialization was missing.");
-                return;
-            }
+            if (!supabase) { console.error("❌ Profile fetch aborted: Supabase initialization was missing."); return; }
 
             try {
                 const { data: { session }, error: sessionError } = await supabase.auth.getSession();
@@ -488,10 +817,9 @@
 
                 document.getElementById('email').value = email || '';
 
-                // ── Step 1: Fetch core profile fields (always present) ────────
                 const { data: profile, error: profileError } = await supabase
                     .from('profiles')
-                    .select('full_name, username, bio, phone, address, city, province, barangay, latitude, longitude, avatar_url')
+                    .select('full_name, username, bio, phone, address, city, province, barangay, latitude, longitude, avatar_url, isVerified, verificationStatus, nationality, birthdate')
                     .eq('id', userId)
                     .maybeSingle();
 
@@ -500,6 +828,7 @@
                     console.warn("⚠️ No profile row found for this user.");
                     originalSnapshot = getSnapshot();
                     attachDirtyListeners();
+                    showVerifyRequiredModal();
                     return;
                 }
 
@@ -523,31 +852,20 @@
                         profileProvinceSelect.dispatchEvent(new Event('change'));
                         await new Promise(r => setTimeout(r, 0));
                     }
-
                     const cityEl = document.getElementById('profile-city');
                     if (profile.city && cityEl) {
                         if (cityEl.tagName === 'SELECT') {
                             const matchOpt = [...cityEl.options].find(o => o.value === profile.city);
-                            if (matchOpt) {
-                                cityEl.value = profile.city;
-                                cityEl.dispatchEvent(new Event('change'));
-                                await new Promise(r => setTimeout(r, 0));
-                            }
-                        } else {
-                            cityEl.value = profile.city;
-                        }
+                            if (matchOpt) { cityEl.value = profile.city; cityEl.dispatchEvent(new Event('change')); await new Promise(r => setTimeout(r, 0)); }
+                        } else { cityEl.value = profile.city; }
                     }
-
                     const brgyEl = document.getElementById('profile-barangay');
                     if (profile.barangay && brgyEl) {
                         if (brgyEl.tagName === 'SELECT') {
                             const matchOpt = [...brgyEl.options].find(o => o.value === profile.barangay);
                             if (matchOpt) brgyEl.value = profile.barangay;
-                        } else {
-                            brgyEl.value = profile.barangay;
-                        }
+                        } else { brgyEl.value = profile.barangay; }
                     }
-
                     if (profile.address) {
                         let street = profile.address;
                         if (profile.city)     street = street.replace(`, ${profile.city}`, '');
@@ -555,10 +873,8 @@
                         street = street.replace(', Philippines', '').replace(/,?\s*\d{4}/, '').trim();
                         document.getElementById('profile-street').value = street;
                     }
-
                     if (profile.latitude)  document.getElementById('profile-lat').value = profile.latitude;
                     if (profile.longitude) document.getElementById('profile-lng').value = profile.longitude;
-
                     profileAddressInput.value = profile.address || '';
                     if (profile.latitude && profile.longitude) {
                         profileLocationStatus.style.display = 'block';
@@ -567,46 +883,387 @@
                     }
                 }
 
-                // ── Step 2: Fetch preferences columns separately (may not exist yet) ──
+                // ── Handle verification status ────────────────────────────────
+                const isVerified         = profile.isVerified === true;
+                const verificationStatus = profile.verificationStatus || null;
+
+                updateVerificationUI(isVerified, verificationStatus);
+
+                // Pre-fill verification fields from profile data
+                await prefillVerificationFields(profile, email);
+
+                // Show modal only if NOT verified and no pending submission
+                if (!isVerified && verificationStatus !== 'pending') {
+                    showVerifyRequiredModal();
+                }
+
+                // ── Pet preferences ───────────────────────────────────────────
                 try {
                     const { data: prefs, error: prefsError } = await supabase
                         .from('profiles')
                         .select('preferred_species, preferred_gender')
                         .eq('id', userId)
                         .maybeSingle();
-
-                    if (prefsError) {
-                        // Columns don't exist yet — log quietly and skip. Profile still loaded fine.
-                        console.warn("ℹ️ Pet preferences columns not found in DB yet. Run the migration to add them:", prefsError.message);
-                    } else if (prefs) {
+                    if (!prefsError && prefs) {
                         if (prefs.preferred_species) document.getElementById('pref-species').value = prefs.preferred_species;
                         if (prefs.preferred_gender)  document.getElementById('pref-gender').value  = prefs.preferred_gender;
-
-                        // Sync to localStorage so other views can read instantly
                         localStorage.setItem('preferred_species', prefs.preferred_species || '');
                         localStorage.setItem('preferred_gender',  prefs.preferred_gender  || '');
                     }
-                } catch (prefsEx) {
-                    console.warn("ℹ️ Could not load pet preferences (non-fatal):", prefsEx.message);
-                }
+                } catch (prefsEx) { console.warn("ℹ️ Could not load pet preferences (non-fatal):", prefsEx.message); }
 
-                // Take snapshot AFTER all fields are populated, then start watching
                 originalSnapshot = getSnapshot();
                 attachDirtyListeners();
 
             } catch (err) {
-                console.error("❌ Exception captured during loadProfile initialization sequence:", err);
+                console.error("❌ Exception during loadProfile:", err);
             }
+        }
+
+        // ── Verification UI helper ────────────────────────────────────────────
+        function updateVerificationUI(isVerified, verificationStatus) {
+            const badge           = document.getElementById('verification-badge');
+            const verifiedBanner  = document.getElementById('verified-banner');
+            const pendingBanner   = document.getElementById('pending-banner');
+            const sendBtn         = document.getElementById('send-verification-btn');
+
+            // Reset banners
+            verifiedBanner.style.display = 'none';
+            pendingBanner.style.display  = 'none';
+
+            if (isVerified || verificationStatus === 'approved') {
+                badge.style.display   = 'none';
+                verifiedBanner.style.display = 'flex';
+                sendBtn.disabled      = true;
+                sendBtn.style.opacity = '0.5';
+                sendBtn.style.cursor  = 'not-allowed';
+                sendBtn.innerHTML     = '<i class="fas fa-check" style="margin-right:8px;"></i>Already Verified';
+                setVerificationFieldStates(true);
+                setIdUploadDisabled(true);
+            } else if (verificationStatus === 'pending') {
+                badge.style.display = 'inline';
+                badge.textContent   = '⏳';
+                badge.style.background = '#dd6b20';
+                pendingBanner.style.display = 'flex';
+                sendBtn.disabled      = true;
+                sendBtn.style.opacity = '0.5';
+                sendBtn.style.cursor  = 'not-allowed';
+                sendBtn.innerHTML     = '<i class="fas fa-clock" style="margin-right:8px;"></i>Pending Review';
+                setVerificationFieldStates(true);
+                setIdUploadDisabled(true);
+            } else {
+                badge.style.display = 'inline';
+                badge.textContent   = '!';
+                badge.style.background = '#e53e3e';
+                sendBtn.disabled      = false;
+                sendBtn.style.opacity = '1';
+                sendBtn.style.cursor  = 'pointer';
+                sendBtn.innerHTML     = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i>Send Verification';
+                setVerificationFieldStates(false);
+            }
+        }
+
+        function setVerificationFieldStates(lockAllFields) {
+            // These fields are always locked (pre-filled from auth/profile, read-only)
+            const alwaysLockedIds = [
+                'verify-first-name',
+                'verify-last-name',
+                'verify-email',
+                'verify-phone',
+                'verify-province',
+                'verify-city',
+                'verify-barangay',
+                'verify-street',
+                'verify-zip',
+                'verify-address',
+            ];
+
+            alwaysLockedIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.disabled = true;
+                    el.style.opacity = '0.6';
+                    el.style.cursor = 'not-allowed';
+                }
+            });
+
+            // These fields are editable when unverified, locked when verified/pending
+            const conditionalIds = ['verify-nationality', 'verify-birthdate'];
+            conditionalIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.disabled = lockAllFields;
+                    el.style.opacity = lockAllFields ? '0.6' : '1';
+                    el.style.cursor  = lockAllFields ? 'not-allowed' : (id === 'verify-birthdate' ? 'default' : 'pointer');
+                }
+            });
+        }
+
+        // ── Pre-fill verification form from profile ───────────────────────────
+        async function prefillVerificationFields(profile, sessionEmail) {
+            if (!profile) return;
+
+            const fullName = profile.full_name || '';
+            const nameParts = fullName.trim().split(' ');
+            document.getElementById('verify-first-name').value = nameParts[0] || '';
+            document.getElementById('verify-last-name').value  = nameParts.slice(1).join(' ') || '';
+
+            if (sessionEmail) {
+                document.getElementById('verify-email').value = sessionEmail;
+            }
+
+            if (profile.phone) {
+                document.getElementById('verify-phone').value = profile.phone;
+            }
+
+            if (profile.nationality) {
+                document.getElementById('verify-nationality').value = profile.nationality;
+            }
+
+            // Pre-fill birthdate if saved
+            if (profile.birthdate) {
+                document.getElementById('verify-birthdate').value = profile.birthdate;
+            }
+
+            if (profile.province) {
+                verifyProvinceSelect.value = profile.province;
+                verifyProvinceSelect.dispatchEvent(new Event('change'));
+                await new Promise(r => setTimeout(r, 0));
+            }
+
+            const verifyCityEl = document.getElementById('verify-city');
+            if (profile.city && verifyCityEl) {
+                if (verifyCityEl.tagName === 'SELECT') {
+                    const matchOpt = [...verifyCityEl.options].find(o => o.value === profile.city);
+                    if (matchOpt) { verifyCityEl.value = profile.city; verifyCityEl.dispatchEvent(new Event('change')); await new Promise(r => setTimeout(r, 0)); }
+                } else { verifyCityEl.value = profile.city; }
+            }
+
+            const verifyBrgyEl = document.getElementById('verify-barangay');
+            if (profile.barangay && verifyBrgyEl) {
+                if (verifyBrgyEl.tagName === 'SELECT') {
+                    const matchOpt = [...verifyBrgyEl.options].find(o => o.value === profile.barangay);
+                    if (matchOpt) verifyBrgyEl.value = profile.barangay;
+                } else { verifyBrgyEl.value = profile.barangay; }
+            }
+
+            if (profile.address) {
+                let street = profile.address;
+                if (profile.city)     street = street.replace(`, ${profile.city}`, '');
+                if (profile.province) street = street.replace(`, ${profile.province}`, '');
+                street = street.replace(', Philippines', '').replace(/,?\s*\d{4}/, '').trim();
+                document.getElementById('verify-street').value = street;
+            }
+
+            verifyAddressInput.value = profile.address || '';
+            updateVerifyAddress();
+        }
+
+        // ── Accepted IDs accordion toggle ─────────────────────────────────────
+        document.getElementById('accepted-ids-toggle').addEventListener('click', () => {
+            const list     = document.getElementById('accepted-ids-list');
+            const chevron  = document.getElementById('accepted-ids-chevron');
+            const isOpen   = list.style.display !== 'none';
+            list.style.display   = isOpen ? 'none' : 'block';
+            chevron.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+        });
+
+        // ── ID file upload helpers ────────────────────────────────────────────
+        let idFrontFile = null;
+        let idBackFile  = null;
+
+        function setupIdUpload(inputId, areaId, previewId, imgId, nameId, removeId, side) {
+            const input   = document.getElementById(inputId);
+            const area    = document.getElementById(areaId);
+            const preview = document.getElementById(previewId);
+            const img     = document.getElementById(imgId);
+            const name    = document.getElementById(nameId);
+            const removeBtn = document.getElementById(removeId);
+
+            input.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                if (file.size > 10 * 1024 * 1024) {
+                    showVerifyMsg(`⚠ ${side} ID file must be under 10MB.`, true);
+                    input.value = ''; return;
+                }
+                if (side === 'Front') idFrontFile = file; else idBackFile = file;
+
+                name.textContent = file.name;
+
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => {
+                        img.src = ev.target.result;
+                        area.style.display    = 'none';
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    img.src = 'data:image/svg+xml,' + encodeURIComponent(
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="80" viewBox="0 0 100 80">'
+                        + '<rect width="100" height="80" fill="#f0f0f0" rx="6"/>'
+                        + '<text x="50" y="38" text-anchor="middle" font-size="12" fill="#888" font-family="sans-serif">📄 PDF</text>'
+                        + '<text x="50" y="54" text-anchor="middle" font-size="9" fill="#aaa" font-family="sans-serif">File selected</text>'
+                        + '</svg>'
+                    );
+                    area.style.display    = 'none';
+                    preview.style.display = 'block';
+                }
+                input.value = '';
+            });
+
+            removeBtn.addEventListener('click', () => {
+                if (side === 'Front') idFrontFile = null; else idBackFile = null;
+                img.src = ''; name.textContent = '';
+                preview.style.display = 'none';
+                area.style.display    = 'flex';
+            });
+        }
+
+        setupIdUpload('id-front-file', 'id-front-area', 'id-front-preview', 'id-front-img', 'id-front-name', 'id-front-remove', 'Front');
+        setupIdUpload('id-back-file',  'id-back-area',  'id-back-preview',  'id-back-img',  'id-back-name',  'id-back-remove',  'Back');
+
+        // ── Lock ID upload fields when verified/pending ───────────────────────
+        function setIdUploadDisabled(disabled) {
+            ['id-front-file','id-back-file'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.disabled = disabled;
+            });
+            ['id-front-area','id-back-area'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.style.opacity       = disabled ? '0.5' : '1';
+                    el.style.pointerEvents = disabled ? 'none' : 'auto';
+                    el.style.cursor        = disabled ? 'not-allowed' : 'pointer';
+                }
+            });
+            ['id-front-remove','id-back-remove'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.disabled = disabled; el.style.display = disabled ? 'none' : 'flex'; }
+            });
+        }
+
+        function fileToDataUrl(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = () => reject(new Error('Could not read file for fallback upload.'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function uploadVerificationId(bucketPath, file, sideLabel) {
+            const { error } = await supabase.storage
+                .from('verification-ids')
+                .upload(bucketPath, file, { upsert: true });
+
+            if (!error) {
+                const { data: urlData } = supabase.storage.from('verification-ids').getPublicUrl(bucketPath);
+                return urlData.publicUrl;
+            }
+
+            if (/row-level security/i.test(error.message || '')) {
+                console.warn(`${sideLabel} ID storage insert blocked by policy; falling back to a data URL.`);
+                return await fileToDataUrl(file);
+            }
+
+            throw new Error(`${sideLabel} ID upload failed: ${error.message}`);
+        }
+
+        // ── Send Verification ────────────────────────────────────────────────
+        document.getElementById('send-verification-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('send-verification-btn');
+
+            const firstName   = document.getElementById('verify-first-name').value.trim();
+            const lastName    = document.getElementById('verify-last-name').value.trim();
+            const birthdate   = document.getElementById('verify-birthdate').value;
+            const nationality = document.getElementById('verify-nationality').value;
+            const phone       = document.getElementById('verify-phone').value.trim();
+            const province    = verifyProvinceSelect.value;
+            const city        = document.getElementById('verify-city').value.trim();
+            const barangay    = document.getElementById('verify-barangay').value.trim();
+            const street      = document.getElementById('verify-street').value.trim();
+            const address     = verifyAddressInput.value.trim();
+
+            if (!firstName || !lastName) { showVerifyMsg('⚠ Please enter your first and last name.', true); return; }
+            if (!birthdate)              { showVerifyMsg('⚠ Please enter your date of birth.', true); return; }
+            if (!nationality)            { showVerifyMsg('⚠ Please select your nationality.', true); return; }
+            if (!province || !city || !barangay || !street) { showVerifyMsg('⚠ Please fill in all address fields.', true); return; }
+            if (!idFrontFile) { showVerifyMsg('⚠ Please upload the front of your ID.', true); return; }
+            if (!idBackFile)  { showVerifyMsg('⚠ Please upload the back of your ID.', true); return; }
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i>Uploading ID...';
+            btn.style.opacity = '0.7';
+
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) { showVerifyMsg('⚠ Session expired. Please sign in again.', true); btn.disabled = false; return; }
+
+            let idFrontUrl = null;
+            let idBackUrl  = null;
+
+            try {
+                const frontExt  = idFrontFile.name.split('.').pop();
+                const frontPath = `${session.user.id}/id_front_${Date.now()}.${frontExt}`;
+                idFrontUrl = await uploadVerificationId(frontPath, idFrontFile, 'Front');
+
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i>Uploading back ID...';
+
+                const backExt  = idBackFile.name.split('.').pop();
+                const backPath = `${session.user.id}/id_back_${Date.now()}.${backExt}`;
+                idBackUrl = await uploadVerificationId(backPath, idBackFile, 'Back');
+
+            } catch (uploadErr) {
+                showVerifyMsg('⚠ ' + uploadErr.message, true);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i>Send Verification';
+                btn.style.opacity = '1';
+                return;
+            }
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:8px;"></i>Submitting...';
+
+            const { error } = await supabase
+                .from('profiles')
+                .update({
+                    verificationStatus  : 'pending',
+                    nationality         : nationality,
+                    birthdate           : birthdate || null,
+                    phone               : phone    || null,
+                    full_name           : [firstName, lastName].filter(Boolean).join(' '),
+                    address             : address  || null,
+                    city                : city     || null,
+                    province            : province || null,
+                    barangay            : barangay || null,
+                    id_front_url        : idFrontUrl,
+                    id_back_url         : idBackUrl,
+                })
+                .eq('id', session.user.id);
+
+            if (error) {
+                showVerifyMsg('⚠ Failed to submit: ' + error.message, true);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i>Send Verification';
+                btn.style.opacity = '1';
+            } else {
+                showVerifyMsg('✓ Verification request submitted! We will review it within 1–2 business days.', false);
+                updateVerificationUI(false, 'pending');
+            }
+        });
+
+        function showVerifyMsg(text, isError) {
+            const msg = document.getElementById('verification-save-msg');
+            msg.textContent   = text;
+            msg.style.color   = isError ? '#e53e3e' : '#38a169';
+            msg.style.display = 'block';
         }
 
         // ── Save profile ─────────────────────────────────────────────────────
         document.getElementById('save-profile-btn').addEventListener('click', async () => {
             const btn = document.getElementById('save-profile-btn');
             const msg = document.getElementById('profile-save-msg');
-            btn.disabled      = true;
-            btn.style.opacity = '0.5';
-            btn.style.cursor  = 'not-allowed';
-            btn.textContent   = 'Saving...';
+            btn.disabled = true; btn.style.opacity = '0.5'; btn.style.cursor = 'not-allowed'; btn.textContent = 'Saving...';
 
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) return;
@@ -625,49 +1282,31 @@
             const longitude = parseFloat(document.getElementById('profile-lng').value) || null;
 
             if (phone && (phone.length < 11 || phone.length > 12 || !/^[0-9]+$/.test(phone))) {
-                msg.textContent   = '⚠ Phone number must be 11 or 12 digits.';
-                msg.style.color   = '#e53e3e';
-                msg.style.display = 'block';
-                btn.disabled      = false;
-                btn.style.opacity = '1';
-                btn.style.cursor  = 'pointer';
-                btn.textContent   = 'Save Changes';
-                return;
+                msg.textContent = '⚠ Phone number must be 11 or 12 digits.'; msg.style.color = '#e53e3e'; msg.style.display = 'block';
+                btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer'; btn.textContent = 'Save Changes'; return;
             }
 
-            const { error } = await supabase
-                .from('profiles')
+            const { error } = await supabase.from('profiles')
                 .update({ full_name: fullName, username, bio, phone, province, city, barangay, address, latitude, longitude })
                 .eq('id', session.user.id);
 
             msg.style.display = 'block';
             if (error) {
-                msg.textContent   = '⚠ ' + error.message;
-                msg.style.color   = '#e53e3e';
-                btn.disabled      = false;
-                btn.style.opacity = '1';
-                btn.style.cursor  = 'pointer';
+                msg.textContent = '⚠ ' + error.message; msg.style.color = '#e53e3e';
+                btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
             } else {
-                msg.textContent = '✓ Profile updated successfully!';
-                msg.style.color = '#38a169';
-
+                msg.textContent = '✓ Profile updated successfully!'; msg.style.color = '#38a169';
                 originalSnapshot = getSnapshot();
-
                 document.getElementById('account-name').textContent    = fullName || session.user.email;
                 document.getElementById('account-username').textContent = username ? `@${username}` : '';
                 document.getElementById('account-bio').textContent      = bio || '';
-
                 const navToggle = document.getElementById('user-menu-toggle');
                 if (navToggle) {
-                    [...navToggle.childNodes]
-                        .filter(n => n.nodeType === Node.TEXT_NODE)
-                        .forEach(n => n.remove());
+                    [...navToggle.childNodes].filter(n => n.nodeType === Node.TEXT_NODE).forEach(n => n.remove());
                     navToggle.appendChild(document.createTextNode(` ${username || 'User'}`));
                 }
-
                 setTimeout(() => { msg.style.display = 'none'; }, 3000);
             }
-
             btn.textContent = 'Save Changes';
         });
 
@@ -675,114 +1314,58 @@
         document.getElementById('save-preferences-btn').addEventListener('click', async () => {
             const btn = document.getElementById('save-preferences-btn');
             const msg = document.getElementById('preferences-save-msg');
-            btn.disabled = true;
-            btn.textContent = 'Saving...';
-
+            btn.disabled = true; btn.textContent = 'Saving...';
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) return;
-
             const species = document.getElementById('pref-species').value;
             const gender  = document.getElementById('pref-gender').value;
-
-            const { error } = await supabase
-                .from('profiles')
+            const { error } = await supabase.from('profiles')
                 .update({ preferred_species: species, preferred_gender: gender })
                 .eq('id', session.user.id);
-
             msg.style.display = 'block';
-            if (error) {
-                msg.textContent = '⚠ ' + error.message;
-                msg.style.color = '#e53e3e';
-            } else {
-                msg.textContent = '✓ Preferences updated successfully!';
-                msg.style.color = '#38a169';
-                
-                // Write directly to local storage to reflect globally across other static views
+            if (error) { msg.textContent = '⚠ ' + error.message; msg.style.color = '#e53e3e'; }
+            else {
+                msg.textContent = '✓ Preferences updated successfully!'; msg.style.color = '#38a169';
                 localStorage.setItem('preferred_species', species);
                 localStorage.setItem('preferred_gender',  gender);
-                
                 setTimeout(() => { msg.style.display = 'none'; }, 3000);
             }
-            btn.disabled = false;
-            btn.textContent = 'Save Preferences';
+            btn.disabled = false; btn.textContent = 'Save Preferences';
         });
 
-        // ── Update password (Fixed & Protected) ───────────────────────────────
-document.getElementById('update-password-btn').addEventListener('click', async () => {
-    const btn      = document.getElementById('update-password-btn');
-    const msg      = document.getElementById('password-msg');
-    const passEl   = document.getElementById('new-password');
-    const confirmEl = document.getElementById('confirm-password');
-
-    const newPass  = passEl.value;
-    const confPass = confirmEl.value;
-
-    if (!newPass || newPass.length < 6) {
-        msg.textContent = '⚠ Password must be at least 6 characters.';
-        msg.style.color = '#e53e3e'; msg.style.display = 'block'; return;
-    }
-    if (newPass !== confPass) {
-        msg.textContent = '⚠ Passwords do not match.';
-        msg.style.color = '#e53e3e'; msg.style.display = 'block'; return;
-    }
-
-    try {
-        // Fully lock down inputs so no concurrent requests can be made
-        btn.disabled = true;
-        btn.textContent = 'Updating...';
-        btn.style.cursor = 'not-allowed';
-        passEl.disabled = true;
-        confirmEl.disabled = true;
-        msg.style.display = 'none';
-
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        if (sessionError || !session) {
-            throw new Error('You must be logged in to change your password.');
-        }
-
-        // Run the race
-        const result = await Promise.race([
-            supabase.auth.updateUser({ password: newPass }),
-            new Promise(resolve =>
-                setTimeout(() => resolve({ 
-                    data: null, 
-                    error: { message: 'The database took too long to respond. This usually means your Supabase Email/SMTP provider is unconfigured or rate-limited. Check your Supabase Auth settings.' } 
-                }), 10000) // Bumped to 10 seconds to give the backend breathing room
-            )
-        ]);
-
-        const { data, error } = result;
-
-        msg.style.display = 'block';
-        if (error) {
-            msg.textContent = '⚠ ' + error.message;
-            msg.style.color = '#e53e3e';
-        } else {
-            msg.textContent = '✓ Password updated successfully!';
-            msg.style.color = '#38a169';
-            passEl.value = '';
-            confirmEl.value = '';
-            setTimeout(() => { msg.style.display = 'none'; }, 5000);
-        }
-    } catch (err) {
-        msg.style.display = 'block';
-        msg.textContent = '⚠ ' + (err.message || 'An unexpected error occurred.');
-        msg.style.color = '#e53e3e';
-        console.error('Password Update Diagnostics:', err);
-    } finally {
-        // Re-enable elements cleanly
-        btn.textContent = 'Update Password';
-        passEl.disabled = false;
-        confirmEl.disabled = false;
-        checkPasswordFields();
-    }
-});
+        // ── Update password ────────────────────────────────────────────────────
+        document.getElementById('update-password-btn').addEventListener('click', async () => {
+            const btn       = document.getElementById('update-password-btn');
+            const msg       = document.getElementById('password-msg');
+            const passEl    = document.getElementById('new-password');
+            const confirmEl = document.getElementById('confirm-password');
+            const newPass  = passEl.value;
+            const confPass = confirmEl.value;
+            if (!newPass || newPass.length < 6) { msg.textContent = '⚠ Password must be at least 6 characters.'; msg.style.color = '#e53e3e'; msg.style.display = 'block'; return; }
+            if (newPass !== confPass) { msg.textContent = '⚠ Passwords do not match.'; msg.style.color = '#e53e3e'; msg.style.display = 'block'; return; }
+            try {
+                btn.disabled = true; btn.textContent = 'Updating...'; btn.style.cursor = 'not-allowed';
+                passEl.disabled = true; confirmEl.disabled = true; msg.style.display = 'none';
+                const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+                if (sessionError || !session) throw new Error('You must be logged in to change your password.');
+                const result = await Promise.race([
+                    supabase.auth.updateUser({ password: newPass }),
+                    new Promise(resolve => setTimeout(() => resolve({ data: null, error: { message: 'Request timed out. Check your Supabase Auth settings.' } }), 10000))
+                ]);
+                const { data, error } = result;
+                msg.style.display = 'block';
+                if (error) { msg.textContent = '⚠ ' + error.message; msg.style.color = '#e53e3e'; }
+                else { msg.textContent = '✓ Password updated successfully!'; msg.style.color = '#38a169'; passEl.value = ''; confirmEl.value = ''; setTimeout(() => { msg.style.display = 'none'; }, 5000); }
+            } catch (err) {
+                msg.style.display = 'block'; msg.textContent = '⚠ ' + (err.message || 'An unexpected error occurred.'); msg.style.color = '#e53e3e';
+            } finally {
+                btn.textContent = 'Update Password'; passEl.disabled = false; confirmEl.disabled = false; checkPasswordFields();
+            }
+        });
 
         // ── Sign out ─────────────────────────────────────────────────────────
         document.getElementById('signout-btn').addEventListener('click', async () => {
-            if (supabase) {
-                await supabase.auth.signOut();
-            }
+            if (supabase) await supabase.auth.signOut();
             window.location.href = '../index.html';
         });
 
@@ -806,185 +1389,110 @@ document.getElementById('update-password-btn').addEventListener('click', async (
         document.getElementById('avatar-file-input').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
-            if (file.size > 5 * 1024 * 1024) {
-                alert('Image must be under 5MB.'); return;
-            }
-
+            if (file.size > 5 * 1024 * 1024) { alert('Image must be under 5MB.'); return; }
             const btn = document.getElementById('avatar-edit-btn');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            btn.disabled = true;
-
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; btn.disabled = true;
             const { data: { session } } = await supabase.auth.getSession();
             if (!session) return;
-
-            const ext      = file.name.split('.').pop();
+            const ext = file.name.split('.').pop();
             const fileName = `${session.user.id}/avatar.${ext}`;
-
-            const { error: uploadError } = await supabase.storage
-                .from('avatars')
-                .upload(fileName, file, { upsert: true });
-
-            if (uploadError) {
-                alert('Upload failed: ' + uploadError.message);
-                btn.innerHTML = '<i class="fas fa-pencil-alt"></i>';
-                btn.disabled = false;
-                e.target.value = '';
-                return;
-            }
-
-            const { data: urlData } = supabase.storage
-                .from('avatars')
-                .getPublicUrl(fileName);
-
+            const { error: uploadError } = await supabase.storage.from('avatars').upload(fileName, file, { upsert: true });
+            if (uploadError) { alert('Upload failed: ' + uploadError.message); btn.innerHTML = '<i class="fas fa-pencil-alt"></i>'; btn.disabled = false; e.target.value = ''; return; }
+            const { data: urlData } = supabase.storage.from('avatars').getPublicUrl(fileName);
             const newAvatarUrl = urlData.publicUrl + '?t=' + Date.now();
-
-            const { error: updateError } = await supabase
-                .from('profiles')
-                .update({ avatar_url: newAvatarUrl })
-                .eq('id', session.user.id);
-
-            if (updateError) {
-                alert('Could not save avatar: ' + updateError.message);
-            } else {
-                renderAvatar(newAvatarUrl);
-                updateNavbarAvatar(newAvatarUrl); 
-            }
-
-            btn.innerHTML = '<i class="fas fa-pencil-alt"></i>';
-            btn.disabled = false;
-            e.target.value = '';
+            const { error: updateError } = await supabase.from('profiles').update({ avatar_url: newAvatarUrl }).eq('id', session.user.id);
+            if (updateError) { alert('Could not save avatar: ' + updateError.message); }
+            else { renderAvatar(newAvatarUrl); updateNavbarAvatar(newAvatarUrl); }
+            btn.innerHTML = '<i class="fas fa-pencil-alt"></i>'; btn.disabled = false; e.target.value = '';
         });
 
-        // Fire loading sequence execution
         loadProfile();
     </script>
 
     <style>
+        /* ── Modal overlay ─────────────────────────────────────────────────── */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+            z-index: 2000; display: flex; align-items: center;
+            justify-content: center; padding: 20px;
+        }
+        .modal-card {
+            background: var(--white-color); border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%; max-width: 620px;
+            max-height: 90vh; overflow-y: auto;
+        }
+
+        /* ── Two-column layout ─────────────────────────────────────────────── */
         .profile-two-col {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 30px;
             align-items: start;
         }
-
-        @media (max-width: 768px) {
-            .profile-two-col { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 768px) { .profile-two-col { grid-template-columns: 1fr; } }
 
         .form-section-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--dark-color);
-            margin: 0 0 16px;
-            padding-bottom: 8px;
+            font-size: 14px; font-weight: 700; color: var(--dark-color);
+            margin: 0 0 16px; padding-bottom: 8px;
             border-bottom: 2px solid var(--primary-color);
         }
 
+        /* ── Account layout ────────────────────────────────────────────────── */
         .account-container {
             display: grid;
             grid-template-columns: 250px 1fr;
             gap: 30px;
             margin-top: 30px;
         }
-
-        @media (max-width: 768px) {
-            .account-container { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 768px) { .account-container { grid-template-columns: 1fr; } }
 
         .account-sidebar {
             background-color: var(--white-color);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            height: fit-content;
+            border-radius: 10px; padding: 20px;
+            box-shadow: var(--shadow); height: fit-content;
         }
 
         .profile-card {
-            text-align: center;
-            margin-bottom: 24px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #f0f0f0;
+            text-align: center; margin-bottom: 24px;
+            padding-bottom: 20px; border-bottom: 1px solid #f0f0f0;
         }
 
-        .profile-avatar-wrap {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
+        .profile-avatar-wrap { position: relative; display: inline-block; margin-bottom: 10px; }
 
         .profile-avatar {
-            font-size: 80px;
-            color: var(--primary-color);
-            line-height: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 80px; color: var(--primary-color);
+            line-height: 1; display: flex; align-items: center; justify-content: center;
         }
-
         .profile-avatar img {
-            width: 88px;
-            height: 88px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--primary-color);
-            display: block;
+            width: 88px; height: 88px; border-radius: 50%; object-fit: cover;
+            border: 3px solid var(--primary-color); display: block;
         }
 
         .avatar-edit-btn {
-            position: absolute;
-            top: 2px;
-            right: -2px;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            color: white;
-            border: 2px solid white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-            transition: filter 0.2s, transform 0.15s;
-            z-index: 2;
+            position: absolute; top: 2px; right: -2px;
+            width: 26px; height: 26px; border-radius: 50%;
+            background: var(--primary-color); color: white;
+            border: 2px solid white; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            transition: filter 0.2s, transform 0.15s; z-index: 2;
         }
-
-        .avatar-edit-btn:hover {
-            filter: brightness(0.9);
-            transform: scale(1.1);
-        }
+        .avatar-edit-btn:hover { filter: brightness(0.9); transform: scale(1.1); }
 
         .profile-card h2 { margin: 8px 0 4px; font-size: 18px; }
 
-        .account-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
+        .account-menu { display: flex; flex-direction: column; gap: 6px; }
         .account-menu-item {
-            padding: 11px 15px;
-            border-radius: 8px;
-            color: var(--dark-color);
-            text-decoration: none;
-            transition: var(--transition);
-            font-size: 14px;
-            font-weight: 500;
+            padding: 11px 15px; border-radius: 8px; color: var(--dark-color);
+            text-decoration: none; transition: var(--transition); font-size: 14px; font-weight: 500;
         }
-
         .account-menu-item:hover { background-color: var(--light-color); }
-
-        .account-menu-item.active {
-            background-color: var(--primary-color);
-            color: var(--white-color);
-        }
+        .account-menu-item.active { background-color: var(--primary-color); color: var(--white-color); }
 
         .account-content {
-            background-color: var(--white-color);
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: var(--shadow);
+            background-color: var(--white-color); border-radius: 10px;
+            padding: 30px; box-shadow: var(--shadow);
         }
 
         .content-section { display: none; }
@@ -1004,15 +1512,8 @@ document.getElementById('update-password-btn').addEventListener('click', async (
         .profile-form textarea:focus { border-color: var(--primary-color); }
         .profile-form select:disabled { background: #f9f9f9; color: #aaa; cursor: not-allowed; }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 18px;
-        }
-
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px; }
         .form-row .form-group { margin-bottom: 0; }
-
         @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
 
         .settings-item { margin-bottom: 30px; }
@@ -1027,8 +1528,36 @@ document.getElementById('update-password-btn').addEventListener('click', async (
         .settings-item input:focus { border-color: var(--primary-color); }
 
         hr { border: none; border-top: 1px solid var(--light-color); margin: 30px 0; }
-
         button:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        /* ── ID upload areas ───────────────────────────────────────────────── */
+        .id-upload-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px 16px;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            min-height: 130px;
+        }
+        .id-upload-area:hover {
+            border-color: var(--primary-color);
+            background: #fffbf0;
+        }
+
+        /* ── Date input styling ────────────────────────────────────────────── */
+        input[type="date"] {
+            color-scheme: light;
+        }
+        input[type="date"]:disabled {
+            background: #f9f9f9;
+            color: #aaa;
+            cursor: not-allowed;
+        }
     </style>
 </body>
 </html>

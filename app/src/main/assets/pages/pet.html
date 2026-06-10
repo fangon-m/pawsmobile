@@ -86,6 +86,38 @@
                         <p id="pet-description"></p>
                     </div>
 
+                    <!-- Supporting Details Section -->
+                    <div id="supporting-details-section" style="display:none;">
+                        <div id="temperament-box" class="description-box" style="display:none;">
+                            <h3>Temperament</h3>
+                            <p id="pet-temperament" style="margin:0;"></p>
+                        </div>
+
+                        <div id="health-info-box" class="description-box" style="display:none;">
+                            <h3>Health & Care</h3>
+                            <div style="display:flex; flex-direction:column; gap:10px;">
+                                <div id="spayed-neutered-item" style="display:none; align-items:center; gap:8px;">
+                                    <i class="fas fa-check-circle" style="color:#48bb78; font-size:18px; margin-right:8px;"></i>
+                                    <span style="font-size:15px; color:#222;">Spayed / Neutered</span>
+                                </div>
+                                <div id="vaccinated-item" style="display:none; align-items:center; gap:8px;">
+                                    <i class="fas fa-check-circle" style="color:#48bb78; font-size:18px; margin-right:8px;"></i>
+                                    <span style="font-size:15px; color:#222;">Fully Vaccinated</span>
+                                </div>
+                                <div id="microchip-item" style="display:none; align-items:center; gap:8px;">
+                                    <i class="fas fa-check-circle" style="color:#48bb78; font-size:18px; margin-right:8px;"></i>
+                                    <span style="font-size:15px; color:#222;">Has Microchip</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="medical-records-box" class="description-box" style="display:none;">
+                            <h3>Medical Records</h3>
+                            <div id="medical-records-gallery" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:10px; margin-top:12px;">
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="owner-card">
                         <h3>Owner</h3>
                         <div class="owner-row">
@@ -127,6 +159,153 @@
                 <h3 id="alert-modal-title" style="margin:0 0 10px; font-size:20px; color:var(--dark-color, #222);"></h3>
                 <p id="alert-modal-message" style="color:#666; margin:0 0 24px; font-size:14px; line-height:1.5;"></p>
                 <div id="alert-modal-actions" style="display:flex; gap:10px; justify-content:center;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Adoption Request Modal 1: Household Info ─────────────────────── -->
+    <div id="adoption-request-modal-1-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Adoption Application - Part 1</h2>
+                <button class="modal-close" id="adoption-request-modal-1-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:13px; color:var(--gray-color); margin-bottom:20px;">Help us ensure a great match for <span id="adoption-pet-name-1" style="font-weight:600;"></span></p>
+                
+                <div class="modal-form-grid">
+                    <!-- Building Type -->
+                    <div class="form-group full-width">
+                        <label class="field-label">What type of building do you live in? <span style="color:red;">*</span></label>
+                        <div class="options-grid-2">
+                            <label class="option-label"><input type="radio" name="building_type" value="house"> House</label>
+                            <label class="option-label"><input type="radio" name="building_type" value="apartment"> Apartment</label>
+                            <label class="option-label"><input type="radio" name="building_type" value="condo"> Condo</label>
+                            <label class="option-label"><input type="radio" name="building_type" value="other"> Other</label>
+                        </div>
+                    </div>
+
+                    <!-- Rent Status -->
+                    <div class="form-group full-width">
+                        <label class="field-label">Do you rent? <span style="color:red;">*</span></label>
+                        <div class="options-grid-2">
+                            <label class="option-label"><input type="radio" name="rent_status" value="yes"> Yes</label>
+                            <label class="option-label"><input type="radio" name="rent_status" value="no"> No</label>
+                        </div>
+                    </div>
+
+                    <!-- Pet Move Plan -->
+                    <div class="form-group full-width">
+                        <label class="field-label">What happens to your pet if or when you move? <span style="color:red;">*</span></label>
+                        <textarea id="pet_move_plan" placeholder="Describe your plan..." rows="3" style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; outline:none; resize:vertical; width:100%; box-sizing:border-box;"></textarea>
+                    </div>
+
+                    <!-- Household Members -->
+                    <div class="form-group full-width">
+                        <label class="field-label">Who do you live with? <span style="color:red;">*</span></label>
+                        <div class="options-grid-3">
+                            <label class="option-label"><input type="checkbox" name="household_members" value="living_alone"> Living alone</label>
+                            <label class="option-label"><input type="checkbox" name="household_members" value="spouse"> Spouse</label>
+                            <label class="option-label"><input type="checkbox" name="household_members" value="children_over_18"> Children over 18</label>
+                            <label class="option-label"><input type="checkbox" name="household_members" value="children_under_18"> Children below 18</label>
+                            <label class="option-label"><input type="checkbox" name="household_members" value="roommate"> Roommate(s)</label>
+                            <label class="option-label"><input type="checkbox" name="household_members" value="parents"> Parents</label>
+                            <label class="option-label"><input type="checkbox" name="household_members" value="relatives"> Relatives</label>
+                        </div>
+                    </div>
+
+                    <!-- Allergies -->
+                    <div class="form-group full-width">
+                        <label class="field-label">Are any members of your household allergic to animals? <span style="color:red;">*</span></label>
+                        <div class="options-grid-2">
+                            <label class="option-label"><input type="radio" name="household_allergies" value="yes"> Yes</label>
+                            <label class="option-label"><input type="radio" name="household_allergies" value="no"> No</label>
+                        </div>
+                    </div>
+
+                    <div style="grid-column:1/-1; display:flex; gap:12px; margin-top:20px;">
+                        <button class="btn" id="adoption-request-modal-1-cancel" style="flex:1; background:#f0f0f0; color:#555; padding:12px; border-radius:8px; font-weight:bold; border:none; cursor:pointer;">
+                            Cancel
+                        </button>
+                        <button class="btn btn-primary" id="adoption-request-modal-1-next" style="flex:1; background:var(--primary-color); color:white; padding:12px; border-radius:8px; font-weight:bold; border:none; cursor:pointer;">
+                            Next →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Adoption Request Modal 2: Care & Responsibility Info ─────────── -->
+    <div id="adoption-request-modal-2-overlay" class="modal-overlay" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Adoption Application - Part 2</h2>
+                <button class="modal-close" id="adoption-request-modal-2-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size:13px; color:var(--gray-color); margin-bottom:20px;">Let us know about your pet care setup</p>
+
+                <div class="modal-form-grid">
+                    <!-- Primary Caregiver -->
+                    <div class="form-group full-width">
+                        <label class="field-label">Who will be responsible for feeding, grooming, and generally caring for your pet? <span style="color:red;">*</span></label>
+                        <textarea id="primary_caregiver" placeholder="Name and relationship..." rows="2" style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; outline:none; resize:vertical; width:100%; box-sizing:border-box;"></textarea>
+                    </div>
+
+                    <!-- Financial Responsibility -->
+                    <div class="form-group full-width">
+                        <label class="field-label">Who will be financially responsible for your pet's needs (food, vet bills, etc.)? <span style="color:red;">*</span></label>
+                        <textarea id="financial_responsibility" placeholder="Name and relationship..." rows="2" style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; outline:none; resize:vertical; width:100%; box-sizing:border-box;"></textarea>
+                    </div>
+
+                    <!-- Emergency Care -->
+                    <div class="form-group full-width">
+                        <label class="field-label">Who will look after your pet if you go on vacation or in case of emergency? <span style="color:red;">*</span></label>
+                        <textarea id="emergency_care" placeholder="Name, relationship, and contact..." rows="2" style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; outline:none; resize:vertical; width:100%; box-sizing:border-box;"></textarea>
+                    </div>
+
+                    <!-- Alone Time -->
+                    <div class="form-group full-width">
+                        <label class="field-label">How many hours in an average workday will your pet be left alone? <span style="color:red;">*</span></label>
+                        <input type="number" id="alone_time_hours" placeholder="e.g. 8" min="0" max="24" style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; outline:none; width:100%; box-sizing:border-box;">
+                    </div>
+
+                    <!-- Home Photos -->
+                    <div class="form-group full-width">
+                        <label class="field-label">Upload photos of your home <span style="color:#aaa; font-weight:normal;">(up to 8 photos)</span></label>
+                        <p style="font-size:12px; color:#888; margin:8px 0;">
+                            We require: Front of house, street photo, living room, dining area, kitchen, bedroom (if pet has access), windows (if adopting cat), front & backyard (if adopting dog)
+                        </p>
+                        <label for="home-photos-file" class="photo-upload-area" id="home-photos-upload-area" style="cursor:pointer; margin-top:8px;">
+                            <i class="fas fa-camera" style="font-size:28px; color:#aaa;"></i>
+                            <p style="margin:8px 0 4px; color:#666; font-size:14px;">Click to upload photos</p>
+                            <p style="margin:0; color:#aaa; font-size:12px;">JPG, PNG, WEBP • Up to 8 photos • 25MB each</p>
+                            <input type="file" id="home-photos-file" accept="image/*" multiple style="display:none;">
+                        </label>
+                        <div id="home-photos-previews" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;"></div>
+                    </div>
+
+                    <!-- Message/Additional Info -->
+                    <div class="form-group full-width">
+                        <label class="field-label">Additional information or message for the owner <span style="color:#aaa; font-weight:normal;">(Optional)</span></label>
+                        <textarea id="additional_message" placeholder="Tell the owner why you'd be a great match..." rows="3" style="padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; outline:none; resize:vertical; width:100%; box-sizing:border-box;"></textarea>
+                    </div>
+
+                    <p id="adoption-request-error" style="display:none; grid-column:1/-1; font-size:13px; padding:10px; border-radius:8px; text-align:center;"></p>
+
+                    <div style="grid-column:1/-1; display:flex; gap:12px; margin-top:20px;">
+                        <button class="btn" id="adoption-request-modal-2-back" style="flex:1; background:#f0f0f0; color:#555; padding:12px; border-radius:8px; font-weight:bold; border:none; cursor:pointer;">
+                            ← Back
+                        </button>
+                        <button class="btn" id="adoption-request-modal-2-cancel" style="flex:1; background:#f0f0f0; color:#555; padding:12px; border-radius:8px; font-weight:bold; border:none; cursor:pointer;">
+                            Cancel
+                        </button>
+                        <button class="btn btn-primary" id="adoption-request-modal-2-submit" style="flex:1; background:var(--primary-color); color:white; padding:12px; border-radius:8px; font-weight:bold; border:none; cursor:pointer;">
+                            <i class="fas fa-paper-plane"></i> Submit Application
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -214,11 +393,11 @@
                 <p id="edit-modal-message" style="display:none; font-size:13px; margin-bottom:10px; text-align:center;"></p>
                 <div class="modal-form-grid">
                     <div class="form-group">
-                        <label>Pet Name <span style="color:red;">*</span></label>
+                        <label class="field-label">Pet Name <span style="color:red;">*</span></label>
                         <input type="text" id="edit-name" placeholder="e.g. Max">
                     </div>
                     <div class="form-group">
-                        <label>Species <span style="color:red;">*</span></label>
+                        <label class="field-label">Species <span style="color:red;">*</span></label>
                         <select id="edit-species">
                             <option value="">Select species</option>
                             <option value="dog">Dog</option>
@@ -226,11 +405,11 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Breed <span style="color:red;">*</span></label>
+                        <label class="field-label">Breed <span style="color:red;">*</span></label>
                         <input type="text" id="edit-breed" placeholder="e.g. Golden Retriever">
                     </div>
                     <div class="form-group">
-                        <label>Gender <span style="color:red;">*</span></label>
+                        <label class="field-label">Gender <span style="color:red;">*</span></label>
                         <select id="edit-gender">
                             <option value="">Select gender</option>
                             <option value="male">Male</option>
@@ -238,11 +417,11 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Age (months) <span style="color:red;">*</span></label>
+                        <label class="field-label">Age (months) <span style="color:red;">*</span></label>
                         <input type="number" id="edit-age" placeholder="e.g. 24" min="0">
                     </div>
                     <div class="form-group">
-                        <label>Health Status <span style="color:red;">*</span></label>
+                        <label class="field-label">Health Status <span style="color:red;">*</span></label>
                         <select id="edit-health">
                             <option value="">Select status</option>
                             <option value="healthy">Healthy</option>
@@ -252,8 +431,12 @@
                         </select>
                     </div>
                     <div class="form-group full-width">
-                        <label>Description <span style="color:red;">*</span></label>
+                        <label class="field-label">Description <span style="color:red;">*</span></label>
                         <textarea id="edit-description" placeholder="Tell us about your pet..." rows="4"></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="field-label">Temperament <span style="color:#aaa; font-weight:normal;">(Optional)</span></label>
+                        <textarea id="edit-temperament" placeholder="e.g. Friendly, energetic, good with kids..." rows="3"></textarea>
                     </div>
                     <div class="form-group full-width" style="display:flex; gap:12px; margin-top:8px;">
                         <button class="btn adopt-btn" id="edit-save-btn" style="flex:1;">
@@ -277,6 +460,8 @@
     const params = new URLSearchParams(window.location.search);
     const petId  = params.get('id');
     let currentPetData = null;
+    let adoptionFormData = {};
+    let homePhotosFiles = [];
 
     // ── Generic Alert Modal Helper ────────────────────────────────────────
     function showAlertModal({ icon = 'ℹ️', title = '', message = '', buttons = [] }) {
@@ -316,6 +501,252 @@
             }
         };
     }
+
+    // ── Adoption Request Modal Handlers ──────────────────────────────────
+    const adoptionModal1Overlay = document.getElementById('adoption-request-modal-1-overlay');
+    const adoptionModal2Overlay = document.getElementById('adoption-request-modal-2-overlay');
+
+    async function checkExistingAdoptionRequest(petId, userId) {
+        const { data: existing, error } = await supabase
+            .from('adoption_requests')
+            .select('status')
+            .eq('pet_id', petId)
+            .eq('requester_id', userId)
+            .neq('status', 'rejected')
+            .neq('status', 'withdrawn')
+            .limit(1);
+        
+        if (error) {
+            console.error('Error checking adoption requests:', error);
+            return null;
+        }
+        return existing && existing.length > 0 ? existing[0] : null;
+    }
+
+    function openAdoptionModal1() {
+        adoptionFormData = {};
+        homePhotosFiles = [];
+        document.getElementById('adoption-pet-name-1').textContent = currentPetData.name;
+        
+        document.querySelectorAll('#adoption-request-modal-1-overlay input, #adoption-request-modal-1-overlay textarea').forEach(el => {
+            if (el.type === 'radio' || el.type === 'checkbox') el.checked = false;
+            else el.value = '';
+        });
+        
+        adoptionModal1Overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeAdoptionModal1() {
+        adoptionModal1Overlay.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    function closeAdoptionModal2() {
+        adoptionModal2Overlay.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    document.getElementById('adoption-request-modal-1-close').addEventListener('click', closeAdoptionModal1);
+    document.getElementById('adoption-request-modal-1-cancel').addEventListener('click', closeAdoptionModal1);
+    document.getElementById('adoption-request-modal-2-close').addEventListener('click', closeAdoptionModal2);
+    document.getElementById('adoption-request-modal-2-cancel').addEventListener('click', closeAdoptionModal2);
+
+    adoptionModal1Overlay.addEventListener('click', e => {
+        if (e.target === adoptionModal1Overlay) closeAdoptionModal1();
+    });
+    adoptionModal2Overlay.addEventListener('click', e => {
+        if (e.target === adoptionModal2Overlay) closeAdoptionModal2();
+    });
+
+    // Modal 1 → Modal 2
+    document.getElementById('adoption-request-modal-1-next').addEventListener('click', () => {
+        const buildingType       = document.querySelector('input[name="building_type"]:checked')?.value;
+        const rentStatus         = document.querySelector('input[name="rent_status"]:checked')?.value;
+        const petMovePlan        = document.getElementById('pet_move_plan').value.trim();
+        const householdMembers   = Array.from(document.querySelectorAll('input[name="household_members"]:checked')).map(el => el.value);
+        const householdAllergies = document.querySelector('input[name="household_allergies"]:checked')?.value;
+
+        if (!buildingType || !rentStatus || !petMovePlan || householdMembers.length === 0 || !householdAllergies) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+
+        adoptionFormData.building_type       = buildingType;
+        adoptionFormData.rent_status         = rentStatus;
+        adoptionFormData.pet_move_plan       = petMovePlan;
+        adoptionFormData.household_members   = householdMembers;
+        adoptionFormData.household_allergies = householdAllergies;
+
+        closeAdoptionModal1();
+        adoptionModal2Overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Modal 2 Back
+    document.getElementById('adoption-request-modal-2-back').addEventListener('click', () => {
+        closeAdoptionModal2();
+        adoptionModal1Overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Home photos upload
+    document.getElementById('home-photos-file').addEventListener('change', (e) => {
+        const files     = Array.from(e.target.files);
+        const remaining = 8 - homePhotosFiles.length;
+        const toAdd     = files.slice(0, remaining).filter(f => f.size <= 25 * 1024 * 1024);
+        
+        toAdd.forEach(file => {
+            homePhotosFiles.push(file);
+            const reader = new FileReader();
+            reader.onload = (ev) => addHomePhotoPreview(ev.target.result, homePhotosFiles.length - 1);
+            reader.readAsDataURL(file);
+        });
+        document.getElementById('home-photos-file').value = '';
+    });
+
+    function addHomePhotoPreview(src, index) {
+        const previews = document.getElementById('home-photos-previews');
+        const wrapper  = document.createElement('div');
+        wrapper.className = 'photo-thumb';
+        wrapper.innerHTML = `
+            <img src="${src}" alt="Home photo ${index + 1}">
+            <button type="button" class="photo-remove-btn" data-index="${index}"><i class="fas fa-times"></i></button>
+        `;
+        wrapper.querySelector('.photo-remove-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            homePhotosFiles.splice(parseInt(e.currentTarget.dataset.index), 1);
+            renderHomePhotoPreviews();
+        });
+        previews.appendChild(wrapper);
+    }
+
+    function renderHomePhotoPreviews() {
+        document.getElementById('home-photos-previews').innerHTML = '';
+        homePhotosFiles.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = (ev) => addHomePhotoPreview(ev.target.result, index);
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Modal 2 Submit
+    document.getElementById('adoption-request-modal-2-submit').addEventListener('click', async () => {
+        const primaryCareiver        = document.getElementById('primary_caregiver').value.trim();
+        const financialResponsibility = document.getElementById('financial_responsibility').value.trim();
+        const emergencyCare          = document.getElementById('emergency_care').value.trim();
+        const aloneTimeHours         = document.getElementById('alone_time_hours').value;
+        const additionalMessage      = document.getElementById('additional_message').value.trim() || null;
+        const errorEl                = document.getElementById('adoption-request-error');
+
+        if (!primaryCareiver || !financialResponsibility || !emergencyCare || !aloneTimeHours) {
+            errorEl.textContent = 'Please fill in all required fields.';
+            errorEl.style.color = '#e53e3e';
+            errorEl.style.background = '#fff5f5';
+            errorEl.style.display = 'block';
+            return;
+        }
+
+        if (homePhotosFiles.length === 0) {
+            errorEl.textContent = 'Please upload at least one home photo.';
+            errorEl.style.color = '#e53e3e';
+            errorEl.style.background = '#fff5f5';
+            errorEl.style.display = 'block';
+            return;
+        }
+
+        const submitBtn = document.getElementById('adoption-request-modal-2-submit');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+            errorEl.textContent = 'Session expired. Please sign in again.';
+            errorEl.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+            return;
+        }
+
+        try {
+            const homePhotoUrls = [];
+            for (let i = 0; i < homePhotosFiles.length; i++) {
+                const file     = homePhotosFiles[i];
+                const ext      = file.name.split('.').pop();
+                const fileName = `adoption_home_${session.user.id}_${Date.now()}_${i}.${ext}`;
+                const { error: uploadError } = await supabase.storage.from('adoption-documents').upload(fileName, file);
+                
+                if (uploadError) {
+                    errorEl.textContent = `Photo ${i + 1} upload failed: ${uploadError.message}`;
+                    errorEl.style.color = '#e53e3e';
+                    errorEl.style.background = '#fff5f5';
+                    errorEl.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+                    return;
+                }
+
+                const { data: urlData } = supabase.storage.from('adoption-documents').getPublicUrl(fileName);
+                homePhotoUrls.push(urlData.publicUrl);
+            }
+
+            const { error: insertError } = await supabase.from('adoption_requests').insert({
+                pet_id:                  petId,
+                requester_id:            session.user.id,
+                owner_id:                currentPetData.owner_id,
+                building_type:           adoptionFormData.building_type,
+                rent_status:             adoptionFormData.rent_status,
+                pet_move_plan:           adoptionFormData.pet_move_plan,
+                household_members:       adoptionFormData.household_members,
+                household_allergies:     adoptionFormData.household_allergies,
+                primary_caregiver:       primaryCareiver,
+                financial_responsibility: financialResponsibility,
+                emergency_care:          emergencyCare,
+                alone_time_hours:        parseInt(aloneTimeHours) || 0,
+                home_photos:             homePhotoUrls,
+                message:                 additionalMessage,
+                status:                  'pending',
+            });
+
+            if (insertError) {
+                errorEl.textContent = 'Failed to submit application: ' + insertError.message;
+                errorEl.style.color = '#e53e3e';
+                errorEl.style.background = '#fff5f5';
+                errorEl.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+                return;
+            }
+
+            submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Submitted!';
+            submitBtn.style.background = '#48bb78';
+            errorEl.textContent = 'Your adoption application has been submitted successfully!';
+            errorEl.style.color = '#276749';
+            errorEl.style.background = '#c6f6d5';
+            errorEl.style.display = 'block';
+
+            setTimeout(() => {
+                closeAdoptionModal2();
+                showAlertModal({
+                    icon: '✓',
+                    title: 'Application Submitted',
+                    message: 'Your adoption application has been submitted. The pet owner will review your request soon.',
+                    buttons: [{ label: 'OK', primary: true }]
+                });
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+                submitBtn.style.background = '';
+            }, 1500);
+
+        } catch (err) {
+            errorEl.textContent = 'Error: ' + err.message;
+            errorEl.style.color = '#e53e3e';
+            errorEl.style.background = '#fff5f5';
+            errorEl.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Application';
+        }
+    });
 
     // ── Mark as Adopted Modal ─────────────────────────────────────────────
     const adoptModalOverlay    = document.getElementById('adopt-modal-overlay');
@@ -431,6 +862,7 @@
         document.getElementById('edit-age').value         = pet.age_months    ?? '';
         document.getElementById('edit-health').value      = pet.health_status || '';
         document.getElementById('edit-description').value = pet.description   || '';
+        document.getElementById('edit-temperament').value = pet.temperament   || '';
         editMessage.style.display = 'none';
         editSaveBtn.disabled = false;
         editSaveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
@@ -455,6 +887,7 @@
         const age         = document.getElementById('edit-age').value;
         const health      = document.getElementById('edit-health').value;
         const description = document.getElementById('edit-description').value.trim();
+        const temperament = document.getElementById('edit-temperament').value.trim() || null;
 
         if (!name || !species || !breed || !gender || !age || !health || !description) {
             editMessage.textContent = 'Please fill in all required fields.';
@@ -471,9 +904,10 @@
 
         const { error } = await supabase.from('pets').update({
             name, species, breed, gender,
-            age_months: parseInt(age) || null,
+            age_months:    parseInt(age) || null,
             health_status: health,
             description,
+            temperament,
         }).eq('id', petId);
 
         if (error) {
@@ -485,16 +919,15 @@
             return;
         }
 
-        // Cache changes locally to ensure synced components preserve dataset updates
-        currentPetData.name = name;
-        currentPetData.species = species;
-        currentPetData.breed = breed;
-        currentPetData.gender = gender;
-        currentPetData.age_months = parseInt(age);
+        currentPetData.name          = name;
+        currentPetData.species       = species;
+        currentPetData.breed         = breed;
+        currentPetData.gender        = gender;
+        currentPetData.age_months    = parseInt(age);
         currentPetData.health_status = health;
-        currentPetData.description = description;
+        currentPetData.description   = description;
+        currentPetData.temperament   = temperament;
 
-        // Refresh dynamic views
         document.getElementById('pet-name').textContent        = name;
         document.getElementById('pet-species').textContent     = capitalize(species);
         document.getElementById('pet-breed').textContent       = breed;
@@ -502,6 +935,11 @@
         document.getElementById('pet-age').textContent         = formatAge(parseInt(age));
         document.getElementById('pet-health').textContent      = formatStatus(health);
         document.getElementById('pet-description').textContent = description;
+
+        if (temperament) {
+            document.getElementById('pet-temperament').textContent = temperament;
+            document.getElementById('temperament-box').style.display = 'block';
+        }
 
         const tagRow = document.getElementById('tag-row');
         const tags = [
@@ -540,43 +978,90 @@
         document.getElementById('pet-not-found').style.display = 'block';
     }
 
-    // ── Render Dynamic Management Buttons Matrix (Owner Perspective) ──────
+    // ── Render Supporting Details ─────────────────────────────────────────
+    function renderSupportingDetails(pet) {
+        const section = document.getElementById('supporting-details-section');
+        
+        const hasTemperament   = pet.temperament && pet.temperament.trim();
+        const hasHealthInfo    = pet.is_spayed_neutered || pet.is_vaccinated || pet.has_microchip;
+        const hasMedicalRecords = Array.isArray(pet.medical_records) && pet.medical_records.length > 0;
+
+        if (!hasTemperament && !hasHealthInfo && !hasMedicalRecords) {
+            section.style.display = 'none';
+            return;
+        }
+
+        section.style.display = 'block';
+
+        const tempBox = document.getElementById('temperament-box');
+        if (hasTemperament) {
+            document.getElementById('pet-temperament').textContent = pet.temperament;
+            tempBox.style.display = 'block';
+        } else {
+            tempBox.style.display = 'none';
+        }
+
+        const healthBox      = document.getElementById('health-info-box');
+        const spayedItem     = document.getElementById('spayed-neutered-item');
+        const vaccinatedItem = document.getElementById('vaccinated-item');
+        const microchipItem  = document.getElementById('microchip-item');
+
+        spayedItem.style.display     = pet.is_spayed_neutered ? 'flex' : 'none';
+        vaccinatedItem.style.display = pet.is_vaccinated      ? 'flex' : 'none';
+        microchipItem.style.display  = pet.has_microchip      ? 'flex' : 'none';
+        healthBox.style.display      = hasHealthInfo           ? 'block' : 'none';
+
+        const medicalBox     = document.getElementById('medical-records-box');
+        const medicalGallery = document.getElementById('medical-records-gallery');
+
+        if (hasMedicalRecords) {
+            medicalGallery.innerHTML = pet.medical_records.map((url, i) => `
+                <div style="position:relative; border-radius:10px; overflow:hidden; background:#f5f5f5;">
+                    <img src="${url}" alt="Medical record ${i + 1}" 
+                         style="width:100%; height:100%; object-fit:cover; cursor:pointer;"
+                         onclick="window.open('${url}', '_blank')">
+                    <span style="position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.6); color:white; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600;">
+                        Doc ${i + 1}
+                    </span>
+                </div>
+            `).join('');
+            medicalBox.style.display = 'block';
+        } else {
+            medicalBox.style.display = 'none';
+        }
+    }
+
+    // ── Render Owner Management Buttons ──────────────────────────────────
     function renderManagementGrid(status) {
         const actionButtonsGroup = document.getElementById('action-buttons');
         actionButtonsGroup.innerHTML = '';
+        actionButtonsGroup.style.gridTemplateColumns = 'repeat(3, 1fr)';
 
-        // Button 1: Reversible Status Modifier Element
         const statusBtn = document.createElement('button');
         if (status === 'adopted') {
             statusBtn.className = 'btn mark-adopted-btn';
-            statusBtn.style.background = '#3182ce'; 
+            statusBtn.style.background = '#3182ce';
             statusBtn.innerHTML = '<i class="fas fa-undo"></i> Mark as Available';
-            statusBtn.style.width = '100%';
             statusBtn.addEventListener('click', () => openAvailableModal());
         } else {
             statusBtn.className = 'btn mark-adopted-btn';
             statusBtn.innerHTML = '<i class="fas fa-check-circle"></i> Mark as Adopted';
-            statusBtn.style.width = '100%';
             statusBtn.addEventListener('click', () => openAdoptModal());
         }
 
-        // Button 2: Profile Update Form Interactivity Trigger
         const editBtn = document.createElement('button');
         editBtn.className = 'btn adopt-btn';
         editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit Information';
-        editBtn.style.width = '100%';
         editBtn.addEventListener('click', () => openEditModal(currentPetData));
 
-        // Button 3: Permanent Datastore Removal Engine
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'btn';
-        deleteBtn.style.cssText = 'width: 100%; padding: 15px; background: #e53e3e; color: white; font-size: 16px; font-weight: 700; border-radius: 12px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: background 0.2s, transform 0.15s;';
+        deleteBtn.style.cssText = 'padding:15px; background:#e53e3e; color:white; font-size:16px; font-weight:700; border-radius:12px; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; transition:background 0.2s, transform 0.15s;';
         deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i> Delete Profile';
         deleteBtn.addEventListener('mouseenter', () => deleteBtn.style.background = '#c53030');
         deleteBtn.addEventListener('mouseleave', () => deleteBtn.style.background = '#e53e3e');
         deleteBtn.addEventListener('click', () => openDeleteModal());
 
-        // Construct 3-Column management layout
         actionButtonsGroup.appendChild(statusBtn);
         actionButtonsGroup.appendChild(editBtn);
         actionButtonsGroup.appendChild(deleteBtn);
@@ -597,24 +1082,21 @@
 
         if (error || !pet) { showNotFound(); return; }
         
-        currentPetData = pet; 
-
-        // ── Page title
+        currentPetData = pet;
         document.title = `${pet.name} - Paws & Pals`;
 
-        // ── Gallery
         const photos = Array.isArray(pet.photo_urls) && pet.photo_urls.length
             ? pet.photo_urls
             : [pet.photo_url || 'https://via.placeholder.com/600x500?text=No+Photo'];
 
-        const mainPhoto  = document.getElementById('main-photo');
-        mainPhoto.src    = photos[0];
-        mainPhoto.alt    = pet.name;
+        const mainPhoto = document.getElementById('main-photo');
+        mainPhoto.src   = photos[0];
+        mainPhoto.alt   = pet.name;
 
         const thumbStrip = document.getElementById('thumb-strip');
         if (photos.length > 1) {
             photos.forEach((url, i) => {
-                const t = document.createElement('img');
+                const t     = document.createElement('img');
                 t.src       = url;
                 t.alt       = `Photo ${i + 1}`;
                 t.className = 'thumb' + (i === 0 ? ' active' : '');
@@ -627,49 +1109,46 @@
             });
         }
 
-        // ── Adoption badge
-        const badge = document.getElementById('adoption-badge');
+        const badge       = document.getElementById('adoption-badge');
         badge.textContent = formatStatus(pet.adoption_status);
         badge.className   = 'adoption-badge status-' + (pet.adoption_status || 'unknown');
 
-        // ── Name & tags
         document.getElementById('pet-name').textContent = pet.name;
 
         const tagRow = document.getElementById('tag-row');
         const tags = [
-            { label: capitalize(pet.species),          icon: 'fa-paw' },
-            { label: capitalize(pet.gender),            icon: 'fa-venus-mars' },
+            { label: capitalize(pet.species),         icon: 'fa-paw' },
+            { label: capitalize(pet.gender),           icon: 'fa-venus-mars' },
             { label: formatStatus(pet.health_status),  icon: 'fa-heartbeat' },
         ].filter(t => t.label && t.label !== '—');
         tagRow.innerHTML = tags.map(t =>
             `<span class="tag"><i class="fas ${t.icon}"></i> ${t.label}</span>`
         ).join('');
 
-        // ── Info grid
-        document.getElementById('pet-species').textContent  = capitalize(pet.species)      || '—';
-        document.getElementById('pet-breed').textContent    = pet.breed                     || '—';
-        document.getElementById('pet-gender').textContent   = capitalize(pet.gender)        || '—';
+        document.getElementById('pet-species').textContent  = capitalize(pet.species)     || '—';
+        document.getElementById('pet-breed').textContent    = pet.breed                    || '—';
+        document.getElementById('pet-gender').textContent   = capitalize(pet.gender)       || '—';
         document.getElementById('pet-age').textContent      = formatAge(pet.age_months);
         document.getElementById('pet-health').textContent   = formatStatus(pet.health_status);
         document.getElementById('pet-location').textContent = pet.address
             ? pet.address.split(',').slice(0).join(',').trim()
             : '—';
 
-        // ── Description
         document.getElementById('pet-description').textContent = pet.description || 'No description provided.';
 
-        // ── Owner card
+        renderSupportingDetails(pet);
+
         const owner = pet.profiles;
         if (owner) {
             const avatarEl = document.getElementById('owner-avatar');
-            avatarEl.src = owner.avatar_url
+            avatarEl.src   = owner.avatar_url
                 || `https://ui-avatars.com/api/?name=${encodeURIComponent(owner.full_name || owner.username || '?')}&background=FBAD38&color=fff&size=56`;
 
             document.getElementById('owner-name').textContent =
                 owner.full_name || owner.username || 'Anonymous';
 
-            const ownerBio = document.getElementById('owner-bio');
-            const ownerLoc = document.getElementById('owner-location');
+            const ownerBio  = document.getElementById('owner-bio');
+            const ownerLoc  = document.getElementById('owner-location');
             const contactEl = document.getElementById('owner-contact');
 
             const fullAddress = owner.address
@@ -685,18 +1164,17 @@
             else             { contactEl.style.display = 'none'; }
 
             if (!owner.bio && !fullAddress && !owner.phone) {
-                ownerBio.style.display  = 'block';
-                ownerBio.textContent    = 'No information available.';
+                ownerBio.style.display = 'block';
+                ownerBio.textContent   = 'No information available.';
             }
         } else {
             document.querySelector('.owner-card').style.display = 'none';
         }
 
-        // ── Session-dependent UI
         const { data: { session } } = await supabase.auth.getSession();
         const isOwner = session && pet.owner_id === session.user.id;
 
-        // ── Favorite button
+        // ── Favorite button ───────────────────────────────────────────────
         const favBtn = document.getElementById('fav-btn');
         if (session && !isOwner) {
             const { data: existing } = await supabase.from('favorites')
@@ -723,7 +1201,7 @@
                     showAlertModal({
                         icon: '🔒',
                         title: 'Sign In Required',
-                        message: 'Please sign in to save your favorite pets and keep track of ones you love.',
+                        message: 'Please sign in to save your favorite pets.',
                         buttons: [
                             { label: 'Sign In', primary: true, onClick: () => window.location.href = 'login.html' },
                             { label: 'Cancel', primary: false }
@@ -748,22 +1226,20 @@
             favBtn.style.display = 'none';
         }
 
-        // ── Adopt / Edit / Message action routers
-        const adoptBtn = document.getElementById('adopt-btn');
-        document.getElementById('action-buttons').style.gridTemplateColumns = '1fr';
-        
+        // ── Action buttons ────────────────────────────────────────────────
+        const actionButtonsGroup = document.getElementById('action-buttons');
+        const adoptBtn           = document.getElementById('adopt-btn');
+
         if (isOwner) {
-            // Render 3 column management UI cleanly based on active state variables
+            // Owner view: status toggle + edit + delete
+            adoptBtn.style.display = 'none';
             renderManagementGrid(pet.adoption_status);
 
-            // Connect Active-State triggers for instant UI feedback
             adoptModalConfirmBtn.addEventListener('click', async () => {
                 adoptModalConfirmBtn.disabled = true;
                 adoptModalConfirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
 
-                const { error } = await supabase.from('pets').update({
-                    adoption_status: 'adopted'
-                }).eq('id', petId);
+                const { error } = await supabase.from('pets').update({ adoption_status: 'adopted' }).eq('id', petId);
 
                 if (error) {
                     adoptModalMessage.textContent = 'Failed: ' + error.message;
@@ -775,12 +1251,10 @@
                     return;
                 }
 
-                // Update UI state components instantly without window reload
                 currentPetData.adoption_status = 'adopted';
                 const badge = document.getElementById('adoption-badge');
                 badge.textContent = 'Adopted';
-                badge.className = 'adoption-badge status-adopted';
-                
+                badge.className   = 'adoption-badge status-adopted';
                 renderManagementGrid('adopted');
 
                 adoptModalMessage.textContent = 'Pet has been marked as adopted!';
@@ -797,9 +1271,7 @@
                 availableModalConfirmBtn.disabled = true;
                 availableModalConfirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
 
-                const { error } = await supabase.from('pets').update({
-                    adoption_status: 'available'
-                }).eq('id', petId);
+                const { error } = await supabase.from('pets').update({ adoption_status: 'available' }).eq('id', petId);
 
                 if (error) {
                     availableModalMessage.textContent = 'Failed: ' + error.message;
@@ -811,12 +1283,10 @@
                     return;
                 }
 
-                // Update UI state components instantly without window reload
                 currentPetData.adoption_status = 'available';
                 const badge = document.getElementById('adoption-badge');
                 badge.textContent = 'Available';
-                badge.className = 'adoption-badge status-available';
-                
+                badge.className   = 'adoption-badge status-available';
                 renderManagementGrid('available');
 
                 availableModalMessage.textContent = 'Pet is now available for adoption!';
@@ -830,346 +1300,166 @@
             });
 
         } else if (session) {
+            // Logged-in non-owner: adopt button + message owner button
+            actionButtonsGroup.style.gridTemplateColumns = '1fr 1fr';
+
+            // Message Owner button
+            const msgBtn = document.createElement('button');
+            msgBtn.className = 'btn msg-owner-btn';
+            msgBtn.innerHTML = '<i class="fas fa-envelope"></i> Message Owner';
+            msgBtn.addEventListener('click', () => {
+                window.location.href = `messages.html?to=${pet.owner_id}&pet=${petId}`;
+            });
+
             if (pet.adoption_status !== 'available') {
                 adoptBtn.textContent = 'Not Available for Adoption';
                 adoptBtn.disabled    = true;
             } else {
-                adoptBtn.innerHTML = '<i class="fas fa-comment-dots"></i> Message Owner';
-                adoptBtn.addEventListener('click', () => {
-                    window.location.href = `messages.html?to=${encodeURIComponent(pet.profiles?.id)}`;
+                adoptBtn.innerHTML = '<i class="fas fa-file-alt"></i> Submit Adoption Application';
+                
+                // Check for existing adoption requests
+                checkExistingAdoptionRequest(petId, session.user.id).then(existingRequest => {
+                    if (existingRequest) {
+                        adoptBtn.textContent = 'Application Pending';
+                        adoptBtn.disabled = true;
+                        adoptBtn.title = `Your ${existingRequest.status} application is already submitted for this pet.`;
+                    } else {
+                        adoptBtn.addEventListener('click', openAdoptionModal1);
+                    }
+                }).catch(err => {
+                    console.error('Error checking adoption requests:', err);
+                    adoptBtn.addEventListener('click', openAdoptionModal1);
                 });
             }
+
+            // Insert message button after adopt button
+            actionButtonsGroup.appendChild(msgBtn);
+
         } else {
-            adoptBtn.addEventListener('click', () => {
+            // Guest: both buttons prompt sign-in
+            actionButtonsGroup.style.gridTemplateColumns = '1fr 1fr';
+
+            const msgBtn = document.createElement('button');
+            msgBtn.className = 'btn msg-owner-btn';
+            msgBtn.innerHTML = '<i class="fas fa-envelope"></i> Message Owner';
+            msgBtn.addEventListener('click', () => {
                 showAlertModal({
                     icon: '🔒',
                     title: 'Sign In Required',
-                    message: 'Please sign in to express your interest in adopting this pet.',
+                    message: 'Please sign in to message the owner.',
                     buttons: [
                         { label: 'Sign In', primary: true, onClick: () => window.location.href = 'login.html' },
                         { label: 'Cancel', primary: false }
                     ]
                 });
             });
+
+            adoptBtn.addEventListener('click', () => {
+                showAlertModal({
+                    icon: '🔒',
+                    title: 'Sign In Required',
+                    message: 'Please sign in to submit an adoption application.',
+                    buttons: [
+                        { label: 'Sign In', primary: true, onClick: () => window.location.href = 'login.html' },
+                        { label: 'Cancel', primary: false }
+                    ]
+                });
+            });
+
+            actionButtonsGroup.appendChild(msgBtn);
         }
 
-        // ── Reveal page
         document.getElementById('pet-detail-content').style.display = 'block';
     }
     </script>
 
     <style>
-        /* ── Back link */
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--gray-color);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 28px;
-            transition: color 0.2s;
-        }
-        .back-link:hover { color: var(--primary-color); }
+        /* ── Back link ── */
+        .back-link { display:inline-flex; align-items:center; gap:8px; color:var(--gray-color); text-decoration:none; font-size:14px; font-weight:500; margin-bottom:28px; transition:color 0.2s; }
+        .back-link:hover { color:var(--primary-color); }
 
-        /* ── Two-column layout */
-        .detail-layout {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            align-items: stretch;
-        }
-        @media (max-width: 820px) {
-            .detail-layout { grid-template-columns: 1fr; }
-        }
+        /* ── Layout ── */
+        .detail-layout { display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:stretch; }
+        @media (max-width:820px) { .detail-layout { grid-template-columns:1fr; } }
+        .detail-gallery-col { display:flex; flex-direction:column; }
 
-        /* ── Gallery */
-        .detail-gallery-col {
-            display: flex;
-            flex-direction: column;
-        }
-        .main-photo-wrap {
-            position: relative;
-            border-radius: 16px;
-            overflow: hidden;
-            background: #f5f5f5;
-            flex: 1;
-            min-height: 300px;
-        }
-        .main-photo-wrap img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: opacity 0.2s;
-        }
-        .thumb-strip {
-            display: flex;
-            gap: 10px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-        .thumb-strip .thumb {
-            width: 72px;
-            height: 72px;
-            object-fit: cover;
-            border-radius: 10px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: border-color 0.2s, opacity 0.2s;
-            opacity: 0.7;
-        }
-        .thumb-strip .thumb:hover { opacity: 1; }
-        .thumb-strip .thumb.active {
-            border-color: var(--primary-color);
-            opacity: 1;
-        }
+        /* ── Gallery ── */
+        .main-photo-wrap { position:relative; border-radius:16px; overflow:hidden; background:#f5f5f5; flex:1; min-height:300px; }
+        .main-photo-wrap img { width:100%; height:100%; object-fit:cover; display:block; transition:opacity 0.2s; }
+        .thumb-strip { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+        .thumb-strip .thumb { width:72px; height:72px; object-fit:cover; border-radius:10px; cursor:pointer; border:2px solid transparent; transition:border-color 0.2s, opacity 0.2s; opacity:0.7; }
+        .thumb-strip .thumb:hover { opacity:1; }
+        .thumb-strip .thumb.active { border-color:var(--primary-color); opacity:1; }
 
-        /* ── Adoption badge */
-        .adoption-badge {
-            position: absolute;
-            top: 14px;
-            left: 14px;
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .status-available    { background: #c6f6d5; color: #276749; }
-        .status-adopted      { background: #bee3f8; color: #2a69ac; }
-        .status-pending      { background: #fefcbf; color: #7b6002; }
-        .status-unknown      { background: #eee;    color: #666; }
+        /* ── Badge ── */
+        .adoption-badge { position:absolute; top:14px; left:14px; padding:5px 14px; border-radius:20px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; }
+        .status-available { background:#c6f6d5; color:#276749; }
+        .status-adopted   { background:#bee3f8; color:#2a69ac; }
+        .status-pending   { background:#fefcbf; color:#7b6002; }
+        .status-unknown   { background:#eee; color:#666; }
 
-        /* ── Info col */
-        .name-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-        .name-row h1 {
-            font-size: 32px;
-            color: var(--dark-color);
-            margin: 0;
-        }
+        /* ── Name & tags ── */
+        .name-row { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:12px; }
+        .name-row h1 { font-size:32px; color:var(--dark-color); margin:0; }
+        .tag-row { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:24px; }
+        .tag { display:inline-flex; align-items:center; gap:6px; background:#fff8ee; color:#c47d00; border:1px solid #fde68a; border-radius:20px; padding:5px 14px; font-size:13px; font-weight:600; }
 
-        /* ── Tags */
-        .tag-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-        .tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #fff8ee;
-            color: #c47d00;
-            border: 1px solid #fde68a;
-            border-radius: 20px;
-            padding: 5px 14px;
-            font-size: 13px;
-            font-weight: 600;
-        }
+        /* ── Info grid ── */
+        .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:24px; }
+        .info-item { background:#fafafa; border:1px solid #eee; border-radius:10px; padding:12px 16px; display:flex; flex-direction:column; gap:4px; }
+        .info-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--gray-color); }
+        .info-label i { margin-right:4px; color:var(--primary-color); }
+        .info-value { font-size:15px; font-weight:600; color:var(--dark-color); }
 
-        /* ── Info grid */
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 24px;
-        }
-        .info-item {
-            background: #fafafa;
-            border: 1px solid #eee;
-            border-radius: 10px;
-            padding: 12px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .info-label {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--gray-color);
-        }
-        .info-label i { margin-right: 4px; color: var(--primary-color); }
-        .info-value {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--dark-color);
-        }
+        /* ── Description / supporting boxes ── */
+        .description-box { background:#fafafa; border:1px solid #eee; border-radius:12px; padding:18px 20px; margin-bottom:24px; }
+        .description-box h3 { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--gray-color); margin-bottom:10px; }
+        .description-box p { font-size:15px; color:#444; line-height:1.7; margin:0; }
 
-        /* ── Description */
-        .description-box {
-            background: #fafafa;
-            border: 1px solid #eee;
-            border-radius: 12px;
-            padding: 18px 20px;
-            margin-bottom: 24px;
-        }
-        .description-box h3 {
-            font-size: 14px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--gray-color);
-            margin-bottom: 10px;
-        }
-        .description-box p {
-            font-size: 15px;
-            color: #444;
-            line-height: 1.7;
-            margin: 0;
-        }
+        /* ── Owner card ── */
+        .owner-card { background:#fff; border:1px solid #eee; border-radius:12px; padding:18px 20px; margin-bottom:24px; box-shadow:0 2px 8px rgba(0,0,0,0.04); }
+        .owner-card h3 { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--gray-color); margin-bottom:14px; }
+        .owner-row { display:flex; align-items:flex-start; gap:14px; }
+        .owner-avatar-wrap img { width:100px; height:120px; border-radius:10%; object-fit:cover; border:2px solid #eee; flex-shrink:0; }
+        .owner-info { flex:1; }
+        .owner-name { font-size:16px; font-weight:700; color:var(--dark-color); }
+        .owner-sub { font-size:13px; color:var(--gray-color); margin-bottom:4px; }
+        .owner-sub i { margin-right:4px; }
 
-        /* ── Owner card */
-        .owner-card {
-            background: #fff;
-            border: 1px solid #eee;
-            border-radius: 12px;
-            padding-top: 18px;
-            padding-left: 20px;
-            padding-right: 20px;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .owner-card h3 {
-            font-size: 14px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--gray-color);
-            margin-bottom: 14px;
-        }
-        .owner-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-        }
-        .owner-avatar-wrap img {
-            width: 100px;
-            height: 120px;
-            border-radius: 10%;
-            object-fit: cover;
-            border: 2px solid #eee;
-            flex-shrink: 0;
-        }
-        .owner-info { flex: 1; }
-        .owner-name {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--dark-color);
-        }
-        .owner-sub {
-            font-size: 13px;
-            color: var(--gray-color);
-            margin-bottom: 4px;
-        }
-        .owner-sub i { margin-right: 4px; }
-        .owner-contact { margin-top: 14px; }
-        .contact-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #fff8ee;
-            color: #c47d00;
-            border: 1px solid #fde68a;
-            border-radius: 8px;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-        .contact-btn:hover { background: #fde68a; }
-        .contact-btn-msg {
-            background: #ebf8ff;
-            color: #2b6cb0;
-            border-color: #bee3f8;
-        }
-        .contact-btn-msg:hover { background: #bee3f8; }
-        .owner-address-inline {
-            font-size: 13px;
-            color: var(--gray-color);
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            flex-shrink: 1;
-            min-width: 0;
-        }
-        .owner-address-inline i { color: var(--primary-color); flex-shrink: 0; }
-
-        /* ── Action buttons 3-column layout structure */
-        .action-buttons-group {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            width: 100%;
-        }
-
-        /* ── Adopt button */
+        /* ── Action buttons ── */
+        .action-buttons-group { display:grid; gap:12px; width:100%; }
         .adopt-btn {
-            width: 100%;
-            padding: 15px;
-            background: var(--primary-color);
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: background 0.2s, transform 0.15s;
+            width:100%; padding:15px;
+            background:var(--primary-color); color:white;
+            font-size:16px; font-weight:700; border-radius:12px;
+            border:none; cursor:pointer;
+            display:flex; align-items:center; justify-content:center; gap:10px;
+            transition:background 0.2s, transform 0.15s;
         }
-        .adopt-btn:hover:not(:disabled) {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
+        .adopt-btn:hover:not(:disabled) { background:var(--secondary-color); transform:translateY(-2px); }
+        .adopt-btn:disabled { background:#ddd; color:#999; cursor:not-allowed; }
+        .msg-owner-btn {
+            width:100%; padding:15px;
+            background:#3182ce; color:white;
+            font-size:16px; font-weight:700; border-radius:12px;
+            border:none; cursor:pointer;
+            display:flex; align-items:center; justify-content:center; gap:10px;
+            transition:background 0.2s, transform 0.15s;
         }
-        .adopt-btn:disabled {
-            background: #ddd;
-            color: #999;
-            cursor: not-allowed;
-        }
-
-        /* ── Mark as Adopted button */
+        .msg-owner-btn:hover { background:#2b6cb0; transform:translateY(-2px); }
         .mark-adopted-btn {
-            width: 100%;
-            padding: 15px;
-            background: #48bb78;
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: background 0.2s, transform 0.15s;
+            width:100%; padding:15px;
+            background:#48bb78; color:white;
+            font-size:16px; font-weight:700; border-radius:12px;
+            border:none; cursor:pointer;
+            display:flex; align-items:center; justify-content:center; gap:10px;
+            transition:background 0.2s, transform 0.15s;
         }
-        .mark-adopted-btn:hover:not(:disabled) {
-            background: #38a169;
-            transform: translateY(-2px);
-        }
-        .mark-adopted-btn:disabled {
-            background: #ddd;
-            color: #999;
-            cursor: not-allowed;
-        }
+        .mark-adopted-btn:hover:not(:disabled) { background:#38a169; transform:translateY(-2px); }
+        .mark-adopted-btn:disabled { background:#ddd; color:#999; cursor:not-allowed; }
+        @media (max-width:640px) { .action-buttons-group { grid-template-columns:1fr !important; } }
 
-        /* ── Modal */
+        /* ── Modals ── */
         .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:2000; display:flex; align-items:center; justify-content:center; padding:20px; }
         .modal-card { background:var(--white-color, #fff); border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,0.3); width:100%; max-width:620px; max-height:90vh; overflow-y:auto; }
         .modal-header { display:flex; justify-content:space-between; align-items:center; padding:20px 24px; border-bottom:1px solid #eee; position:sticky; top:0; background:var(--white-color, #fff); z-index:1; }
@@ -1179,42 +1469,99 @@
         .modal-body { padding:24px; }
         .modal-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
         .modal-form-grid .full-width { grid-column:1/-1; }
-        .modal-form-grid .form-group { display:flex; flex-direction:column; gap:5px; }
-        .modal-form-grid label { font-size:13px; font-weight:600; color:var(--dark-color, #222); }
+        .modal-form-grid .form-group { display:flex; flex-direction:column; gap:6px; }
+
+        /* ── Field labels (consistent across all form groups) ── */
+        .field-label {
+            font-size:13px;
+            font-weight:600;
+            color:var(--dark-color, #222);
+            display:block;
+            margin-bottom:6px;
+        }
         .modal-form-grid input,
         .modal-form-grid select,
-        .modal-form-grid textarea { padding:9px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; outline:none; transition:border-color 0.2s; }
+        .modal-form-grid textarea {
+            padding:9px 12px;
+            border:1px solid #ddd;
+            border-radius:8px;
+            font-size:14px;
+            outline:none;
+            transition:border-color 0.2s;
+            width:100%;
+            box-sizing:border-box;
+        }
         .modal-form-grid input:focus,
         .modal-form-grid select:focus,
         .modal-form-grid textarea:focus { border-color:var(--primary-color, #FBAD38); }
         .modal-form-grid textarea { resize:vertical; }
 
-        /* ── Alert modal */
-        #alert-modal-overlay .modal-card { max-width:400px; }
-        #alert-modal-overlay h3 { color: var(--dark-color, #222); }
-
-        @media (max-width:640px) { 
-            .action-buttons-group { grid-template-columns: 1fr; }
+        /* ── Option grids (radio / checkbox) ── */
+        .options-grid-2 {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:8px;
+            margin-top:4px;
         }
+        .options-grid-3 {
+            display:grid;
+            grid-template-columns:repeat(3, 1fr);
+            gap:8px;
+            margin-top:4px;
+        }
+        .option-label {
+            display:flex;
+            align-items:center;
+            gap:8px;
+            cursor:pointer;
+            font-size:14px;
+            font-weight:400 !important;
+            color:#333;
+            background:#fafafa;
+            border:1px solid #e2e8f0;
+            border-radius:8px;
+            padding:9px 12px;
+            transition:border-color 0.2s, background 0.2s;
+            user-select:none;
+        }
+        .option-label:hover {
+            border-color:var(--primary-color);
+            background:#fff8ee;
+        }
+        .option-label input[type="radio"],
+        .option-label input[type="checkbox"] {
+            accent-color:var(--primary-color);
+            width:15px;
+            height:15px;
+            flex-shrink:0;
+            cursor:pointer;
+            margin:0;
+        }
+        @media (max-width:480px) {
+            .options-grid-2 { grid-template-columns:1fr; }
+            .options-grid-3 { grid-template-columns:1fr 1fr; }
+        }
+
+        /* ── Photo upload ── */
+        .photo-upload-area { display:flex; flex-direction:column; align-items:center; gap:8px; border:2px dashed #ddd; border-radius:12px; padding:32px 20px; text-align:center; transition:border-color 0.2s; }
+        .photo-upload-area:hover { border-color:var(--primary-color); }
+        .photo-thumb { position:relative; border-radius:10px; overflow:hidden; background:#f5f5f5; }
+        .photo-thumb img { width:100%; height:100%; object-fit:cover; }
+        .photo-remove-btn { position:absolute; top:4px; right:4px; background:#e53e3e; color:white; border:none; width:24px; height:24px; border-radius:4px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:14px; }
+
+        /* ── Skeleton loader ── */
         button:disabled { opacity:0.7; cursor:not-allowed; }
-
-        /* ── Skeletons */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.4s infinite;
-            border-radius: 10px;
-        }
-        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        .skeleton-back  { width: 80px; height: 20px; margin-bottom: 28px; border-radius: 6px; }
-        .skeleton-img   { width: 100%; aspect-ratio: 4/3; border-radius: 16px; }
-        .skeleton-thumbs { display: flex; gap: 10px; margin-top: 12px; }
-        .skeleton-thumb { width: 72px; height: 72px; border-radius: 10px; flex-shrink: 0; }
-        .skeleton-title { width: 60%; height: 36px; margin-bottom: 16px; }
-        .skeleton-line  { width: 100%; height: 16px; margin-bottom: 10px; }
-        .skeleton-line.short { width: 60%; }
-        .skeleton-block { width: 100%; height: 100px; margin-bottom: 16px; border-radius: 12px; }
-        .skeleton-owner { width: 100%; height: 80px; border-radius: 12px; }
+        .skeleton { background:linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; border-radius:10px; }
+        @keyframes shimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
+        .skeleton-back { width:80px; height:20px; margin-bottom:28px; border-radius:6px; }
+        .skeleton-img { width:100%; aspect-ratio:4/3; border-radius:16px; }
+        .skeleton-thumbs { display:flex; gap:10px; margin-top:12px; }
+        .skeleton-thumb { width:72px; height:72px; border-radius:10px; flex-shrink:0; }
+        .skeleton-title { width:60%; height:36px; margin-bottom:16px; }
+        .skeleton-line { width:100%; height:16px; margin-bottom:10px; }
+        .skeleton-line.short { width:60%; }
+        .skeleton-block { width:100%; height:100px; margin-bottom:16px; border-radius:12px; }
+        .skeleton-owner { width:100%; height:80px; border-radius:12px; }
     </style>
 </body>
 </html>

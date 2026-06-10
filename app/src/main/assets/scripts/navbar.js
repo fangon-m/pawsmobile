@@ -58,9 +58,12 @@ window.navbarReady = (async () => {
                     </button>
                     <ul class="nav-links" id="nav-links">
                         <li><a href="${basePath}index.html" class="nav-link">Home</a></li>
-                        <li><a href="${basePath}pages/maps.html" class="nav-link">Maps</a></li>
+                        <li><a href="${basePath}pages/maps.html" class="nav-link">Pets</a></li>
                         <li id="favorites-item" ${isLoggedIn ? '' : 'style="display:none;"'}>
                             <a href="${basePath}pages/favorites.html" class="nav-link">Favorites</a>
+                        </li>
+                        <li id="adoptions-item" ${isLoggedIn ? '' : 'style="display:none;"'}>
+                            <a href="${basePath}pages/adoptions.html" class="nav-link">Adoptions</a>
                         </li>
                         <li id="messages-item" ${isLoggedIn ? '' : 'style="display:none;"'}>
                             <a href="${basePath}pages/messages.html" class="nav-link nav-icon" title="Messages" style="position: relative;">

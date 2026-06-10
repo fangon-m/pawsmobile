@@ -490,6 +490,11 @@
                 return;
             }
 
+            if (!currentUser) {
+                searchResults.innerHTML = '<div style="padding: 12px 16px; text-align: center; color: var(--gray-color);">Loading...</div>';
+                return;
+            }
+
             searchTimeout = setTimeout(async () => {
                 try {
                     const { data: users } = await supabase
@@ -541,6 +546,10 @@
 
         async function startConversation(otherUserId) {
             try {
+                if (!currentUser) {
+                    throw new Error('User not initialized. Please refresh the page.');
+                }
+
                 const [{ data: existing1 }, { data: existing2 }] = await Promise.all([
                     supabase
                         .from('conversations')
@@ -884,13 +893,15 @@
             return div.innerHTML;
         }
 
-        getCurrentUser();
-
-        const params = new URLSearchParams(window.location.search);
-        const toUserId = params.get('to');
-        if (toUserId) {
-            setTimeout(() => startConversation(toUserId), 500);
-        }
+        (async () => {
+            await getCurrentUser();
+            
+            const params = new URLSearchParams(window.location.search);
+            const toUserId = params.get('to');
+            if (toUserId) {
+                await startConversation(toUserId);
+            }
+        })();
     </script>
 </body>
 </html>
